@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JAB Holding Company — Ownership Web · Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --ink: #1a1714;
+      --muted: #6b6459;
+      --dim: #a09890;
+      --bg: #f7f4ef;
+      --bg2: #f0ece5;
+      --card: #fdfaf6;
+      --border: rgba(26,23,20,.10);
+      --border-md: rgba(26,23,20,.16);
+      --shadow-s: 0 2px 8px rgba(26,23,20,.06);
+      --shadow: 0 6px 24px rgba(26,23,20,.10);
+      --accent: #1f7a6a;
+      --gold: #b5872a;
+      --owner: #2d2d2d;
+      --owner-lt: rgba(45,45,45,0.08);
+      --serif: 'Playfair Display', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+      --body: 'Lora', Georgia, serif;
+    }
+    
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    
+    a { color: inherit; text-decoration: none; }
+    
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(247,244,239,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 max(24px, 5vw);
+    }
+    .nav-inner {
+      max-width: 1120px; margin: 0 auto;
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--ink);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+      transition: color .15s;
+    }
+    .nav-back:hover { color: var(--accent); }
+    
+    /* ── MASTHEAD ── */
+    .masthead {
+      background: var(--owner);
+      padding: 72px max(24px, 5vw) 60px;
+      position: relative; overflow: hidden;
+    }
+    .masthead::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 30px,
+        rgba(255,255,255,.025) 30px,
+        rgba(255,255,255,.025) 31px
+      );
+    }
+    .masthead-inner {
+      max-width: 1120px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .masthead-kicker {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+      text-transform: uppercase; color: rgba(255,255,255,.5);
+      margin-bottom: 16px;
+    }
+    .masthead-name {
+      font-family: var(--serif); font-size: clamp(44px, 6vw, 80px);
+      font-weight: 800; color: #fff; line-height: 1;
+      letter-spacing: -.02em; margin-bottom: 20px;
+    }
+    .masthead-tagline {
+      font-size: clamp(15px, 1.6vw, 18px); color: rgba(255,255,255,.75);
+      max-width: 60ch; line-height: 1.6; font-style: italic;
+      margin-bottom: 36px;
+    }
+    .masthead-meta {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .meta-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(255,255,255,.4);
+    }
+    .meta-val {
+      font-family: var(--mono); font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,.9);
+    }
+    
+    /* ── WRAP ── */
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 max(24px, 5vw); }
+    .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    .section:last-child { border-bottom: none; }
+    
+    .sec-eyebrow {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: var(--serif); font-size: clamp(26px, 3vw, 38px);
+      font-weight: 700; letter-spacing: -.01em; line-height: 1.1;
+      margin-bottom: 10px;
+    }
+    .sec-sub {
+      font-size: 15px; color: var(--muted); max-width: 60ch;
+      line-height: 1.65; margin-bottom: 40px;
+    }
+    
+    /* ── BRAND WEB ── */
+    .brand-web {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .brand-col {
+      padding: 28px 32px;
+    }
+    .brand-col:first-child {
+      border-right: 1px solid var(--border);
+    }
+    .brand-col-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--dim);
+      margin-bottom: 20px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-col-label span {
+      display: inline-block;
+      width: 7px; height: 7px; border-radius: 50%;
+      margin-right: 6px; vertical-align: middle;
+      position: relative; top: -1px;
+    }
+    .brand-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid rgba(26,23,20,.05);
+      flex-wrap: wrap;
+    }
+    .brand-row:last-child { border-bottom: none; }
+    .brand-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .brand-name {
+      font-size: 14px; font-weight: 600; color: var(--ink);
+      font-family: var(--body);
+    }
+    .brand-meta {
+      font-family: var(--mono); font-size: 10px; color: var(--dim);
+      margin-left: auto;
+    }
+    .brand-traced-link {
+      font-family: var(--mono); font-size: 10px; color: var(--accent);
+      font-weight: 500; letter-spacing: .05em;
+      padding: 2px 8px; border: 1px solid var(--accent);
+      border-radius: 4px; transition: all .15s;
+    }
+    .brand-traced-link:hover { background: var(--accent); color: #fff; }
+    
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-top: 28px;
+    }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 20px; text-align: center;
+      box-shadow: var(--shadow-s);
+    }
+    .stat-n {
+      font-family: var(--serif); font-size: 48px; font-weight: 800;
+      color: var(--owner); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-l { font-size: 13px; color: var(--muted); line-height: 1.4; }
+    
+    /* ── OBFUSCATION SECTION ── */
+    .obf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    .obf-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 28px;
+      box-shadow: var(--shadow-s);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .obf-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .obf-num {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+      color: var(--dim); margin-bottom: 8px;
+    }
+    .obf-brand {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--owner);
+      font-weight: 500; margin-bottom: 10px;
+    }
+    .obf-headline {
+      font-family: var(--serif); font-size: 19px; font-weight: 700;
+      line-height: 1.25; margin-bottom: 14px; letter-spacing: -.01em;
+    }
+    .obf-body {
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+    
+    /* ── FORMULA CHANGES ── */
+    .formula-grid { display: grid; gap: 0; }
+    .formula-card {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .formula-card:last-child { border-bottom: none; }
+    .formula-top {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .formula-brand {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: .1em; color: var(--ink);
+    }
+    .formula-year {
+      font-family: var(--mono); font-size: 11px; color: var(--dim);
+      background: var(--bg2); padding: 2px 10px; border-radius: 20px;
+    }
+    .formula-change {
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+      max-width: 80ch;
+    }
+    
+    /* ── CALLOUT BANNER ── */
+    .callout {
+      background: var(--owner-lt);
+      border: 1.5px solid color-mix(in srgb, var(--owner) 30%, transparent);
+      border-radius: 18px; padding: 32px 36px;
+      display: flex; align-items: flex-start; gap: 20px;
+    }
+    .callout-icon {
+      font-size: 28px; flex-shrink: 0; line-height: 1;
+    }
+    .callout-text { flex: 1; }
+    .callout-hed {
+      font-family: var(--serif); font-size: 20px; font-weight: 700;
+      margin-bottom: 8px; letter-spacing: -.01em;
+    }
+    .callout-sub {
+      font-size: 14px; color: var(--muted); line-height: 1.65;
+    }
+    
+    /* ── FOOTER / CTA ── */
+    .page-cta {
+      background: linear-gradient(135deg, rgba(31,122,106,.1), rgba(181,135,42,.08));
+      border: 1px solid rgba(31,122,106,.2); border-radius: 22px;
+      padding: 44px 48px; margin: 64px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .cta-hed {
+      font-family: var(--serif); font-size: 26px; font-weight: 700;
+      letter-spacing: -.01em; margin-bottom: 8px;
+    }
+    .cta-sub {
+      font-size: 15px; color: var(--muted); max-width: 52ch; line-height: 1.55;
+    }
+    .cta-btns { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px; border-radius: 12px;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
+      transition: all .15s;
+    }
+    .btn-p { background: #0f5c4e; color: #fff; box-shadow: 0 8px 22px rgba(15,92,78,.25); }
+    .btn-p:hover { background: #1f7a6a; }
+    .btn-s { background: var(--card); color: var(--ink); border: 1px solid var(--border); box-shadow: var(--shadow-s); }
+    .btn-s:hover { border-color: var(--accent); color: var(--accent); }
+    
+    .page-footer {
+      text-align: center; padding: 32px max(24px, 5vw) 48px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    
+    @media (max-width: 700px) {
+      .brand-web { grid-template-columns: 1fr; }
+      .brand-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .obf-grid { grid-template-columns: 1fr; }
+      .page-cta { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="traced-homepage-v5.html" class="nav-logo">Traced<span>●</span></a>
+    <a href="traced-homepage-v5.html#ownership" class="nav-back">← Ownership Overview</a>
+  </div>
+</nav>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-kicker">Ownership Web · JAB Holding Company</div>
+    <h1 class="masthead-name">JAB Holding Company</h1>
+    <p class="masthead-tagline">A private European holding company that quietly owns your morning coffee.</p>
+    <div class="masthead-meta">
+      <div class="meta-item">
+        <span class="meta-label">Founded</span>
+        <span class="meta-val">1828</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Annual Revenue</span>
+        <span class="meta-val">$30B+ (est.)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Headquarters</span>
+        <span class="meta-val">Luxembourg City</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Brands Owned</span>
+        <span class="meta-val">40+</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- BRAND WEB -->
+  <section class="section">
+    <div class="sec-eyebrow">Full Portfolio</div>
+    <h2 class="sec-title">The Brand Web</h2>
+    <p class="sec-sub">Every brand below is owned by JAB Holding Company. Highlighted rows are brands that specifically market themselves as natural, organic, wellness, or independent — the ones most likely to obscure their parent company.</p>
+    
+    <div class="brand-web">
+      <div class="brand-col">
+        <div class="brand-col-label">
+          <span style="background:#2d7a5c"></span>Natural / Organic / Wellness
+        </div>
+        <div class="brand-row">
+              <span class="brand-dot" style="background:#2d7a5c"></span>
+              <span class="brand-name">Stumptown Coffee</span>
+              <span class="brand-meta">2015 · undisclosed</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#2d7a5c"></span>
+              <span class="brand-name">Intelligentsia Coffee</span>
+              <span class="brand-meta">2015 · undisclosed</span>
+              
+            </div>
+      </div>
+      <div class="brand-col">
+        <div class="brand-col-label">
+          <span style="background:#aaa"></span>Legacy / Mainstream / Other
+        </div>
+        <div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Peet's Coffee</span>
+              <span class="brand-meta">2012 · $1B</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Caribou Coffee</span>
+              <span class="brand-meta">2012 · $340M</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Keurig Dr Pepper</span>
+              <span class="brand-meta">2016 merger · $13.9B</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Einstein Bros. Bagels</span>
+              <span class="brand-meta">2014 · $100M est.</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Panera Bread</span>
+              <span class="brand-meta">2017 · $7.5B</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Krispy Kreme</span>
+              <span class="brand-meta">2016 · $1.35B</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Prêt à Manger</span>
+              <span class="brand-meta">2018 · $2B</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Coty Inc. (beauty)</span>
+              <span class="brand-meta">2015 · $12B</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Espresso House (Scandinavia)</span>
+              <span class="brand-meta">2013 · undisclosed</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Au Bon Pain</span>
+              <span class="brand-meta">2017 · undisclosed</span>
+              
+            </div>
+      </div>
+    </div>
+    
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-n">40+</div>
+        <div class="stat-l">Consumer brands owned globally</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">50+</div>
+        <div class="stat-l">Countries with active operations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">$2B+ (est.)</div>
+        <div class="stat-l">Estimated annual marketing spend</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE MONEY FLOWS TO THEM -->
+  <section class="section">
+    <div class="callout">
+      <div class="callout-icon">↑</div>
+      <div class="callout-text">
+        <div class="callout-hed">Every purchase flows upward</div>
+        <div class="callout-sub">When you buy a brand in the left column above — Annie's, RXBar, Vital Proteins, Stumptown — the revenue flows through subsidiary holding structures back to JAB Holding Company. The brand may feel independent. The product may be genuinely different. But the financial relationship is the same as buying any other product in this portfolio.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OBFUSCATION CASES -->
+  <section class="section">
+    <div class="sec-eyebrow">Marketing Obfuscation</div>
+    <h2 class="sec-title">How the Story Gets Obscured</h2>
+    <p class="sec-sub">These are documented cases where branding, packaging, or public messaging obscures the ownership relationship or ingredient reality.</p>
+    <div class="obf-grid">
+      <div class="obf-card">
+          <div class="obf-num">01</div>
+          <div class="obf-brand">Stumptown + Intelligentsia</div>
+          <h3 class="obf-headline">Third-wave coffee absorbed into a private equity holding company</h3>
+          <p class="obf-body">Stumptown and Intelligentsia were two of the defining names of the third-wave coffee movement — the idea that coffee was an artisanal product deserving traceability, direct trade relationships, and transparent sourcing. JAB acquired both in 2015. Neither brand displays any JAB branding. Both continue to operate independent websites, maintain direct trade messaging, and position themselves as alternatives to corporate coffee. The irony is structural: they are now subsidiaries of a company that also owns Keurig — the disposable-pod coffee platform that specialty coffee professionals have spent a decade criticizing.</p>
+        </div>
+<div class="obf-card">
+          <div class="obf-num">02</div>
+          <div class="obf-brand">Panera Bread</div>
+          <h3 class="obf-headline">'You Pick Two' and a hidden sodium problem</h3>
+          <p class="obf-body">Panera spent years positioning itself as 'clean' food — no artificial preservatives, colors, or sweeteners. Its 'No No List' was a marketing centerpiece. What the brand didn't prominently communicate: many of its 'clean' soups and sandwiches contained sodium levels exceeding 1,500mg per serving — close to an entire day's recommended intake. The 'clean' framing focused on ingredient type, not quantity. Panera was acquired by JAB for $7.5 billion in 2017.</p>
+        </div>
+<div class="obf-card">
+          <div class="obf-num">03</div>
+          <div class="obf-brand">Keurig</div>
+          <h3 class="obf-headline">The pod platform that locked in convenience — and locked out competition</h3>
+          <p class="obf-body">Keurig's original K-Cup design included a DRM-style lock to prevent third-party pods from working in their machines. The Keurig 2.0 (2014) added an optical reader that rejected unlicensed pods. Consumer backlash was significant; the feature was eventually removed. But the episode was illustrative: a platform sold on 'choice' and 'convenience' was simultaneously being engineered for lock-in. JAB's merger of Keurig and Dr Pepper in 2018 created a combined beverage platform valued at ~$20B.</p>
+        </div>
+    </div>
+  </section>
+
+  <!-- FORMULA CHANGES -->
+  <section class="section">
+    <div class="sec-eyebrow">Formula Changes</div>
+    <h2 class="sec-title">What Changed After Acquisition</h2>
+    <p class="sec-sub">Post-acquisition formula changes are rarely announced. They appear in the ingredient panel — in 7pt type — long after the acquisition press release has been forgotten.</p>
+    <div class="formula-grid">
+      <div class="formula-card">
+            <div class="formula-top">
+              <span class="formula-brand">Stumptown Cold Brew</span>
+              <span class="formula-year">2018</span>
+            </div>
+            <p class="formula-change">The original Stumptown cold brew was made from single-origin Holler Mountain blend, brewed in Portland. Post-JAB scaling, the retail cold brew moved to a multi-origin blend with standardized extraction parameters. The packaging retained 'Portland, OR' and the hand-drawn aesthetic but sourcing became co-manufacturer dependent.</p>
+          </div>
+<div class="formula-card">
+            <div class="formula-top">
+              <span class="formula-brand">Panera Bread soups</span>
+              <span class="formula-year">2016</span>
+            </div>
+            <p class="formula-change">Panera completed its 'clean' reformulation with fanfare — removing 150+ artificial ingredients. What was less publicized: several reformulated soups increased sodium content to compensate for flavor lost when removing artificial enhancers. The clean ingredients story ran; the sodium increase did not.</p>
+          </div>
+<div class="formula-card">
+            <div class="formula-top">
+              <span class="formula-brand">Peet's Bottled Coffee</span>
+              <span class="formula-year">2019</span>
+            </div>
+            <p class="formula-change">Peet's RTD (ready-to-drink) line expanded with Keurig Dr Pepper distribution. The retail bottles shifted from cold-brew to nitrogen-infused concentrate blends to reduce cost. Premium origin language was maintained on packaging; the production method change was not communicated.</p>
+          </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="page-cta">
+    <div>
+      <div class="cta-hed">Find what exists outside this system</div>
+      <div class="cta-sub">Local vendors, independent makers, and farmers markets where your purchase doesn't route through a holding company.</div>
+    </div>
+    <div class="cta-btns">
+      <a href="traced-homepage-v5.html#local" class="btn btn-p">Find Local Alternatives</a>
+      <a href="traced-homepage-v5.html#ownership" class="btn btn-s">← Other Owners</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  Traced — An independent food transparency project · All information sourced from public filings, regulatory documents, and reported journalism
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>General Mills — Ownership Web · Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --ink: #1a1714;
+      --muted: #6b6459;
+      --dim: #a09890;
+      --bg: #f7f4ef;
+      --bg2: #f0ece5;
+      --card: #fdfaf6;
+      --border: rgba(26,23,20,.10);
+      --border-md: rgba(26,23,20,.16);
+      --shadow-s: 0 2px 8px rgba(26,23,20,.06);
+      --shadow: 0 6px 24px rgba(26,23,20,.10);
+      --accent: #1f7a6a;
+      --gold: #b5872a;
+      --owner: #1a3a6b;
+      --owner-lt: rgba(26,58,107,0.08);
+      --serif: 'Playfair Display', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+      --body: 'Lora', Georgia, serif;
+    }
+    
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    
+    a { color: inherit; text-decoration: none; }
+    
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(247,244,239,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 max(24px, 5vw);
+    }
+    .nav-inner {
+      max-width: 1120px; margin: 0 auto;
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--ink);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+      transition: color .15s;
+    }
+    .nav-back:hover { color: var(--accent); }
+    
+    /* ── MASTHEAD ── */
+    .masthead {
+      background: var(--owner);
+      padding: 72px max(24px, 5vw) 60px;
+      position: relative; overflow: hidden;
+    }
+    .masthead::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 30px,
+        rgba(255,255,255,.025) 30px,
+        rgba(255,255,255,.025) 31px
+      );
+    }
+    .masthead-inner {
+      max-width: 1120px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .masthead-kicker {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+      text-transform: uppercase; color: rgba(255,255,255,.5);
+      margin-bottom: 16px;
+    }
+    .masthead-name {
+      font-family: var(--serif); font-size: clamp(44px, 6vw, 80px);
+      font-weight: 800; color: #fff; line-height: 1;
+      letter-spacing: -.02em; margin-bottom: 20px;
+    }
+    .masthead-tagline {
+      font-size: clamp(15px, 1.6vw, 18px); color: rgba(255,255,255,.75);
+      max-width: 60ch; line-height: 1.6; font-style: italic;
+      margin-bottom: 36px;
+    }
+    .masthead-meta {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .meta-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(255,255,255,.4);
+    }
+    .meta-val {
+      font-family: var(--mono); font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,.9);
+    }
+    
+    /* ── WRAP ── */
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 max(24px, 5vw); }
+    .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    .section:last-child { border-bottom: none; }
+    
+    .sec-eyebrow {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: var(--serif); font-size: clamp(26px, 3vw, 38px);
+      font-weight: 700; letter-spacing: -.01em; line-height: 1.1;
+      margin-bottom: 10px;
+    }
+    .sec-sub {
+      font-size: 15px; color: var(--muted); max-width: 60ch;
+      line-height: 1.65; margin-bottom: 40px;
+    }
+    
+    /* ── BRAND WEB ── */
+    .brand-web {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .brand-col {
+      padding: 28px 32px;
+    }
+    .brand-col:first-child {
+      border-right: 1px solid var(--border);
+    }
+    .brand-col-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--dim);
+      margin-bottom: 20px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-col-label span {
+      display: inline-block;
+      width: 7px; height: 7px; border-radius: 50%;
+      margin-right: 6px; vertical-align: middle;
+      position: relative; top: -1px;
+    }
+    .brand-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid rgba(26,23,20,.05);
+      flex-wrap: wrap;
+    }
+    .brand-row:last-child { border-bottom: none; }
+    .brand-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .brand-name {
+      font-size: 14px; font-weight: 600; color: var(--ink);
+      font-family: var(--body);
+    }
+    .brand-meta {
+      font-family: var(--mono); font-size: 10px; color: var(--dim);
+      margin-left: auto;
+    }
+    .brand-traced-link {
+      font-family: var(--mono); font-size: 10px; color: var(--accent);
+      font-weight: 500; letter-spacing: .05em;
+      padding: 2px 8px; border: 1px solid var(--accent);
+      border-radius: 4px; transition: all .15s;
+    }
+    .brand-traced-link:hover { background: var(--accent); color: #fff; }
+    
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-top: 28px;
+    }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 20px; text-align: center;
+      box-shadow: var(--shadow-s);
+    }
+    .stat-n {
+      font-family: var(--serif); font-size: 48px; font-weight: 800;
+      color: var(--owner); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-l { font-size: 13px; color: var(--muted); line-height: 1.4; }
+    
+    /* ── OBFUSCATION SECTION ── */
+    .obf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    .obf-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 28px;
+      box-shadow: var(--shadow-s);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .obf-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .obf-num {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+      color: var(--dim); margin-bottom: 8px;
+    }
+    .obf-brand {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--owner);
+      font-weight: 500; margin-bottom: 10px;
+    }
+    .obf-headline {
+      font-family: var(--serif); font-size: 19px; font-weight: 700;
+      line-height: 1.25; margin-bottom: 14px; letter-spacing: -.01em;
+    }
+    .obf-body {
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+    
+    /* ── FORMULA CHANGES ── */
+    .formula-grid { display: grid; gap: 0; }
+    .formula-card {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .formula-card:last-child { border-bottom: none; }
+    .formula-top {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .formula-brand {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: .1em; color: var(--ink);
+    }
+    .formula-year {
+      font-family: var(--mono); font-size: 11px; color: var(--dim);
+      background: var(--bg2); padding: 2px 10px; border-radius: 20px;
+    }
+    .formula-change {
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+      max-width: 80ch;
+    }
+    
+    /* ── CALLOUT BANNER ── */
+    .callout {
+      background: var(--owner-lt);
+      border: 1.5px solid color-mix(in srgb, var(--owner) 30%, transparent);
+      border-radius: 18px; padding: 32px 36px;
+      display: flex; align-items: flex-start; gap: 20px;
+    }
+    .callout-icon {
+      font-size: 28px; flex-shrink: 0; line-height: 1;
+    }
+    .callout-text { flex: 1; }
+    .callout-hed {
+      font-family: var(--serif); font-size: 20px; font-weight: 700;
+      margin-bottom: 8px; letter-spacing: -.01em;
+    }
+    .callout-sub {
+      font-size: 14px; color: var(--muted); line-height: 1.65;
+    }
+    
+    /* ── FOOTER / CTA ── */
+    .page-cta {
+      background: linear-gradient(135deg, rgba(31,122,106,.1), rgba(181,135,42,.08));
+      border: 1px solid rgba(31,122,106,.2); border-radius: 22px;
+      padding: 44px 48px; margin: 64px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .cta-hed {
+      font-family: var(--serif); font-size: 26px; font-weight: 700;
+      letter-spacing: -.01em; margin-bottom: 8px;
+    }
+    .cta-sub {
+      font-size: 15px; color: var(--muted); max-width: 52ch; line-height: 1.55;
+    }
+    .cta-btns { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px; border-radius: 12px;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
+      transition: all .15s;
+    }
+    .btn-p { background: #0f5c4e; color: #fff; box-shadow: 0 8px 22px rgba(15,92,78,.25); }
+    .btn-p:hover { background: #1f7a6a; }
+    .btn-s { background: var(--card); color: var(--ink); border: 1px solid var(--border); box-shadow: var(--shadow-s); }
+    .btn-s:hover { border-color: var(--accent); color: var(--accent); }
+    
+    .page-footer {
+      text-align: center; padding: 32px max(24px, 5vw) 48px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    
+    @media (max-width: 700px) {
+      .brand-web { grid-template-columns: 1fr; }
+      .brand-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .obf-grid { grid-template-columns: 1fr; }
+      .page-cta { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="traced-homepage-v5.html" class="nav-logo">Traced<span>●</span></a>
+    <a href="traced-homepage-v5.html#ownership" class="nav-back">← Ownership Overview</a>
+  </div>
+</nav>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-kicker">Ownership Web · General Mills</div>
+    <h1 class="masthead-name">General Mills</h1>
+    <p class="masthead-tagline">The company that buys organic brands and puts them back on the same shelf.</p>
+    <div class="masthead-meta">
+      <div class="meta-item">
+        <span class="meta-label">Founded</span>
+        <span class="meta-val">1856</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Annual Revenue</span>
+        <span class="meta-val">$19.9B</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Headquarters</span>
+        <span class="meta-val">Golden Valley, MN</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Brands Owned</span>
+        <span class="meta-val">30+</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- BRAND WEB -->
+  <section class="section">
+    <div class="sec-eyebrow">Full Portfolio</div>
+    <h2 class="sec-title">The Brand Web</h2>
+    <p class="sec-sub">Every brand below is owned by General Mills. Highlighted rows are brands that specifically market themselves as natural, organic, wellness, or independent — the ones most likely to obscure their parent company.</p>
+    
+    <div class="brand-web">
+      <div class="brand-col">
+        <div class="brand-col-label">
+          <span style="background:#2d7a5c"></span>Natural / Organic / Wellness
+        </div>
+        <div class="brand-row">
+              <span class="brand-dot" style="background:#2d7a5c"></span>
+              <span class="brand-name">Annie's Homegrown</span>
+              <span class="brand-meta">2014 · $820M</span>
+              <a href="traced-annies.html" class="brand-traced-link">→ Investigation</a>
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#2d7a5c"></span>
+              <span class="brand-name">Lärabar</span>
+              <span class="brand-meta">2008 · ~$65M</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#2d7a5c"></span>
+              <span class="brand-name">Epic Provisions</span>
+              <span class="brand-meta">2016 · undisclosed</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#2d7a5c"></span>
+              <span class="brand-name">Cascadian Farm (organic)</span>
+              <span class="brand-meta">2000 · undisclosed</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#2d7a5c"></span>
+              <span class="brand-name">Muir Glen (organic tomatoes)</span>
+              <span class="brand-meta">2000 · undisclosed</span>
+              
+            </div>
+      </div>
+      <div class="brand-col">
+        <div class="brand-col-label">
+          <span style="background:#aaa"></span>Legacy / Mainstream / Other
+        </div>
+        <div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Cheerios</span>
+              <span class="brand-meta">legacy · —</span>
+              <a href="traced-cheerios.html" class="brand-traced-link">→ Investigation</a>
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Lucky Charms</span>
+              <span class="brand-meta">legacy · —</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Häagen-Dazs</span>
+              <span class="brand-meta">1983 · $100M est.</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Yoplait (51% stake)</span>
+              <span class="brand-meta">1977 · —</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Nature Valley</span>
+              <span class="brand-meta">legacy · —</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Pillsbury</span>
+              <span class="brand-meta">2001 · $10.5B</span>
+              
+            </div><div class="brand-row">
+              <span class="brand-dot" style="background:#999"></span>
+              <span class="brand-name">Betty Crocker</span>
+              <span class="brand-meta">legacy · —</span>
+              
+            </div>
+      </div>
+    </div>
+    
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-n">30+</div>
+        <div class="stat-l">Consumer brands owned globally</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">100+</div>
+        <div class="stat-l">Countries with active operations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">$800M+</div>
+        <div class="stat-l">Estimated annual marketing spend</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE MONEY FLOWS TO THEM -->
+  <section class="section">
+    <div class="callout">
+      <div class="callout-icon">↑</div>
+      <div class="callout-text">
+        <div class="callout-hed">Every purchase flows upward</div>
+        <div class="callout-sub">When you buy a brand in the left column above — Annie's, RXBar, Vital Proteins, Stumptown — the revenue flows through subsidiary holding structures back to General Mills. The brand may feel independent. The product may be genuinely different. But the financial relationship is the same as buying any other product in this portfolio.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OBFUSCATION CASES -->
+  <section class="section">
+    <div class="sec-eyebrow">Marketing Obfuscation</div>
+    <h2 class="sec-title">How the Story Gets Obscured</h2>
+    <p class="sec-sub">These are documented cases where branding, packaging, or public messaging obscures the ownership relationship or ingredient reality.</p>
+    <div class="obf-grid">
+      <div class="obf-card">
+          <div class="obf-num">01</div>
+          <div class="obf-brand">Annie's Homegrown</div>
+          <h3 class="obf-headline">The 'student-run' brand that isn't</h3>
+          <p class="obf-body">Annie's was founded in 1989 by Annie Withey out of her Connecticut farmhouse. It went public in 2012, positioning itself as the independent, mission-driven alternative to Big Food. Two years later, General Mills acquired it for $820 million. The packaging still features Annie's handwritten font, her photo, and the tagline 'Homegrown.' The back-of-box letter still reads like a note from a small farmer. The company is headquartered in Berkeley, CA — but owned from Golden Valley, MN.</p>
+        </div>
+<div class="obf-card">
+          <div class="obf-num">02</div>
+          <div class="obf-brand">Lärabar</div>
+          <h3 class="obf-headline">Whole-ingredient simplicity, conglomerate supply chain</h3>
+          <p class="obf-body">Lärabar was founded in 2003 by Lara Merriken, selling bars with 3–5 ingredients at farmers markets. The pitch was radical transparency — no additives, no isolates, just dates and nuts. General Mills acquired it in 2008. The ingredient list hasn't changed dramatically, but sourcing decisions now flow through General Mills' global procurement operation, which sources ingredients for Cheerios, Betty Crocker, and Lucky Charms simultaneously.</p>
+        </div>
+<div class="obf-card">
+          <div class="obf-num">03</div>
+          <div class="obf-brand">Cascadian Farm / Muir Glen</div>
+          <h3 class="obf-headline">Organic brands inside a non-organic company</h3>
+          <p class="obf-body">Both Cascadian Farm and Muir Glen were acquired in 2000 through Small Planet Foods. They operate as standalone units with separate branding and messaging. General Mills itself is not an organic company — it lobbied against stricter organic standards multiple times. The brands' 'organic' identity is siloed marketing, not a reflection of company-wide sourcing philosophy.</p>
+        </div>
+    </div>
+  </section>
+
+  <!-- FORMULA CHANGES -->
+  <section class="section">
+    <div class="sec-eyebrow">Formula Changes</div>
+    <h2 class="sec-title">What Changed After Acquisition</h2>
+    <p class="sec-sub">Post-acquisition formula changes are rarely announced. They appear in the ingredient panel — in 7pt type — long after the acquisition press release has been forgotten.</p>
+    <div class="formula-grid">
+      <div class="formula-card">
+            <div class="formula-top">
+              <span class="formula-brand">Cheerios</span>
+              <span class="formula-year">2015</span>
+            </div>
+            <p class="formula-change">Reformulated to remove oat hull fiber, increasing the proportion of cheaper whole grain oats. The 'heart healthy' claim remained on the box. No announcement was made to consumers.</p>
+          </div>
+<div class="formula-card">
+            <div class="formula-top">
+              <span class="formula-brand">Annie's Mac & Cheese</span>
+              <span class="formula-year">2017–2020</span>
+            </div>
+            <p class="formula-change">Post-acquisition, Annie's gradually increased portion of non-organic ingredients in some SKUs. The 'organic' label on select products was maintained where certification thresholds were met, but critics noted the broadening use of conventional inputs across the line.</p>
+          </div>
+<div class="formula-card">
+            <div class="formula-top">
+              <span class="formula-brand">Nature Valley Granola Bars</span>
+              <span class="formula-year">2016</span>
+            </div>
+            <p class="formula-change">Lawsuit filed claiming the 'natural' label was misleading because bars contained glyphosate-treated oats. General Mills settled for $9M. The 'natural' label was quietly modified but not removed.</p>
+          </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="page-cta">
+    <div>
+      <div class="cta-hed">Find what exists outside this system</div>
+      <div class="cta-sub">Local vendors, independent makers, and farmers markets where your purchase doesn't route through a holding company.</div>
+    </div>
+    <div class="cta-btns">
+      <a href="traced-homepage-v5.html#local" class="btn btn-p">Find Local Alternatives</a>
+      <a href="traced-homepage-v5.html#ownership" class="btn btn-s">← Other Owners</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  Traced — An independent food transparency project · All information sourced from public filings, regulatory documents, and reported journalism
+</footer>
+
+</body>
+</html>

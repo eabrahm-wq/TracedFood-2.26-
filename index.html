@@ -962,6 +962,108 @@ img{display:block;max-width:100%}
   .pe-grid{grid-template-columns:1fr;}
 }
 
+
+/* ── FEATURED INVESTIGATION BLOCK ── */
+.feat-invest{
+  display:flex;gap:40px;
+  background:linear-gradient(135deg, rgba(26,22,18,.96), rgba(26,22,18,.99));
+  border:1.5px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  padding:40px 44px;
+  margin-bottom:28px;
+  color:#fff;
+  cursor:pointer;
+  transition:border-color .2s, transform .2s, box-shadow .2s;
+  box-shadow:0 12px 40px rgba(26,22,18,.22);
+  text-decoration:none;
+  position:relative;
+  overflow:hidden;
+}
+.feat-invest::before{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -55deg,
+    transparent, transparent 28px,
+    rgba(255,255,255,.012) 28px, rgba(255,255,255,.012) 29px
+  );
+  pointer-events:none;
+}
+.feat-invest:hover{
+  border-color:rgba(31,122,106,.5);
+  transform:translateY(-2px);
+  box-shadow:0 18px 50px rgba(26,22,18,.28);
+}
+.fi-left{ flex:1; position:relative; z-index:1; }
+.fi-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.fi-badge{
+  background:var(--accent);
+  color:#fff;
+  font-family:var(--mono);
+  font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  padding:4px 10px;border-radius:6px;font-weight:500;
+}
+.fi-category{
+  font-family:var(--mono);
+  font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);
+}
+.fi-title{
+  font-family:var(--serif);
+  font-style:italic;font-weight:700;
+  font-size:clamp(22px,2.4vw,34px);
+  line-height:1.1;letter-spacing:-.02em;
+  color:#fff;margin-bottom:14px;
+}
+.fi-desc{
+  font-size:14px;color:rgba(255,255,255,.6);
+  line-height:1.7;max-width:58ch;margin-bottom:20px;
+}
+.fi-tags{ display:flex;flex-wrap:wrap;gap:7px; }
+.fi-tag{
+  font-family:var(--mono);
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.5);
+  padding:4px 10px;border-radius:6px;
+}
+.fi-right{
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  min-width:190px;flex-shrink:0;
+  position:relative;z-index:1;
+  border-left:1px solid rgba(255,255,255,.08);
+  padding-left:36px;
+}
+.fi-stat-col{ display:flex;flex-direction:column;gap:20px; }
+.fi-stat-n{
+  font-family:var(--serif);
+  font-size:34px;font-weight:800;
+  color:rgba(255,255,255,.9);line-height:1;
+  margin-bottom:4px;
+}
+.fi-stat-l{
+  font-family:var(--mono);
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);line-height:1.4;max-width:16ch;
+}
+.fi-cta{
+  font-family:var(--mono);
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;
+  margin-top:24px;
+  transition:color .15s;
+}
+.feat-invest:hover .fi-cta{ color:#4ec9b0; }
+@media(max-width:720px){
+  .feat-invest{flex-direction:column;padding:28px 24px;}
+  .fi-right{border-left:none;border-top:1px solid rgba(255,255,255,.08);
+    padding-left:0;padding-top:24px;}
+}
 </style>
 </head>
 <body>
@@ -1269,22 +1371,31 @@ img{display:block;max-width:100%}
       <!-- Kettle & Fire -->
       <div class="pe-card">
         <div class="pe-card-header" style="background:#3d2a1a;">
-          <div class="pe-firm-type">VC-Backed Brand · Austin, TX → Lancaster, PA</div>
-          <div class="pe-firm-name">Kettle & Fire</div>
-          <div class="pe-firm-aum">$43M raised March 2025 · Colter Ventures</div>
+          <div class="pe-firm-type">VC-Backed Brand · Austin, TX &rarr; Lancaster, PA</div>
+          <div class="pe-firm-name">Kettle &amp; Fire</div>
+          <div class="pe-firm-aum">$43M raised March 2025 &middot; Colter Ventures</div>
         </div>
         <div class="pe-card-body">
-          <div class="pe-brands-label">The original product vs. where the line is going</div>
+          <div class="pe-brands-label">Same brand name. Very different product. Per 1 cup:</div>
           <div class="pe-brands-list">
-            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Classic Beef Bone Broth <span class="pe-note">flagship — grass-fed bones, ~45 cal, 10g protein, 0g fat</span></span></div>
-            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Classic Chicken Bone Broth <span class="pe-note">regeneratively sourced, simple ingredient list</span></span></div>
-            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Coconut Ginger Chicken Broth <span class="pe-note">new line — added coconut cream, 7g fat vs 0g in original</span></span></div>
-            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Turmeric Ginger Chicken Broth <span class="pe-note">flavored line — lower protein density than flagship</span></span></div>
-            <div class="pe-brand-row"><span class="pe-dot red"></span><span>KettleWorks facility <span class="pe-note">new 167,000 sq ft plant — built for volume, not craft</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Classic Chicken Bone Broth <span class="pe-note">flagship &mdash; ~40 cal &middot; ~0g fat &middot; 0g sat fat &middot; ~9.5g protein &middot; 3 ingredients</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot red"></span><span>Coconut Curry &amp; Lime Bone Broth <span class="pe-note">new line &mdash; 190 cal &middot; 15g fat &middot; 13g sat fat (65% DV) &middot; 12g protein &middot; 521mg sodium</span></span></div>
           </div>
-          <div class="pe-card-insight">
+          <div style="background:rgba(139,26,26,.07);border:1px solid rgba(139,26,26,.18);border-radius:10px;padding:14px 16px;margin:14px 0 0;">
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#8b1a1a;margin-bottom:8px;font-weight:500;">By the numbers &middot; per cup</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;font-size:12px;">
+              <div style="color:#5c5349;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;padding-bottom:4px;border-bottom:1px solid rgba(0,0,0,.07);grid-column:1">Flagship</div>
+              <div style="color:#8b1a1a;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;padding-bottom:4px;border-bottom:1px solid rgba(0,0,0,.07);grid-column:2">Coconut Curry Lime</div>
+              <div style="color:#1a1612;">Calories: <strong>~40</strong></div><div style="color:#8b1a1a;">Calories: <strong>190</strong> <span style="font-size:11px;opacity:.7;">(4.75&times;)</span></div>
+              <div style="color:#1a1612;">Total Fat: <strong>~0g</strong></div><div style="color:#8b1a1a;">Total Fat: <strong>15g</strong></div>
+              <div style="color:#1a1612;">Sat. Fat: <strong>0g</strong></div><div style="color:#8b1a1a;">Sat. Fat: <strong>13g &mdash; 65% DV</strong></div>
+              <div style="color:#1a1612;">Protein: <strong>~9.5g</strong></div><div style="color:#1a1612;">Protein: <strong>12g</strong></div>
+              <div style="color:#1a1612;">Sodium: <strong>~310mg</strong></div><div style="color:#8b1a1a;">Sodium: <strong>521mg</strong></div>
+            </div>
+          </div>
+          <div class="pe-card-insight" style="margin-top:14px;">
             <span class="pe-insight-label">What to watch here</span>
-            Kettle & Fire is not yet owned by a conglomerate — but the $43M Colter Ventures round in March 2025 bought out the founders' early investors, installed a new CEO, and is explicitly funding "new product lines." The original bone broth remains genuinely well-sourced. The flavored line uses coconut cream and additional oils that significantly change the fat and calorie profile while carrying the same brand credibility. This is the inflection point — not a condemnation, but a signal to read the label on each SKU individually.
+            The original bone broth is genuinely well-sourced and nutritionally clean. The new Coconut Curry &amp; Lime line carries identical branding but is a fundamentally different product &mdash; 69% of calories from fat, 65% of the daily saturated fat limit in a single cup. Kettle &amp; Fire markets it as &ldquo;the only bone broth in the world that contains fat.&rdquo; The $43M Colter Ventures round (March 2025) bought out early investors, installed a new CEO, and is explicitly funding line expansion. The flagship is fine. Read the label on each SKU individually.
           </div>
         </div>
       </div>
@@ -1530,6 +1641,43 @@ img{display:block;max-width:100%}
       </div>
       <a href="#indexes" class="sec-link">Browse all indexes →</a>
     </div>
+
+    <!-- ── FEATURED INVESTIGATION ── -->
+    <a href="traced-meat-fish.html" class="feat-invest">
+      <div class="fi-left">
+        <div class="fi-eyebrow">
+          <span class="fi-badge">Featured Investigation</span>
+          <span class="fi-category">Meat &amp; Seafood · 4 chapters</span>
+        </div>
+        <h2 class="fi-title">The Counter Doesn't Know Where It Came From</h2>
+        <p class="fi-desc">Grocery store meat and fish labeling has three overlapping problems: origin claims that mean less than they sound, quality terms with no federal definition, and a supply chain so fragmented that even the retailer often can't trace it. We went through the regulatory history, the Oceana fraud data, and the USDA loopholes — chapter by chapter.</p>
+        <div class="fi-tags">
+          <span class="fi-tag">Country of origin labeling</span>
+          <span class="fi-tag">Grass-fed vs. grass-finished</span>
+          <span class="fi-tag">43% salmon mislabeling rate</span>
+          <span class="fi-tag">Supply chain opacity</span>
+          <span class="fi-tag">Local butchers &amp; fishmongers</span>
+        </div>
+      </div>
+      <div class="fi-right">
+        <div class="fi-stat-col">
+          <div class="fi-stat">
+            <div class="fi-stat-n">43%</div>
+            <div class="fi-stat-l">of salmon samples mislabeled in Oceana study</div>
+          </div>
+          <div class="fi-stat">
+            <div class="fi-stat-n">2016</div>
+            <div class="fi-stat-l">Congress repealed mandatory beef origin labeling</div>
+          </div>
+          <div class="fi-stat">
+            <div class="fi-stat-n">4</div>
+            <div class="fi-stat-l">companies process ~85% of all US beef</div>
+          </div>
+        </div>
+        <div class="fi-cta">Read the investigation →</div>
+      </div>
+    </a>
+
     <div class="stories-scroll">
       <a href="traced-annies.html" class="s-card feat">
         <div class="kicker">Story · Featured</div>

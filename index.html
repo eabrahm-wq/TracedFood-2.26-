@@ -1627,4 +1627,17 @@ img{display:block;max-width:100%}
       applyFilter();
     });
   });
-  fChips.forEach(c
+  fChips.forEach(c{
+    c.addEventListener('click',()=>{
+      activeFilter = c.dataset.f;
+      fChips.forEach(cc=>cc.classList.toggle('on', cc.dataset.f===activeFilter));
+      applyFilter();
+    });
+  });
+
+  applyFilter();
+
+})();
+</script>
+</body>
+</html>

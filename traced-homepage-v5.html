@@ -1577,7 +1577,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!input.contains(e.target)&&!dd.contains(e.target))
       dd.classList.remove('open');
   });
-})();
+});
 
 /* ── NAV search ──────────────────────────────── */
 (function(){
@@ -1627,7 +1627,7 @@ document.addEventListener('DOMContentLoaded', function(){
       applyFilter();
     });
   });
-  fChips.forEach(c{
+  fChips.forEach(c=>{
     c.addEventListener('click',()=>{
       activeFilter = c.dataset.f;
       fChips.forEach(cc=>cc.classList.toggle('on', cc.dataset.f===activeFilter));

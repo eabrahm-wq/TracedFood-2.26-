@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AG1 — Deep Trace | Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0908;
+      --bg-card: #111009;
+      --bg-hover: #161410;
+      --border: #232018;
+      --border-light: #2d2a20;
+      --text: #ede9e0;
+      --text-muted: #9a9284;
+      --text-dim: #625c50;
+      --amber: #c8943a;
+      --amber-dim: rgba(200,148,58,0.08);
+      --green: #4e9b6f;
+      --green-dim: rgba(78,155,111,0.08);
+      --yellow: #d4a84b;
+      --yellow-dim: rgba(212,168,75,0.08);
+      --red: #c94d3c;
+      --red-dim: rgba(201,77,60,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10,9,8,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-cat {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-muted); }
+
+    /* ── LIVE ALERT ── */
+    .live-alert {
+      background: rgba(201,77,60,0.07);
+      border-bottom: 1px solid rgba(201,77,60,0.2);
+      padding: 10px 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.75); }
+    }
+    .live-alert-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: rgba(237,233,224,0.65);
+    }
+    .live-alert-text strong { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 40px 0;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 64px;
+      align-items: start;
+    }
+    .hero-breadcrumb {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .bc-sep { color: var(--border-light); }
+    .bc-current { color: var(--amber); }
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-label::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--red);
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(56px, 8vw, 100px);
+      font-weight: 900;
+      line-height: 0.85;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--amber);
+    }
+    .hero-subtitle {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      line-height: 1.3;
+    }
+    .hero-verdict {
+      font-size: 15.5px;
+      font-weight: 300;
+      color: rgba(237,233,224,0.8);
+      max-width: 560px;
+      line-height: 1.75;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-verdict strong { color: var(--text); font-weight: 500; }
+
+    /* ── SCORECARD ── */
+    .scorecard {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      position: sticky;
+      top: 80px;
+    }
+    .scorecard-head {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(201,77,60,0.04);
+    }
+    .scorecard-head-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .overall-verdict {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--red);
+      letter-spacing: -0.02em;
+    }
+    .overall-sub {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .score-row:last-of-type { border-bottom: none; }
+    .score-dim {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+    .score-pill {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+    .score-pill.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .score-pill.yellow { color: var(--yellow); background: var(--yellow-dim); border: 1px solid rgba(212,168,75,0.2); }
+    .score-pill.green { color: var(--green); background: var(--green-dim); border: 1px solid rgba(78,155,111,0.2); }
+    .scorecard-meta {
+      border-top: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .meta-key {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .meta-val {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .meta-val.red { color: var(--red); }
+
+    /* ── CONTENT ── */
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 64px 40px 80px;
+    }
+
+    /* Section divider */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 60px 0 36px;
+    }
+    .section-divider:first-child { margin-top: 0; }
+    .section-num {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      flex-shrink: 0;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .section-title em { font-style: italic; color: var(--amber); }
+
+    /* Prose */
+    .prose {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(237,233,224,0.8);
+      line-height: 1.8;
+      max-width: 720px;
+    }
+    .prose p { margin-bottom: 18px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+    .prose em { color: var(--amber); font-style: normal; }
+
+    /* Findings grid */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 36px 0;
+    }
+    .finding-block {
+      background: var(--bg-card);
+      padding: 24px 26px;
+    }
+    .finding-num {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+    .finding-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .finding-body {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .finding-flag {
+      margin-top: 12px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .finding-flag.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .finding-flag.yellow { color: var(--yellow); background: var(--yellow-dim); border: 1px solid rgba(212,168,75,0.2); }
+
+    /* Callout box */
+    .callout {
+      border: 1px solid var(--border-light);
+      border-left: 3px solid var(--amber);
+      background: var(--bg-card);
+      padding: 20px 24px;
+      margin: 28px 0;
+      border-radius: 0 2px 2px 0;
+    }
+    .callout.red { border-left-color: var(--red); }
+    .callout-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .callout.red .callout-label { color: var(--red); }
+    .callout-text {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .callout-text strong { color: var(--text); font-weight: 500; }
+
+    /* Endorser table */
+    .endorser-table {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 28px 0;
+    }
+    .et-head {
+      display: grid;
+      grid-template-columns: 220px 1fr 1fr 130px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+    .et-row {
+      display: grid;
+      grid-template-columns: 220px 1fr 1fr 130px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .et-row:last-child { border-bottom: none; }
+    .et-row:hover { background: var(--bg-hover); }
+    .et-cell {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      border-right: 1px solid var(--border);
+      line-height: 1.5;
+    }
+    .et-cell:last-child { border-right: none; }
+    .et-head .et-cell {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+    .et-cell strong { color: var(--text); font-weight: 500; }
+    .conflict-tag {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: var(--red-dim);
+      border: 1px solid rgba(201,77,60,0.2);
+      padding: 2px 6px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .disclosed-tag {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: rgba(106,100,96,0.1);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    /* Ingredient audit */
+    .ingredient-audit {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 28px 0;
+    }
+    .ia-head {
+      display: grid;
+      grid-template-columns: 200px 1fr 120px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(201,77,60,0.04);
+    }
+    .ia-row {
+      display: grid;
+      grid-template-columns: 200px 1fr 120px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ia-row:last-child { border-bottom: none; }
+    .ia-row:nth-child(even) { background: rgba(255,255,255,0.01); }
+    .ia-cell {
+      padding: 10px 16px;
+      font-size: 12.5px;
+      font-weight: 300;
+      color: var(--text-muted);
+      border-right: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .ia-cell:last-child { border-right: none; }
+    .ia-head .ia-cell {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+    .ia-cell.hidden { color: var(--red); }
+    .ia-cell.disclosed { color: var(--green); }
+
+    /* Data pull-quote */
+    .pull-quote {
+      border-left: 3px solid var(--amber);
+      padding: 16px 24px;
+      margin: 36px 0;
+    }
+    .pq-text {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 26px);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .pq-source {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 0;
+      margin: 28px 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 88px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .tl-row {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      margin-bottom: 0;
+      position: relative;
+    }
+    .tl-row::after {
+      content: '';
+      position: absolute;
+      left: 84px;
+      top: 20px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border-light);
+      border: 1px solid var(--border);
+    }
+    .tl-row.red::after { background: var(--red); border-color: var(--red); }
+    .tl-row.amber::after { background: var(--amber); border-color: var(--amber); }
+    .tl-year {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      padding: 14px 0;
+      text-align: right;
+      padding-right: 20px;
+    }
+    .tl-content {
+      padding: 14px 0 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tl-row:last-child .tl-content { border-bottom: none; }
+    .tl-event {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .tl-detail {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .tl-flag {
+      display: inline-block;
+      margin-top: 5px;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 2px;
+    }
+    .tl-flag.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .tl-flag.amber { color: var(--amber); background: var(--amber-dim); border: 1px solid rgba(200,148,58,0.2); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--amber);
+      text-decoration: none;
+    }
+    .footer-note {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 900px) {
+      .nav { padding: 16px 20px; }
+      .live-alert { padding: 10px 20px; }
+      .hero { grid-template-columns: 1fr; padding: 48px 20px 0; gap: 40px; }
+      .scorecard { position: static; }
+      .content { padding: 40px 20px 60px; }
+      .findings-grid { grid-template-columns: 1fr; }
+      .et-head, .et-row { grid-template-columns: 1fr 1fr; }
+      .et-cell:nth-child(3), .et-cell:nth-child(4) { grid-column: span 1; }
+      .ia-head, .ia-row { grid-template-columns: 150px 1fr 100px; }
+      footer { flex-direction: column; gap: 12px; padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html">Traced</a>
+  <span class="nav-cat">Deep Trace — AG1</span>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="traced-protein-supplements.html">Proteins</a></li>
+    <li><a href="traced-electrolytes.html">Electrolytes</a></li>
+    <li><a href="traced-greens-powders.html">Greens</a></li>
+    <li><a href="traced-chocolate.html">Chocolate</a></li>
+    <li><a href="traced-protein-bars.html">Protein Bars</a></li><li><a href="traced-deep-dives.html">Deep Dives</a></li></ul>
+</nav>
+
+<!-- LIVE ALERT -->
+<div class="live-alert">
+  <div class="live-dot"></div>
+  <p class="live-alert-text"><strong>Updated Feb 2026:</strong> Founder Chris Ashenden resigned July 2024 after NZ criminal convictions surfaced · AG1 Next Gen reformulation launched May 2025 · $600M revenue, $1.2B valuation · 75 ingredients, proprietary blend undisclosed</p>
+</div>
+
+<!-- HERO -->
+<div style="max-width:1100px;margin:0 auto;padding:0 40px;">
+  <div class="hero" style="padding-left:0;padding-right:0;">
+    <div>
+      <div class="hero-breadcrumb">
+        <span>Traced</span>
+        <span class="bc-sep">/</span>
+        <span>Greens Powders</span>
+        <span class="bc-sep">/</span>
+        <span class="bc-current">AG1 — Deep Trace</span>
+      </div>
+      <div class="hero-label">Low Transparency · Deep Trace</div>
+      <h1 class="hero-title"><em>AG1</em></h1>
+      <div class="hero-subtitle">Formerly Athletic Greens. $79/month. 75 ingredients.<br>49 doses hidden. One very complicated founder.</div>
+      <div class="hero-verdict">
+        AG1 is the supplement industry's most successful product and its most instructive case study in how trust is manufactured at scale. <strong>The investor-endorser conflict is not peripheral to the AG1 model — it is the model.</strong> The company was built around acquiring equity stakes in high-trust health communicators and deploying them as paid sponsors simultaneously. The product behind this machinery contains 75 ingredients in a proprietary blend where <strong>49 of 75 individual doses are not disclosed</strong> — making independent efficacy evaluation structurally impossible by design. The founder who built this structure resigned in July 2024 after a New Zealand journalism investigation surfaced criminal convictions from rent-to-buy property scams he had concealed for over a decade. <strong>$600 million in annual revenue. Zero independent clinical trials on the complete formula.</strong>
+      </div>
+    </div>
+    <div class="scorecard">
+      <div class="scorecard-head">
+        <div class="scorecard-head-label">Transparency Score</div>
+        <div class="overall-verdict">Low Transparency</div>
+        <div class="overall-sub">6 Red · 1 Yellow · 0 Green</div>
+      </div>
+      <div class="score-row"><span class="score-dim">Ownership / Control</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Investor-Endorser Conflict</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Label Claims</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Founder Integrity</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Certification (NSF)</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="scorecard-meta">
+        <div class="meta-row">
+          <span class="meta-key">Price</span>
+          <span class="meta-val">$79/mo subscription</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Revenue (2024)</span>
+          <span class="meta-val">~$600M</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Valuation</span>
+          <span class="meta-val">$1.2B (Jan 2025)</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Ingredients</span>
+          <span class="meta-val">75 total</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Doses hidden</span>
+          <span class="meta-val red">49 of 75</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Clinical trials</span>
+          <span class="meta-val red">0 on full formula</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">NSF Certified</span>
+          <span class="meta-val">Yes (purity only)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY FINDINGS -->
+<div class="content">
+
+  <div class="section-divider">
+    <span class="section-num">Key Findings</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="findings-grid">
+    <div class="finding-block">
+      <div class="finding-num">01</div>
+      <div class="finding-title">The investor-endorser conflict is the business model, not a side effect of it</div>
+      <div class="finding-body">Peter Attia, Andrew Huberman, and Tim Ferriss all held financial relationships with AG1 simultaneously with public endorsements to their combined 10M+ followers. None of these relationships were fully disclosed at point of endorsement. The product's market position is almost entirely a function of this trust channel — not the formula.</div>
+      <div class="finding-flag red">Red — Structural, not incidental</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">02</div>
+      <div class="finding-title">49 of 75 ingredient doses are hidden inside proprietary blends — making independent evaluation impossible by design</div>
+      <div class="finding-body">AG1 discloses 26 individual doses (vitamins, minerals). The remaining 49 ingredients — the herbal extracts, adaptogens, probiotics, antioxidants — are grouped into proprietary blends with only a total blend weight disclosed. A physician cannot assess dosing adequacy. A researcher cannot replicate the formula. The consumer cannot evaluate what they are paying for.</div>
+      <div class="finding-flag red">Red — Pharmaceutical-grade opacity in a food supplement</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">03</div>
+      <div class="finding-title">The founder was convicted of criminal fraud in New Zealand — and concealed it for 14 years</div>
+      <div class="finding-body">Chris Ashenden was convicted of 43 breaches of the NZ Fair Trading Act in 2011 for rent-to-buy property scams that stripped vulnerable people of home ownership. He fled New Zealand, rebuilt in the US, and built a $1.2B company without disclosing this history. When the Newsroom "Powder Keg" podcast surfaced the convictions in July 2024, Ashenden resigned as CEO within days. AG1 denied any connection between the two events.</div>
+      <div class="finding-flag red">Red — Criminal history concealed from board, investors, and subscribers</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">04</div>
+      <div class="finding-title">AG1's clinical trials involve ~30 adults. Comparable supplement research involves 15,000 participants over 11 years</div>
+      <div class="finding-body">AG1's three-stage internal testing process has been conducted on groups of approximately 30 adults per stage. Dr. JoAnn Manson, professor of medicine at Harvard Medical School, explicitly criticized the methodology as lacking scientific rigor in a Fortune interview. No independent, peer-reviewed clinical trial of the complete AG1 formula has been published.</div>
+      <div class="finding-flag red">Red — "Science-backed" claim is not supported by independent research</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">05</div>
+      <div class="finding-title">NSF Certified for Sport confirms purity — not efficacy, not dose adequacy, not that any ingredient works</div>
+      <div class="finding-body">AG1 heavily promotes its NSF Certified for Sport status. This certification confirms what's on the label is in the container, that no banned athletic substances are present, and that the manufacturing facility meets quality standards. It does not validate any health claim, confirm clinical efficacy, or require dose disclosure above what FDA regulations require.</div>
+      <div class="finding-flag yellow">Yellow — Real certification, systematically overstated in marketing</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">06</div>
+      <div class="finding-title">AG1 is marketed as "made in New Zealand" — it is not manufactured or sold in New Zealand</div>
+      <div class="finding-body">For years AG1 marketing prominently featured New Zealand provenance. The Powder Keg investigation revealed the product is not manufactured in New Zealand for any commercial market. The NZ subsidiary registered with Ashenden's father as director appeared to create a paper connection to the country for marketing purposes. AG1 declined to address the claim directly when questioned.</div>
+      <div class="finding-flag red">Red — Geographic provenance claim not supported by manufacturing reality</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: THE CONFLICT -->
+  <div class="section-divider">
+    <span class="section-num">01</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">The <em>Investor-Endorser</em><br>Conflict</h2>
+
+  <div class="prose">
+    <p>AG1's go-to-market strategy was built on a structural insight: the most trusted voices in the health and wellness space — physicians, scientists, podcasters — have audiences that trust their recommendations implicitly. If those voices hold equity in a product, they have a financial interest in the product's success. If they are simultaneously paid sponsors, that interest is compounded. If neither the equity relationship nor the sponsorship fees are disclosed at point of endorsement, the listener has no way to distinguish scientific recommendation from commercial transaction.</p>
+    <p>This is not an unusual situation in consumer marketing. It is, however, <strong>an unusually pure form of the problem</strong> — because the endorsers are specifically physicians and scientists whose authority derives from the perception of disinterest. Peter Attia's brand is built on the premise that he applies the same evidence standard to supplements as he does to pharmaceuticals. Andrew Huberman's brand is built on the credibility of Stanford neuroscience. Tim Ferriss's brand is built on rigorous personal experimentation. In each case, AG1 purchased both the financial relationship and the benefit of that trust.</p>
+  </div>
+
+  <div class="endorser-table">
+    <div class="et-head">
+      <div class="et-cell">Endorser</div>
+      <div class="et-cell">Platform & Reach</div>
+      <div class="et-cell">AG1 Relationship</div>
+      <div class="et-cell">Disclosure Status</div>
+    </div>
+    <div class="et-row">
+      <div class="et-cell"><strong>Peter Attia, MD</strong><br>The Drive Podcast</div>
+      <div class="et-cell">2M+ subscribers. Longevity physician, Stanford/Johns Hopkins trained. High-net-worth health audience. Author, <em>Outlive</em>.</div>
+      <div class="et-cell">Named Scientific Advisor. Confirmed equity investor (two funding rounds per Sacra research). David brand CSO in 2024 — departed Feb 2026. AG1 advisor relationship predates David.<div class="conflict-tag">Equity + Advisory</div></div>
+      <div class="et-cell"><span class="disclosed-tag">Partial</span><br>Sponsorship disclosed; equity not consistently disclosed at point of endorsement.</div>
+    </div>
+    <div class="et-row">
+      <div class="et-cell"><strong>Andrew Huberman, PhD</strong><br>Huberman Lab</div>
+      <div class="et-cell">7M+ YouTube subscribers. Stanford neuroscientist. Sold-out live events. "Professor" framing adds institutional weight.</div>
+      <div class="et-cell">Named Scientific Advisor. Paid podcast sponsor (estimated $2M/year). Equity status not publicly confirmed but multiple sourced reports indicate equity stake.<div class="conflict-tag">Advisory + Sponsor</div></div>
+      <div class="et-cell"><span class="disclosed-tag">Partial</span><br>"AG1 sponsor" disclosed in episodes. Equity not disclosed. Advisory role not consistently disclosed.</div>
+    </div>
+    <div class="et-row">
+      <div class="et-cell"><strong>Tim Ferriss</strong><br>The Tim Ferriss Show</div>
+      <div class="et-cell">800K+ subscribers. Author, <em>The 4-Hour Body</em>. Earliest biohacking audience. Introduced AG1 to the mainstream productivity/wellness crossover.</div>
+      <div class="et-cell">Confirmed early equity investor (mentioned AG1 in <em>The 4-Hour Body</em>). Long-term paid podcast sponsor. Earliest known investor in the endorser network.<div class="conflict-tag">Equity + Sponsor</div></div>
+      <div class="et-cell"><span class="disclosed-tag">Partial</span><br>Sponsorship disclosed in episodes. Equity relationship rarely foregrounded in endorsements.</div>
+    </div>
+    <div class="et-row">
+      <div class="et-cell"><strong>Joe Rogan</strong><br>The Joe Rogan Experience</div>
+      <div class="et-cell">~14M Spotify subscribers. Highest-reach podcast in US. Non-specialist audience but enormous volume.</div>
+      <div class="et-cell">Paid podcast sponsor. Equity relationship not publicly confirmed but sourced by NZ Herald investigation as part of influencer compensation package.<div class="conflict-tag">Sponsor (equity unclear)</div></div>
+      <div class="et-cell"><span class="disclosed-tag">Partial</span><br>Sponsor noted. Broader financial arrangement not disclosed.</div>
+    </div>
+    <div class="et-row">
+      <div class="et-cell"><strong>Lex Fridman</strong><br>Lex Fridman Podcast</div>
+      <div class="et-cell">4M+ YouTube subscribers. MIT-affiliated AI researcher framing. Credibility transfer from technical/academic positioning.</div>
+      <div class="et-cell">Paid podcast sponsor. No equity relationship publicly confirmed.<div class="conflict-tag">Sponsor</div></div>
+      <div class="et-cell"><span class="disclosed-tag">Standard disclosure</span><br>"AG1 sponsor" noted in episodes.</div>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-label">The Valuation Paradox</div>
+    <div class="callout-text">At a <strong>$1.2 billion valuation</strong> on a product with no patent protection, no proprietary ingredient that competitors cannot replicate, and no manufacturing moat, the entire enterprise value is brand equity — which is itself almost entirely a function of influencer trust. When the influencers are also equity holders, <strong>the asset and the marketing channel are the same thing.</strong> This creates a structural fragility: if the trust relationship fractures, the valuation has no floor. The Ashenden resignation in 2024 was the first stress test. Revenue held. But the test is not over.</div>
+  </div>
+
+  <!-- SECTION 2: FOUNDER -->
+  <div class="section-divider">
+    <span class="section-num">02</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">The <em>Founder</em><br>Problem</h2>
+
+  <div class="prose">
+    <p>Chris Ashenden built AG1 on a specific brand of personal authenticity: the reformed athlete who discovered foundational nutrition and built a company around sharing it with the world. The origin story, repeated in countless interviews, positioned him as a mission-driven entrepreneur whose product reflected his personal commitment to health optimization.</p>
+    <p>In July 2024, Newsroom New Zealand published the results of an eighteen-month investigation. <strong>Ashenden had been convicted in 2011 of 43 breaches of the NZ Fair Trading Act</strong> for operating rent-to-buy property schemes that took deposits from financially vulnerable people, gave them the impression they were acquiring homes, and did not transfer title. An Auckland District Court judge described the offending as containing "strong elements of cynicism and the calculated exploitation of people struggling financially."</p>
+    <p>Ashenden had fled New Zealand after the convictions, rebuilt in Australia and then the US, and built a $1.2 billion company without disclosing this history to his board, his institutional investors, or his subscriber base. He had hired legal representation to suppress the story before it went public. AG1 had denied the criminal charges were criminal in nature — an assertion NZ journalists documented as factually false.</p>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-row">
+      <div class="tl-year">2006–10</div>
+      <div class="tl-content">
+        <div class="tl-event">NZ Rent-to-Buy Schemes</div>
+        <div class="tl-detail">Ashenden's companies take deposits from buyers seeking home ownership through rent-to-buy arrangements. Title is not transferred. Victims lose everything they invested.</div>
+      </div>
+    </div>
+    <div class="tl-row red">
+      <div class="tl-year">2011</div>
+      <div class="tl-content">
+        <div class="tl-event">43 Criminal Convictions — NZ Fair Trading Act</div>
+        <div class="tl-detail">Auckland District Court convicts Ashenden. Judge describes the offending as "cynical and calculated exploitation of people struggling financially." Fines and reparations ordered against Ashenden's companies.</div>
+        <div class="tl-flag red">Criminal conviction — suppressed for 13+ years</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">2010–14</div>
+      <div class="tl-content">
+        <div class="tl-event">Athletic Greens Founded — Grows to $160M Revenue</div>
+        <div class="tl-detail">Ashenden founds Athletic Greens in New Zealand and grows it into a DTC supplement company. No public disclosure of criminal history to investors, board, or subscribers.</div>
+      </div>
+    </div>
+    <div class="tl-row amber">
+      <div class="tl-year">2014</div>
+      <div class="tl-content">
+        <div class="tl-event">Personal Fines Paid to Lift Arrest Warrant</div>
+        <div class="tl-detail">Ashenden pays personal fines imposed on him (not the companies) in order to return to New Zealand without arrest. The $182,000 in fines and reparations awarded against his companies remains unpaid as of 2024 — the companies had been wound up.</div>
+        <div class="tl-flag amber">Reparations to victims: not paid</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">2021</div>
+      <div class="tl-content">
+        <div class="tl-event">Rebrands as AG1 · Hires Kat Cole as President/COO · $115M Series A</div>
+        <div class="tl-detail">Company raises $115M Series A at $1.2B valuation. Kat Cole joins from Focus Brands. AG1 is the fastest-growing supplement DTC brand in the US. Criminal history still not disclosed.</div>
+      </div>
+    </div>
+    <div class="tl-row red">
+      <div class="tl-year">May 2024</div>
+      <div class="tl-content">
+        <div class="tl-event">Newsroom "Powder Keg" Investigation Publishes</div>
+        <div class="tl-detail">Scott Carney (Substack) and Newsroom NZ publish findings. AG1 hires "the most powerful legal team in the country" to suppress the video — it fails. Ashenden confronted on camera in Playa del Carmen, Mexico, outside an AG1 executive retreat.</div>
+        <div class="tl-flag red">Legal suppression attempted — failed</div>
+      </div>
+    </div>
+    <div class="tl-row red">
+      <div class="tl-year">July 2024</div>
+      <div class="tl-content">
+        <div class="tl-event">Ashenden Resigns as CEO</div>
+        <div class="tl-detail">Resignation announced one day after Newsroom asks AG1 directly about the criminal history and revenue claims. AG1 denies the two events are connected. Ashenden remains on the board. Kat Cole becomes CEO.</div>
+        <div class="tl-flag red">Resignation within 24hrs of press inquiry</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">2025</div>
+      <div class="tl-content">
+        <div class="tl-event">AG1 Next Gen Launches · $600M Revenue · Retail Expansion</div>
+        <div class="tl-detail">Kat Cole launches reformulated AG1 Next Gen, expands to Vitamin Shoppe, tests airport vending machines and Starbucks. Company commits $20M to clinical research over three years. Revenue holds despite Ashenden departure.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-label">The Authenticity Inversion</div>
+    <div class="callout-text">AG1's entire brand premise — "foundational nutrition from a mission-driven founder" — was built on an authenticity that was, from the beginning, constructed over a concealed criminal history. <strong>Ashenden told investors, advisors, and subscribers a version of himself that omitted convictions for exploiting financially vulnerable people.</strong> The NZ Herald summarized the judge's characterization: "Folk were lured into commitments which were a recipe for disaster in which they lost everything they had put into the property they were seeking to acquire." The same man built a $1.2B supplement company on the promise of helping people invest in their health.</div>
+  </div>
+
+  <!-- SECTION 3: INGREDIENT OPACITY -->
+  <div class="section-divider">
+    <span class="section-num">03</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">75 Ingredients.<br><em>49 Doses Hidden.</em></h2>
+
+  <div class="prose">
+    <p>AG1 contains 75 ingredients organized into multiple proprietary blend categories. The FDA requires only that each ingredient in a proprietary blend be listed by name, and that the total weight of the blend be disclosed. Individual doses within blends do not need to be disclosed. AG1 takes full advantage of this.</p>
+    <p>The practical consequence: a physician cannot assess whether the dose of any individual adaptogen, herbal extract, or probiotic strain is at a clinically relevant level. A consumer paying $79/month cannot know if they are receiving a therapeutic dose of ashwagandha or a trace. <strong>A dietitian who criticized this practice used the term "pixie dusting"</strong> — the inclusion of impressive-sounding ingredients in sub-therapeutic quantities solely for label marketing purposes.</p>
+    <p>AG1 explicitly markets the formula as "science-backed." The NSF Certified for Sport certification confirms purity and label accuracy — meaning the listed ingredients are present. It does not confirm that any ingredient is present at a dose with demonstrated clinical effect.</p>
+  </div>
+
+  <div class="ingredient-audit">
+    <div class="ia-head">
+      <div class="ia-cell">Blend Category</div>
+      <div class="ia-cell">What It Contains</div>
+      <div class="ia-cell">Dose Transparency</div>
+    </div>
+    <div class="ia-row">
+      <div class="ia-cell">Vitamins & Minerals</div>
+      <div class="ia-cell">Vitamin A, C, E, K, B complex, calcium, magnesium, zinc, selenium, copper, chromium, and others</div>
+      <div class="ia-cell disclosed">✓ Disclosed — individual doses on label</div>
+    </div>
+    <div class="ia-row">
+      <div class="ia-cell">Alkaline Greens Complex</div>
+      <div class="ia-cell">Spirulina, wheat grass, alfalfa, chlorella, broccoli flower powder, papaya, pineapple, bilberry extract, and others</div>
+      <div class="ia-cell hidden">✗ Hidden — blend total only</div>
+    </div>
+    <div class="ia-row">
+      <div class="ia-cell">Nutrient-Dense Extracts</div>
+      <div class="ia-cell">Acerola, Lycium berry, artichoke leaf, citrus bioflavonoids, L-glutamine, and others</div>
+      <div class="ia-cell hidden">✗ Hidden — blend total only</div>
+    </div>
+    <div class="ia-row">
+      <div class="ia-cell">Herb & Antioxidant Complex</div>
+      <div class="ia-cell">Green tea extract, ashwagandha, dandelion root, milk thistle, burdock root, hawthorn berry, beta-glucans, and others</div>
+      <div class="ia-cell hidden">✗ Hidden — blend total only</div>
+    </div>
+    <div class="ia-row">
+      <div class="ia-cell">Mushroom Complex</div>
+      <div class="ia-cell">Reishi, shiitake, maitake — doses not disclosed</div>
+      <div class="ia-cell hidden">✗ Hidden — blend total only</div>
+    </div>
+    <div class="ia-row">
+      <div class="ia-cell">Digestive Enzyme & Super Mushroom Complex</div>
+      <div class="ia-cell">Bromelain, bifidobacterium, lactobacillus strains and others — CFU count not disclosed</div>
+      <div class="ia-cell hidden">✗ Hidden — blend total only</div>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <div class="pq-text">"The amount of individual nutrients that a user absorbs is insignificant due to the addition of a relatively large quantity of ingredients present in the powdered mixture."</div>
+    <div class="pq-source">Charlotte Martin, Dietitian and Author — on AG1's dose structure</div>
+  </div>
+
+  <div class="prose">
+    <p>The physician problem is specific: AG1 markets aggressively to a medically literate audience through doctors like Attia. When a physician recommends a supplement, patients reasonably assume the physician has reviewed the ingredient doses against clinical evidence. <strong>With AG1, that review is structurally impossible</strong> — the dose data does not exist in the public label. A physician recommending AG1 is, in effect, recommending a formula they cannot evaluate. If that physician also holds equity in the company, the conflict is complete.</p>
+    <p>AG1's Next Gen reformulation in 2025 added ingredients and committed to future clinical research. The company has pledged $20M in research investment over three years. This is a genuine step toward the scientific backing the marketing claims. It does not change the current state: no published independent trial on the complete formula, and 49 of 75 doses still undisclosed.</p>
+  </div>
+
+  <!-- SECTION 4: THE NSF QUESTION -->
+  <div class="section-divider">
+    <span class="section-num">04</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">What NSF Actually<br><em>Certifies</em></h2>
+
+  <div class="prose">
+    <p>NSF Certified for Sport is a real and meaningful certification. It is sought by professional athletes, required by some sporting organizations, and represents a genuine third-party audit of manufacturing quality. In the Traced framework, it is the only dimension on which AG1 avoids a red score.</p>
+    <p>What NSF Certified for Sport confirms: the product contains what the label says it contains; no banned athletic substances are present; the manufacturing facility meets Good Manufacturing Practice (GMP) standards; batch testing is conducted.</p>
+    <p><strong>What NSF Certified for Sport does not confirm:</strong> that any ingredient is present at a clinically effective dose; that any health claim is valid; that the product does the things AG1 says it does; that the formula has been independently tested for efficacy.</p>
+    <p>AG1's marketing systematically presents NSF certification as evidence of scientific rigor. The certification is invoked in the same sentence as "science-backed" and "clinically studied." These are separate claims. A product can be NSF certified and contain 49 undisclosed ingredient doses in sub-therapeutic quantities. A product can be NSF certified and have no published clinical trial on its complete formula. AG1 is both.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">The Traced NSF Standard</div>
+    <div class="callout-text">NSF Certified for Sport is the <strong>floor of acceptable third-party testing</strong> for a supplement at this price point — not the ceiling. Momentous (green in the proteins category) goes further: individual product certificates of analysis (COAs) are publicly accessible batch by batch. AG1 does not publish COAs. Heavy metal load, mycotoxin profiles, and batch-specific contamination data are not available to subscribers. When the Powder Keg investigation asked AG1 to provide these certificates, the company refused. This is the distinction between using NSF as a quality standard and using it as a marketing claim.</div>
+  </div>
+
+  <!-- SECTION 5: WHAT CHANGED UNDER KAT COLE -->
+  <div class="section-divider">
+    <span class="section-num">05</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">Under <em>Kat Cole</em>:<br>What Has Changed</h2>
+
+  <div class="prose">
+    <p>Kat Cole became CEO in July 2024, three years after joining as President and COO. She is a more conventional executive than Ashenden: Focus Brands background (Cinnabon, Jamba Juice, Auntie Anne's), operational expertise, investor in early-stage health companies. She has no criminal history. Her public positioning on AG1 is grounded in consumer benefit rather than founder mythology.</p>
+    <p>Under Cole, the company has: launched AG1 Next Gen with upgraded methylated B complex, added vitamins and minerals, and five new clinically studied probiotic strains; committed $20M to clinical research over three years; expanded into retail (Vitamin Shoppe, Starbucks tests, airport vending); added new product lines including sleep supplements; and hired a Chief Science and Nutrition Officer (Dr. Ralph Esposito) in 2025.</p>
+    <p><strong>What has not changed:</strong> the proprietary blend structure remains. The 49 hidden doses remain. No independent peer-reviewed trial on the complete formula has been published. The endorser network — Huberman, Rogan, Fridman — remains in place. The Cayman Islands corporate structure through which the company operates has not changed. Ashenden remains on the board.</p>
+    <p>The Kat Cole era is a genuine improvement in corporate governance credibility and research investment intent. It does not address the structural transparency problems that define AG1's position in the Traced framework. <strong>A reformed management team does not un-hide 49 ingredient doses or un-create the investor-endorser conflict that built the subscriber base.</strong></p>
+  </div>
+
+  <!-- SECTION 6: EDITORIAL CONCLUSION -->
+  <div class="section-divider">
+    <span class="section-num">06</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">Why AG1 Is the<br><em>Definitive Case</em></h2>
+
+  <div class="prose">
+    <p>AG1 is not the worst product in the supplement category. The formula is not dangerous. The ingredients are not fraudulent. NSF certification is real. The company is not selling something that will harm the people taking it.</p>
+    <p>What makes AG1 the definitive case study is the precision with which it exploits every structural gap in the supplement regulatory framework simultaneously. Proprietary blends allow ingredient opacity. The FDA does not require clinical trials for supplements. The FTC's endorsement disclosure rules have significant enforcement gaps in the podcasting context. New Zealand's criminal conviction suppression law (convictions concealed after 7 years) allowed a fraudulent founder to present a false personal narrative. The US's general openness to business reinvention enabled the rest.</p>
+    <p>AG1 did not create these gaps. But <strong>it built a $600M business by navigating all of them at once</strong> — proprietary blends to prevent formula evaluation, influencer equity to manufacture trust, founder mythology to substitute for clinical evidence, and NSF certification to provide a plausible third-party credibility signal.</p>
+    <p>The platform that Kat Cole is now building — retail expansion, product diversification, genuine research investment — may eventually produce the evidence base AG1's marketing has always claimed. If it does, and if the proprietary blend opacity is reduced, the Traced score will update. Those conditions have not been met. The score remains red.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">What Would Change the Score</div>
+    <div class="callout-text">
+      AG1 would move from red toward yellow on this assessment if: <strong>(1)</strong> Individual ingredient doses are disclosed, ending the proprietary blend opacity for the herbal, adaptogen, and probiotic categories. <strong>(2)</strong> An independent, peer-reviewed clinical trial on the complete formula is published in a credible journal — not a company-funded study of 30 participants. <strong>(3)</strong> Batch-level certificates of analysis are made publicly available. <strong>(4)</strong> The equity relationships of all named Scientific Advisors are disclosed at point of endorsement, not just buried in company disclosures. None of these require reformulation. They require transparency. The $20M research pledge is a step. The dose disclosure is a choice.
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<footer>
+  <a class="footer-logo" href="index.html">Traced</a>
+  <span class="footer-note">No advertising · No affiliate revenue · No brand partnerships · February 2026</span>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#94f1f0fde0fbe6fdf5f8d4e0e6f5f7f1f0baf7fb" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="6603020f1209140f070a26121407050302480509">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="trace

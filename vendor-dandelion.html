@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dandelion Chocolate — Traced Vendor Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surface:#111;--surface-2:#181818;--surface-3:#1e1e1e;
+  --border:#222;--border-lt:#2a2a2a;
+  --text:#e8e4dc;--muted:#7a7570;--dim:#4a4642;
+  --accent:#C9A84C;--accent-dim:rgba(201,168,76,.08);
+  --accent-dk:#a8863a;
+  --gold:#C9A84C;--gold-lt:rgba(201,168,76,.10);
+  --teal-lt:rgba(201,168,76,.08);--teal-md:rgba(201,168,76,.14);
+  --red:#D94F3D;--red-lt:rgba(217,79,61,.10);
+  --yellow:#D4A84B;--yellow-lt:rgba(212,168,75,.10);
+  --green:#4E9B6F;--green-lt:rgba(78,155,111,.10);
+  --ink:var(--text);--card:var(--surface);--bg2:var(--surface-2);
+  --shadow:0 16px 40px rgba(0,0,0,.5);--shadow-s:0 4px 14px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.W{max-width:1160px;margin:0 auto;padding:0 28px}
+.kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--accent);}
+.kicker.gold{color:var(--gold)}.kicker.dim{color:var(--dim)}
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:rgba(8,8,8,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-i{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px;}
+.nav-logo{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:500;}
+.nav-bc{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);}
+.nav-bc a{color:var(--muted);transition:color .15s;}.nav-bc a:hover{color:var(--accent)}
+.nav-bc .sep{color:var(--border)}.nav-bc .cur{color:var(--ink);font-weight:700}
+.nav-cta{padding:9px 16px;border-radius:999px;background:var(--accent);color:#e8e4dc111;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:background .15s;}
+.nav-cta:hover{background:var(--accent-dk)}
+/* HERO */
+.vhero{padding:56px 0 0;background:var(--surface);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.vhero::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 70% at 85% 30%,rgba(202,162,75,.10),transparent),radial-gradient(ellipse 40% 50% at 15% 80%,rgba(201,168,76,.07),transparent);}
+.hero-grid{display:grid;grid-template-columns:1fr 370px;gap:52px;align-items:start;position:relative;padding-bottom:48px;}
+.vtypes{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.vbadge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--teal-lt);border:1px solid rgba(201,168,76,.22);color:var(--accent);}
+.vbadge.gold{background:var(--gold-lt);border-color:rgba(202,162,75,.28);color:var(--gold)}
+.vbadge.verified{display:flex;align-items:center;gap:5px;background:transparent;border:none;padding-left:0;color:var(--accent);}
+.vbadge.verified::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.vname{font-family:'Playfair Display',Georgia,serif;font-size:clamp(44px,5.2vw,72px);font-weight:800;letter-spacing:-.03em;line-height:.9;margin-bottom:16px;}
+.vclaim{font-size:17px;color:var(--muted);font-style:italic;font-family:'Playfair Display',Georgia,serif;font-weight:600;margin-bottom:20px;line-height:1.4;max-width:50ch;}
+.vmeta-row{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:22px;}
+/* traced note */
+.tnote{background:linear-gradient(135deg,var(--teal-lt),rgba(202,162,75,.05));border:1.5px solid rgba(201,168,76,.20);border-radius:16px;padding:20px;margin-top:4px;}
+.tnote-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.tnote-txt{font-size:14px;line-height:1.65;color:var(--ink);}
+.tnote-txt a{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px;}
+.tnote-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.tbtn{padding:9px 14px;border-radius:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:all .15s;cursor:pointer;}
+.tbtn-p{background:var(--accent);color:#e8e4dc111;border:none;}.tbtn-p:hover{background:var(--accent-dk)}
+.tbtn-s{background:var(--surface);color:var(--ink);border:1px solid var(--border);}.tbtn-s:hover{border-color:var(--accent);color:var(--accent)}
+/* sidebar info */
+.icard{background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow-s);margin-bottom:16px;}
+.icard-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.irow{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(20,18,15,.05);}
+.irow:last-child{border-bottom:none;padding-bottom:0}
+.ikey{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.10em;text-transform:uppercase;color:var(--dim);flex-shrink:0;}
+.ival{font-size:13px;color:var(--ink);text-align:right;line-height:1.4}.ival a{color:var(--accent)}
+/* score bars */
+.sbar-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:7px;}
+.sbar-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);}
+.sbar-wrap{width:76px;height:4px;background:rgba(20,18,15,.08);border-radius:99px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:99px;}.fill-g{background:var(--accent)}.fill-a{background:var(--gold)}
+/* BODY */
+.pbody{padding:52px 0 80px}
+.player{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start;}
+.paside{position:sticky;top:80px;}
+.psec{margin-bottom:48px}
+.psec-h{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.psec-title{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;letter-spacing:-.01em;}
+/* creds */
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ccard{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow-s);transition:border-color .2s;}
+.ccard:hover{border-color:var(--accent)}
+.ccard.vf{border-color:rgba(201,168,76,.24);background:var(--teal-lt);}
+.ccard.gd{border-color:rgba(202,162,75,.24);background:var(--gold-lt);}
+.cstat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.cstat.g{color:var(--accent)}.cstat.a{color:var(--gold)}.cstat.d{color:var(--dim)}
+.cclaim{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px;line-height:1.3}
+.cdetail{font-size:12px;color:var(--muted);line-height:1.5}
+.csrc{display:inline-block;margin-top:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
+/* schedule */
+.sched-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sched-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.sched-item.open{border-color:rgba(201,168,76,.28);background:var(--teal-lt);}
+.sched-day{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+.sched-item.open .sched-day{color:var(--accent)}
+.sched-hrs{font-size:14px;font-weight:700;color:var(--ink);}
+.sched-note{font-size:12px;color:var(--muted);margin-top:3px}
+.contact-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.cbtn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);font-size:13px;color:var(--ink);cursor:pointer;transition:all .15s;}
+.cbtn:hover{border-color:var(--accent);color:var(--accent)}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0}
+.tli{display:grid;grid-template-columns:78px 1fr;gap:14px;padding:16px 0;border-left:1.5px solid var(--border);margin-left:6px;padding-left:20px;position:relative;}
+.tli::before{content:'';position:absolute;left:-5px;top:22px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border);}
+.tli.ac::before{background:var(--accent);border-color:var(--accent)}
+.tl-yr{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--dim);padding-top:2px;}
+.tl-ev{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.tl-dt{font-size:13px;color:var(--muted);line-height:1.55}
+/* commerce */
+.cblock{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-s);}
+.cblock-hd{background:linear-gradient(135deg,rgba(201,168,76,.09),rgba(202,162,75,.07));padding:20px 22px;border-bottom:1px solid var(--border);}
+.cblock-body{padding:20px 22px;}
+.copt{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.35);gap:12px;flex-wrap:wrap;}
+.copt:last-child{border-bottom:none;padding-bottom:0}
+.copt-lbl{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.copt-note{font-size:12px;color:var(--muted)}
+.coptbtn{padding:10px 16px;border-radius:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;flex-shrink:0;cursor:pointer;transition:all .15s;}
+.coptbtn-p{background:var(--accent);color:#e8e4dc111;border:none;}.coptbtn-p:hover{background:var(--accent-dk)}
+.coptbtn-s{border:1px solid var(--border);background:var(--bg);color:var(--ink);}.coptbtn-s:hover{border-color:var(--accent);color:var(--accent)}
+.future-note{margin-top:16px;padding:12px;border-radius:10px;background:var(--surface-2);border:1px dashed var(--border);font-size:12px;color:var(--dim);line-height:1.5;}
+/* intent form */
+.intent-form{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.ii{width:100%;padding:10px 13px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);font-size:13px;font-family:inherit;color:var(--ink);transition:border-color .15s;}
+.ii:focus{outline:none;border-color:var(--accent)}
+.ibtn{width:100%;padding:12px;border-radius:10px;background:var(--accent);color:#e8e4dc111;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:background .15s;}
+.ibtn:hover{background:var(--accent-dk)}
+/* aside */
+.aside-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow-s);margin-bottom:18px;}
+.ac-hd{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.ri{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer;transition:background .14s;margin:-4px;text-decoration:none;}
+.ri:hover{background:var(--teal-lt)}
+.ri-ico{width:38px;height:38px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
+.ri-ico.dk{background:#111;border-color:#7a7570;}
+.ri-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px;}
+.ri-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.ri-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.ri-why{font-size:11px;color:var(--accent);font-weight:700;margin-top:4px;}
+.nb-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid rgba(20,18,15,.05);}
+.nb-item:last-child{border-bottom:none}
+.nb-name{font-size:13px;font-weight:700;color:var(--ink)}.nb-meta{font-size:11px;color:var(--muted)}
+.nb-dist{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;}
+/* quote */
+.fq{background:linear-gradient(135deg,var(--teal-lt),rgba(202,162,75,.04));border:1px solid rgba(201,168,76,.16);border-left:3px solid var(--accent);border-radius:0 14px 14px 0;padding:22px 24px;margin:24px 0;}
+.fq-t{font-family:'Playfair Display',Georgia,serif;font-size:19px;font-style:italic;font-weight:600;line-height:1.4;color:var(--ink);margin-bottom:10px;}
+.fq-a{font-size:13px;color:var(--muted)}.fq-a strong{color:var(--ink)}
+.body-copy{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:16px}.body-copy strong{color:var(--ink)}
+.callout{padding:16px 18px;border-radius:12px;margin:16px 0;font-size:14px;line-height:1.6;}
+.callout.teal{background:var(--teal-lt);border:1px solid rgba(201,168,76,.18);color:var(--ink)}
+/* share */
+.share-btns{display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;margin-top:12px;border-top:1px solid var(--border);}
+.sbtn{padding:8px 12px;border-radius:9px;border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:var(--bg);color:var(--muted);cursor:pointer;transition:all .14s;}
+.sbtn:hover{border-color:var(--accent);color:var(--accent)}
+/* responsive */
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}.player{grid-template-columns:1fr}.paside{position:relative;top:auto}.cred-grid{grid-template-columns:1fr}.sched-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.nav-bc{display:none}.vname{font-size:48px}}
+/* animate */
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.vname{animation:up .6s ease both}.vclaim{animation:up .6s ease .1s both}.vmeta-row{animation:up .6s ease .18s both}.tnote{animation:up .65s ease .24s both}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="W nav-i">
+  <a href="index.html" class="nav-logo">TRACED</a>
+  <div class="nav-bc">
+    <a href="index.html">Home</a><span class="sep">/</span>
+    <a href="index.html#local">Local Discovery</a><span class="sep">/</span>
+    <span class="cur">Dandelion Chocolate</span>
+  </div>
+  <a href="index.html#local" class="nav-cta">Find more vendors</a>
+</div></nav>
+
+<div class="vhero"><div class="W">
+  <div class="hero-grid">
+    <div>
+      <div class="vtypes">
+        <span class="vbadge">Specialty Maker</span>
+        <span class="vbadge gold">Bean-to-Bar</span>
+        <span class="vbadge verified">Traced verified</span>
+      </div>
+      <h1 class="vname">Dandelion<br>Chocolate</h1>
+      <p class="vclaim">"We make chocolate from two ingredients: cacao beans and cane sugar. Nothing else."</p>
+      <div class="vmeta-row">
+        <span>&#x1F4CD; 740 Valencia St, Mission District, SF</span>
+        <span>&#x1F550; Daily 10am&ndash;9pm</span>
+        <span>&#x1F3ED; Factory + Caf&eacute; open to public</span>
+        <span>&#x1F4C5; Founded 2010</span>
+      </div>
+      <div class="tnote" id="tracedNote">
+        <div class="tnote-lbl">Traced Note</div>
+        <p class="tnote-txt" id="noteText">Dandelion is on Traced because of what it makes visible: farm names, harvest dates, and prices paid to farmers are published for every single origin. This is the supply chain transparency that companies like <a href="traced-reeses-hershey.html">Hershey</a> and <a href="traced-chocolate.html">the major chocolate conglomerates</a> structurally cannot offer. Dandelion sources direct&mdash;no broker, no commodity market, no opacity. Their two-ingredient model makes ingredient substitution (the <a href="traced-reeses-hershey.html">PGPR/compound coating problem in Reese&apos;s</a>) physically impossible: there&apos;s nothing to substitute.</p>
+        <div class="tnote-btns">
+          <a href="traced-reeses-hershey.html" class="tbtn tbtn-p" id="noteBtn1">Read the Reese&apos;s investigation &rarr;</a>
+          <a href="traced-chocolate.html" class="tbtn tbtn-s" id="noteBtn2">Chocolate index</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="icard">
+        <div class="icard-lbl">Vendor at a glance</div>
+        <div class="irow"><span class="ikey">Type</span><span class="ival">Bean-to-bar maker &middot; Caf&eacute;</span></div>
+        <div class="irow"><span class="ikey">Ownership</span><span class="ival">Privately held &middot; SF-founded</span></div>
+        <div class="irow"><span class="ikey">Scale</span><span class="ival">Small batch &middot; ~15 origins/yr</span></div>
+        <div class="irow"><span class="ikey">Origins</span><span class="ival">Ecuador, Peru, Madagascar, Ghana, Vietnam</span></div>
+        <div class="irow"><span class="ikey">Ingredients</span><span class="ival">Cacao beans + cane sugar only</span></div>
+        <div class="irow"><span class="ikey">Founded</span><span class="ival">2010 &middot; San Francisco</span></div>
+        <div class="irow"><span class="ikey">Factory tours</span><span class="ival"><a href="https://dandelionchocolate.com/tours" target="_blank">Open to public</a></span></div>
+      </div>
+      <div class="icard">
+        <div class="icard-lbl">Traced transparency score</div>
+        <div class="sbar-row"><span class="sbar-lbl">Origin traceability</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:100%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">Ingredient simplicity</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:100%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">Farmer price disclosed</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:95%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">Owner transparency</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:92%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">3rd-party certification</span><div class="sbar-wrap"><div class="sbar-fill fill-a" style="width:35%"></div></div></div>
+        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.5">Low certification score reflects Dandelion&apos;s deliberate self-certification through published sourcing data. Traced considers this a feature&mdash;their disclosure exceeds what most certifications require.</p>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="pbody"><div class="W"><div class="player">
+
+<!-- MAIN -->
+<div class="pmain">
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Business Background</span><h2 class="psec-title">The story behind the shop</h2></div>
+    <p class="body-copy">Dandelion Chocolate was founded in 2010 by Todd Masonis and Cameron Ring in San Francisco&apos;s Mission District. Both were former tech founders&mdash;Masonis had sold a startup to Google&mdash;who became obsessed with why craft chocolate tasted so different from commodity chocolate, and whether a two-ingredient model could make that difference legible to consumers.</p>
+    <div class="fq"><p class="fq-t">&ldquo;We started because we wanted to understand why cacao from one farm tasted so different from another. We&apos;ve never found a good reason to add anything else.&rdquo;</p><p class="fq-a">&mdash; <strong>Todd Masonis</strong>, Co-founder, Dandelion Chocolate</p></div>
+    <p class="body-copy">The founding model has never changed: <strong>source directly from small cacao farms, use only two ingredients, publish everything about where the beans came from and what you paid.</strong> In 2010 this was unusual. In 2025 it&apos;s still unusual at scale. Most &ldquo;bean-to-bar&rdquo; producers source through brokers and don&apos;t disclose purchase prices. Dandelion publishes both&mdash;annually, per origin.</p>
+    <p class="body-copy">Dandelion has remained privately held and San Francisco-based through over a decade of the broader chocolate category being acquired, consolidated, and reformulated. They expanded to Tokyo in 2016 and a Ferry Building location in 2020&mdash;but the ownership structure and production model have not changed. There is no private equity on the cap table. There is no parent company. There is no acquisition risk that Traced can identify.</p>
+    <div class="callout teal"><strong>Why this matters for Traced users:</strong> The brands in Traced&apos;s chocolate investigation have ownership structures that create direct incentives to substitute ingredients and obscure supply chain details. Dandelion&apos;s structure creates the opposite incentive: their entire value proposition depends on verifiable sourcing transparency. You cannot reformulate toward opacity and remain Dandelion.</div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Sourcing Credentials</span><h2 class="psec-title">The evidence for the claims</h2></div>
+    <p class="body-copy" style="margin-bottom:18px">Every claim below is sourced to a primary record. This is the Traced standard for vendor listings: not marketing language, but verifiable claims you can check yourself.</p>
+    <div class="cred-grid">
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; primary source</div><div class="cclaim">Farm names + harvest dates published for every origin</div><div class="cdetail">Dandelion&apos;s sourcing page lists the specific farm, region, farmer name (where available), harvest year, and flavor notes for every origin currently in production. Updated each harvest cycle.</div><a href="https://dandelionchocolate.com/sourcemap" target="_blank" class="csrc">dandelionchocolate.com/sourcemap &rarr;</a></div>
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; label inspection</div><div class="cclaim">Two ingredients only: cacao beans + cane sugar</div><div class="cdetail">Every production run carries the same two-ingredient label. No lecithin, no cocoa butter, no vanilla, no emulsifiers. Consistent across 14 years, verified by Traced review of 7 current products.</div><a href="traced-chocolate.html" class="csrc">Cross-reference: Chocolate Index &rarr;</a></div>
+      <div class="ccard gd"><div class="cstat a">&#x2605; Notable practice</div><div class="cclaim">Purchase prices paid to farmers disclosed publicly</div><div class="cdetail">Most direct-trade chocolate producers do not disclose what they pay farmers. Dandelion publishes price-per-pound paid for most origins in their annual sourcing reports. Industry-exceptional.</div><a href="https://dandelionchocolate.com/sourcing-reports" target="_blank" class="csrc">Sourcing reports &rarr;</a></div>
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; on-site</div><div class="cclaim">Factory floor open to public tours</div><div class="cdetail">Production happens at 740 Valencia St, the same address as the retail caf&eacute;. You can watch chocolate being made through a glass window while ordering at the counter.</div><a href="https://dandelionchocolate.com/tours" target="_blank" class="csrc">Book a tour &rarr;</a></div>
+      <div class="ccard"><div class="cstat d">&mdash; No formal certification</div><div class="cclaim">No Fairtrade, Rainforest Alliance, or organic certification</div><div class="cdetail">Dandelion has deliberately not pursued third-party certifications, arguing that published sourcing data is more transparent than what certification audits verify. Traced considers this a legitimate position given the quality of their primary-source disclosure. <a href="traced-chocolate.html" style="color:var(--accent)">See our certification methodology &rarr;</a></div></div>
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; public records</div><div class="cclaim">Privately held, no PE, no acquisition on record</div><div class="cdetail">No public records of institutional investment, private equity involvement, or acquisition. No ownership changes that would create the reformulation incentives documented in our Nestl&eacute;, Kellogg&apos;s, or General Mills investigations.</div><a href="owner-nestle.html" class="csrc">See Nestl&eacute; acquisition pattern &rarr;</a></div>
+    </div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Schedule &amp; Contact</span><h2 class="psec-title">Visit, buy, or get in touch</h2></div>
+    <div class="sched-grid">
+      <div class="sched-item open"><div class="sched-day">Mon &ndash; Thu</div><div class="sched-hrs">10:00 AM &ndash; 9:00 PM</div><div class="sched-note">Factory tours at select times</div></div>
+      <div class="sched-item open"><div class="sched-day">Fri &ndash; Sat</div><div class="sched-hrs">10:00 AM &ndash; 10:00 PM</div><div class="sched-note">Extended weekend hours</div></div>
+      <div class="sched-item"><div class="sched-day">Sunday</div><div class="sched-hrs">10:00 AM &ndash; 9:00 PM</div><div class="sched-note">Brunch menu available</div></div>
+      <div class="sched-item"><div class="sched-day">Factory Tours</div><div class="sched-hrs">Thu &ndash; Sun (varies)</div><div class="sched-note">Book in advance online</div></div>
+    </div>
+    <div class="contact-row">
+      <a href="https://dandelionchocolate.com" target="_blank" class="cbtn">&#x1F310; dandelionchocolate.com</a>
+      <a href="https://maps.google.com/?q=740+Valencia+St+San+Francisco" target="_blank" class="cbtn">&#x1F4CD; Get directions</a>
+      <a href="https://www.instagram.com/dandelionchocolate" target="_blank" class="cbtn">&#x1F4F7; @dandelionchocolate</a>
+      <button class="cbtn" onclick="navigator.clipboard.writeText('740 Valencia St, San Francisco CA 94110 — Dandelion Chocolate')">&#x1F4CB; Copy address</button>
+    </div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Shop &amp; Order</span><h2 class="psec-title">How to buy from Dandelion</h2></div>
+    <div class="cblock">
+      <div class="cblock-hd"><div class="kicker">Current options</div><div style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;margin-top:5px;">Three ways to buy from Dandelion</div></div>
+      <div class="cblock-body">
+        <div class="copt"><div><div class="copt-lbl">Visit in person</div><div class="copt-note">740 Valencia St, Mission &middot; Full retail + caf&eacute; &middot; Factory view</div></div><a href="https://maps.google.com/?q=740+Valencia+St+San+Francisco" target="_blank" class="coptbtn coptbtn-p">Get directions</a></div>
+        <div class="copt"><div><div class="copt-lbl">Order online (ships nationwide)</div><div class="copt-note">Their own store &mdash; no Amazon, no Thrive Market. Direct from Dandelion.</div></div><a href="https://dandelionchocolate.com/shop" target="_blank" class="coptbtn coptbtn-s">Shop online &rarr;</a></div>
+        <div class="copt"><div><div class="copt-lbl">Express interest via Traced</div><div class="copt-note">Tell Dandelion you found them here &mdash; we&apos;re piloting coordinated inquiry routing from Traced users</div></div><button class="coptbtn coptbtn-s" onclick="document.getElementById('intentWrap').style.display='block';this.style.display='none'">Express interest</button></div>
+        <div id="intentWrap" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:10px;"><strong style="color:var(--ink)">Pilot: Traced &rarr; Dandelion direct inquiry</strong> &mdash; leave your email and we&apos;ll forward to Dandelion&apos;s team.</p>
+          <div class="intent-form">
+            <input class="ii" type="text" placeholder="Your name">
+            <input class="ii" type="email" placeholder="Email address">
+            <input class="ii" type="text" placeholder="What are you looking for? (bars, gifts, tasting box&hellip;)">
+            <button class="ibtn" onclick="this.textContent='Sent ✓';this.style.background='#145c4e';this.disabled=true">Send to Dandelion &rarr;</button>
+            <p style="font-size:11px;color:var(--dim);text-align:center;line-height:1.4">Dandelion reviews and responds directly. Traced takes no fee in this pilot.</p>
+          </div>
+        </div>
+        <div class="future-note" style="margin-top:0"><strong style="color:var(--muted)">Coming to Traced Marketplace (v2):</strong> Native checkout for direct orders. Currently piloting intent routing &mdash; we connect you to the vendor, they handle fulfillment. No transaction fee until v2 launches.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">History</span><h2 class="psec-title">Timeline without acquisition</h2></div>
+    <p class="body-copy" style="margin-bottom:18px">The absence of acquisition events in a vendor&apos;s timeline is as significant as their presence. Compare this timeline to the Reese&apos;s and Annie&apos;s investigation timelines on Traced.</p>
+    <div class="tl">
+      <div class="tli ac"><div class="tl-yr">2010</div><div><div class="tl-ev">Founded in SF</div><div class="tl-dt">Todd Masonis and Cameron Ring start in a Mission District space. Two-ingredient rule established from day one. No outside funding.</div></div></div>
+      <div class="tli"><div class="tl-yr">2011</div><div><div class="tl-ev">Valencia St factory opens to public</div><div class="tl-dt">Production at 740 Valencia with factory-floor visibility. Customers can watch chocolate being made from bean to bar. Still their primary SF location.</div></div></div>
+      <div class="tli"><div class="tl-yr">2014</div><div><div class="tl-ev">First annual sourcing report published</div><div class="tl-dt">Farm names, harvest data, and prices paid published for every origin. Becomes annual practice. No other US bean-to-bar maker publishes price-per-pound paid to farmers at this time.</div></div></div>
+      <div class="tli"><div class="tl-yr">2016</div><div><div class="tl-ev">Tokyo flagship opens</div><div class="tl-dt">First international location in Tokyo&apos;s Kuramae district. Production model and two-ingredient standard carried over intact. No outside capital raised.</div></div></div>
+      <div class="tli"><div class="tl-yr">2020</div><div><div class="tl-ev">SF Ferry Building location</div><div class="tl-dt">Second SF location adjacent to Ferry Plaza Farmers Market. No ownership change, no investor event.</div></div></div>
+      <div class="tli ac"><div class="tl-yr">2024&ndash;25</div><div><div class="tl-ev">Still independent &mdash; cocoa crisis year</div><div class="tl-dt">While Hershey CFO confirmed recipe adjustments to investors under cocoa cost pressure, Dandelion continued sourcing direct and publishing prices paid to farmers. No reformulation events on record for any Dandelion origin.</div></div></div>
+    </div>
+  </div>
+
+</div><!-- /pmain -->
+
+<!-- ASIDE -->
+<aside class="paside">
+  <div class="aside-card">
+    <div class="ac-hd">Related investigations on Traced</div>
+    <a href="traced-reeses-hershey.html" class="ri"><div class="ri-ico dk">&#x1F36B;</div><div><div class="ri-type">Story &middot; High relevance</div><div class="ri-name">Reese&apos;s / Hershey</div><div class="ri-desc">PGPR, compound coatings, the Brad Reese open letter, and ingredient substitution as a business model.</div><div class="ri-why">Dandelion is the direct sourcing alternative to this story.</div></div></a>
+    <a href="traced-chocolate.html" class="ri"><div class="ri-ico dk">&#x1F4CA;</div><div><div class="ri-type">Index &middot; High relevance</div><div class="ri-name">Chocolate Index</div><div class="ri-desc">11 brands scored on origin traceability, ingredient integrity, ownership, and labor record.</div><div class="ri-why">Dandelion scores highest on sourcing transparency in this index.</div></div></a>
+    <a href="owner-nestle.html" class="ri"><div class="ri-ico" style="background:#e8f4f1;border-color:rgba(31,122,106,.2)">&#x1F578;</div><div><div class="ri-type">Owner web &middot; Contextual</div><div class="ri-name">Nestl&eacute; Portfolio</div><div class="ri-desc">KitKat, Crunch, Sweet Earth. A conglomerate chocolate portfolio under one owner.</div><div class="ri-why">Context for what acquisition-driven chocolate ownership looks like.</div></div></a>
+    <a href="owner-general-mills.html" class="ri"><div class="ri-ico" style="background:#e8f4f1;border-color:rgba(31,122,106,.2)">&#x1F578;</div><div><div class="ri-type">Owner web &middot; Contextual</div><div class="ri-name">General Mills</div><div class="ri-desc">Annie&apos;s, L&auml;rabar, Cascadian Farm. The acquisition-to-shelf pattern.</div><div class="ri-why">Broader context: same ownership dynamic, adjacent categories.</div></div></a>
+  </div>
+
+  <div class="aside-card">
+    <div class="ac-hd">Other Traced vendors nearby</div>
+    <div class="nb-item"><div><div class="nb-name">Ferry Plaza Farmers Market</div><div class="nb-meta">Market &middot; The Embarcadero</div></div><div class="nb-dist">0.6 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Bi-Rite Market</div><div class="nb-meta">Independent shop &middot; Mission</div></div><div class="nb-dist">0.2 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Rainbow Grocery Co-op</div><div class="nb-meta">Worker co-op &middot; Mission</div></div><div class="nb-dist">0.4 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Civic Center FM</div><div class="nb-meta">Market &middot; Civic Center</div></div><div class="nb-dist">1.1 mi</div></div>
+    <a href="index.html#local" style="display:block;margin-top:14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">View all SF vendors &rarr;</a>
+  </div>
+
+  <div class="aside-card">
+    <div class="ac-hd">Share this profile</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5">Share the Traced note + vendor link. Useful for group chats or anyone who just read the Reese&apos;s story.</p>
+    <div class="share-btns">
+      <button class="sbtn" onclick="copySnap()">Copy Traced snapshot</button>
+      <button class="sbtn" onclick="copyUrl()">Copy URL</button>
+    </div>
+    <div id="shareConfirm" style="display:none;font-size:12px;color:var(--accent);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.08em">Copied &#x2713;</div>
+  </div>
+
+  <div class="aside-card">
+    <div class="ac-hd">Vendor status</div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Listed</span><span class="ival">Feb 2025</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Last verified</span><span class="ival">Feb 2026</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Views this month</span><span class="ival" style="color:var(--accent);font-weight:700">1,240</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Via Reese&apos;s story</span><span class="ival" style="color:var(--accent);font-weight:700">847 referrals</span></div>
+    <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.5">Is this your shop? <a href="/cdn-cgi/l/email-protection#7e081b101a110c0d3e0a0c1f1d1b1a501d1113" style="color:var(--accent)">Update your profile &rarr;</a></p>
+  </div>
+</aside>
+
+</div></div></div>
+
+<footer style="border-top:1px solid var(--border);padding:30px 0">
+  <div class="W" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Traced</div>
+    <div style="font-size:12px;color:var(--dim)">Dandelion Chocolate vendor profile &middot; Last verified February 2026</div>
+    <a href="index.html#local" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Find more vendors &rarr;</a>
+  </div>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#96f3f2ffe2f9e4fff7fad6e2e4f7f5f3f2b8f5f9" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="ff9a9b968b908d969e93bf8b8d9e9c9a9bd19c90">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="traced-editorial-standards.html" style="color:var(--accent, #C9A84C);">Editorial Standards →</a>
+  </p>
+</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  const sp = new URLSearchParams(window.location.search);
+  const from = sp.get('from') || '';
+  const notes = {
+    'reeses-hershey':{text:'You arrived from our <a href="traced-reeses-hershey.html" style="color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px">Reese&apos;s / Hershey investigation</a>. Dandelion is listed here specifically as the sourcing-transparent answer to everything that investigation documents: PGPR replacing cocoa butter, compound coatings replacing milk chocolate, a supply chain structured to minimize cost rather than maximize transparency. Dandelion sources direct, publishes what they pay, uses two ingredients. That&apos;s the structural answer to what you just read.',b1:{t:'Back to Reese&apos;s investigation &rarr;',h:'traced-reeses-hershey.html'},b2:{t:'See full chocolate index',h:'traced-chocolate.html'}},
+    'chocolate-index':{text:'You arrived from the <a href="traced-chocolate.html" style="color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px">Traced Chocolate Index</a>. Dandelion is the highest-scoring maker in that index on sourcing transparency. While the index documents what conglomerates don&apos;t disclose, Dandelion represents what full disclosure looks like in practice: farm names, harvest dates, prices paid, and a two-ingredient product that cannot be reformulated toward opacity.',b1:{t:'Back to Chocolate Index &rarr;',h:'traced-chocolate.html'},b2:{t:'Find more SF vendors',h:'index.html#local'}},
+    'annies':{text:'You arrived from our <a href="annies.html" style="color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px">Annie&apos;s investigation</a>. The Annie&apos;s story is about what happens to brand identity and sourcing standards after acquisition&mdash;and Dandelion&apos;s 14-year history of remaining independent and sourcing-transparent is the direct contrast case. No acquisition event. No ownership change. No incentive drift.',b1:{t:'Back to Annie&apos;s story &rarr;',h:'annies.html'},b2:{t:'Chocolate Index',h:'traced-chocolate.html'}}
+  };
+  if(from && notes[from]){
+    document.getElementById('noteText').innerHTML = notes[from].text;
+    document.getElementById('noteBtn1').textContent = notes[from].b1.t;
+    document.getElementById('noteBtn1').href = notes[from].b1.h;
+    document.getElementById('noteBtn2').textContent = notes[from].b2.t;
+    document.getElementById('noteBtn2').href = notes[from].b2.h;
+  }
+})();
+function copySnap(){navigator.clipboard.writeText('Dandelion Chocolate (SF) is on Traced because they publish farm names, harvest dates, and prices paid for every cacao origin — the exact opposite of the Hershey supply chain opacity story. Two ingredients only: cacao + sugar. Still independent after 14 years.\n\nhttps://traced.com/vendor-dandelion.html').then(()=>{document.get

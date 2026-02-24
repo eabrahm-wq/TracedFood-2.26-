@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Protein Bar — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .endorser-table{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .et-header{background:var(--surface-2);display:grid;grid-template-columns:1.2fr 1fr 1.3fr;border-bottom:1px solid var(--border);}
+  .et-row{display:grid;grid-template-columns:1.2fr 1fr 1.3fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.et-row:last-child{border-bottom:none;}.et-row:hover{background:var(--surface-2);}
+  .et-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.et-cell:last-child{border-right:none;}
+  .et-header .et-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .et-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:2px;}
+  .conflict-tag{display:inline-block;font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);padding:2px 6px;border-radius:2px;margin-top:4px;}
+  .protein-breakdown{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .pb-header{background:var(--surface-2);display:grid;grid-template-columns:1.5fr 0.8fr 1.7fr;border-bottom:1px solid var(--border);}
+  .pb-row{display:grid;grid-template-columns:1.5fr 0.8fr 1.7fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.pb-row:last-child{border-bottom:none;}.pb-row:hover{background:var(--surface-2);}
+  .pb-row.highlight{background:rgba(217,79,61,0.06);border-left:2px solid var(--red);}
+  .pb-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.pb-cell:last-child{border-right:none;}
+  .pb-header .pb-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .pb-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}.pb-cell.flag{color:var(--red);}.pb-cell.ok{color:var(--green);}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}.et-header,.et-row,.pb-header,.pb-row{display:block;}.et-cell,.pb-cell{border-right:none;border-bottom:1px solid var(--border);}.et-cell:last-child,.pb-cell:last-child{border-bottom:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="site-nav"><a href="#">Database</a><a href="#">Methodology</a><a href="#">About</a></nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Breaking</span>
+  <span class="alert-text"><strong>February 2026:</strong> Peter Attia resigned as Chief Science Officer of David following the release of Epstein-related documents naming him in 1,700+ pages. Attia was an early equity investor and executive team member. Andrew Huberman remains an equity investor.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Investor-Endorser Conflict</span></div>
+    <h1 class="product-name">David</h1>
+    <p class="product-sub">Protein Bar,<br>"28g Protein · 150 Calories · 0g Sugar"</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      David's macros are real: 28 grams of protein, 150 calories, zero sugar per bar. In a category full of inflated claims, these numbers are verified and extraordinary — the protein density is genuinely best-in-class. What Traced examines is the infrastructure behind those numbers and the people promoting them. <strong>Peter Attia</strong> was both an early equity investor and the brand's Chief Science Officer — the most direct possible fusion of financial interest and scientific authority — until he resigned in February 2026 following the release of Epstein-related documents naming him in over 1,700 pages. <strong>Andrew Huberman</strong> is a confirmed equity investor from the seed round and has promoted the product across his platforms. When a physician-podcaster with 2 million subscribers serves as a brand's <em>Chief Science Officer</em>, holds equity, and promotes the product, the independence of scientific recommendation is not a gray area. The protein quality question deserves scrutiny as well: David's "Protein System" blends milk protein isolate, collagen, whey protein concentrate, and egg white. The blend achieves a legitimate 1.0 PDCAAS score — but collagen is the cheapest ingredient in that system and its proportion is undisclosed. The collagen contributes total gram count at the lowest possible cost; the whey and egg white do the amino acid work. The label shows 28g of protein. It does not show how much of that protein is doing what.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header"><span class="scorecard-title">Transparency Score</span><div class="score-summary"><span class="score-count red">5 ●</span><span class="score-count yellow">2 ●</span></div></div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      </div>
+      <div class="scorecard-footer"><div class="scorecard-footer-label">Last reviewed</div><div class="scorecard-footer-value">February 2026 · Sources below</div></div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>David was founded in 2023 by Peter Rahal, co-founder of RXBar (sold to Kellogg's in 2017 for $600 million). The brand launched with immediate velocity, driven by a strategic capital structure that placed its investor roster at the center of its marketing plan from day one.</p>
+        <p>Known equity investors include Peter Attia (physician, longevity podcaster, The Drive, ~2M subscribers) and Andrew Huberman (neuroscientist, Huberman Lab, ~7M YouTube subscribers). Both were confirmed investors from the $10M seed round in August 2024 (per the AlleyWatch CEO interview). Attia additionally served as Chief Science Officer — a formal executive role, not merely an advisory title — until his resignation in February 2026. The equity relationship for both has not been consistently disclosed beyond standard "sponsored by" language in podcast reads, which does not meet the FTC's specific guidance on equity disclosure.</p>
+        <p>The company has not disclosed a full investor list or capitalization table publicly. The valuation is not public. What is known is that David raised initial funding, placed its highest-trust health influencers on the cap table, and launched into a market where those same influencers' audiences are the primary target customer. This is the AG1 model — investor-endorser alignment as the core go-to-market strategy — executed with a newer, faster-growing brand and better macros.</p>
+
+        <div class="callout red">
+          <div class="callout-label">The Attia-Huberman Pattern — and Its Collapse</div>
+          <div class="callout-body">Peter Attia and Andrew Huberman are the two most-cited health authorities in the longevity and performance optimization space. Both held equity in AG1. Both held equity in David. Attia additionally served as David's Chief Science Officer — the formal fusion of medical authority and equity interest. In February 2026, Attia resigned from David after his name appeared in 1,700+ Epstein-related documents. The departure illustrates the structural fragility of personality-driven brands: when your scientific credibility is the product, reputational risk is an existential business risk. For David, the product and its macros are unchanged. The authority structure that sold it is dismantled.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>David's go-to-market strategy is built on investor-endorser integration. The promotional apparatus is the ownership table. When Attia says on The Drive that David is the best protein bar he's found for his own consumption, or when Huberman discusses it on Huberman Lab, the listener's prior is expert independent recommendation. The actual structure is equity holder promoting equity investment.</p>
+
+        <div class="endorser-table">
+          <div class="et-header">
+            <div class="et-cell">Endorser</div>
+            <div class="et-cell">Platform</div>
+            <div class="et-cell">David Relationship</div>
+          </div>
+          <div class="et-row">
+            <div class="et-cell">
+              <strong>Peter Attia, MD</strong>
+              The Drive Podcast
+            </div>
+            <div class="et-cell">~2M subscribers. Longevity physician. High-net-worth health optimization audience.</div>
+            <div class="et-cell">
+              Early equity investor (seed round, Aug 2024). Chief Science Officer — formal executive role. Resigned February 2026 following Epstein document release.<br>
+              <span class="conflict-tag">Equity + CSO + Promoter — departed Feb 2026</span>
+            </div>
+          </div>
+          <div class="et-row">
+            <div class="et-cell">
+              <strong>Andrew Huberman, PhD</strong>
+              Huberman Lab
+            </div>
+            <div class="et-cell">~7M YouTube subscribers. Stanford neuroscientist positioning. Mass market reach.</div>
+            <div class="et-cell">
+              Confirmed equity investor (seed round, Aug 2024, per AlleyWatch CEO interview). Active promoter. Equity relationship not prominently disclosed in standard podcast reads.<br>
+              <span class="conflict-tag">Equity + Promoter — still active as of Feb 2026</span>
+            </div>
+          </div>
+          <div class="et-row">
+            <div class="et-cell">
+              <strong>Peter Rahal</strong>
+              Founder / CEO
+            </div>
+            <div class="et-cell">Co-founder of RXBar ($600M sale to Kellogg's 2017). Proven consumer food operator.</div>
+            <div class="et-cell">Majority operator. Not an endorser conflict — standard founder role.</div>
+          </div>
+        </div>
+
+        <p>The FTC's endorsement guidelines require disclosure of material connections including equity. The standard disclaimer "sponsored by David" at the top of a podcast episode does not clearly communicate equity ownership to a typical listener. The FTC has issued guidance specifically noting that equity relationships require explicit disclosure beyond standard sponsorship language. Whether David's influencer disclosures meet this standard is an open regulatory question.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>David bars retail at approximately $3.50–4.00 per bar, or $36–42 for a 12-pack. They are available via Amazon, DTC subscription on David's website, and expanding retail distribution. The subscription option offers 10–15% discounts and auto-renewal — a mild lock-in mechanism but not aggressive by DTC health brand standards.</p>
+        <p>The yellow score reflects the premium pricing relative to comparable protein bars (Quest, RXBar, Barebells all retail at $2.50–3.00) and the DTC subscription model, weighted against the genuinely superior macro profile that partially justifies the premium. This is the most defensible yellow in the database — there is a real product argument for the price, even if the pricing is also influenced by influencer-driven brand premium.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>The headline claim — 28g protein, 150 calories, 0g sugar — is accurate. The ingredient question is more subtle than the profile's original framing suggested.</p>
+        <p>David's "Protein System" is: Milk Protein Isolate, Collagen, Whey Protein Concentrate, Egg White. The company claims, and third-party testing by Light Labs supports, a 1.0 PDCAAS score for the blend — meaning the combination of protein sources together provides a complete essential amino acid profile. This is not a fraudulent claim. The blend as a whole is complete protein.</p>
+        <p>The real issue is what the blend's composition reveals about cost engineering. Collagen is listed second in the protein system — meaning it is the second most abundant ingredient by weight. Collagen is dramatically cheaper per gram than whey isolate or milk protein isolate. It contributes to the total 28g gram count while doing less of the muscle protein synthesis work: collagen is low in leucine (the primary MPS trigger) and its tryptophan content, while present in the blend context, is the reason collagen alone scores near zero on PDCAAS. The proportion of collagen in the blend is not disclosed. A consumer cannot determine how much of their 28g is cheap structural protein versus complete high-quality protein.</p>
+
+        <div class="protein-breakdown">
+          <div class="pb-header">
+            <div class="pb-cell">Protein Source</div>
+            <div class="pb-cell">PDCAAS Score</div>
+            <div class="pb-cell">Muscle Protein Synthesis</div>
+          </div>
+          <div class="pb-row">
+            <div class="pb-cell"><strong>Whey protein (isolate/concentrate)</strong>In David's blend</div>
+            <div class="pb-cell ok">1.0 (max)</div>
+            <div class="pb-cell ok">High. Complete amino acid profile. High leucine content. Does the MPS work in the David blend.</div>
+          </div>
+          <div class="pb-row">
+            <div class="pb-cell"><strong>Egg white protein</strong>In David's blend</div>
+            <div class="pb-cell ok">1.0 (max)</div>
+            <div class="pb-cell ok">High. Complete essential amino acid profile.</div>
+          </div>
+          <div class="pb-row">
+            <div class="pb-cell"><strong>Milk protein isolate</strong>In David's blend</div>
+            <div class="pb-cell ok">1.0 (max)</div>
+            <div class="pb-cell ok">High. Contains both whey and casein fractions.</div>
+          </div>
+          <div class="pb-row highlight">
+            <div class="pb-cell"><strong>Collagen</strong>In David's blend — proportion undisclosed. Listed 2nd by weight in protein system.</div>
+            <div class="pb-cell flag">~0.0 alone</div>
+            <div class="pb-cell flag">Low leucine. Tryptophan-deficient in isolation. Cheapest ingredient in the system. Inflates total gram count at lowest cost per gram.</div>
+          </div>
+        </div>
+
+        <p>David's bar does contain whey protein concentrate alongside collagen, milk protein isolate, and egg white — the blend achieves 1.0 PDCAAS. But the proportion of collagen in the blend is not disclosed on the label, and collagen is the cheapest ingredient in the system. The consumer paying $3.50/bar for "28g protein" cannot determine what share of that protein comes from high-MPS whey and egg white versus cheap structural collagen.</p>
+
+        <div class="callout red">
+          <div class="callout-label">The Collagen Arbitrage</div>
+          <div class="callout-body">Collagen is far cheaper per gram than whey or casein. Using it as a substantial proportion of a protein blend achieves high total protein numbers on the label at lower ingredient cost, while providing meaningfully inferior nutritional outcomes for the stated purpose (performance, muscle recovery) that the brand markets toward. The label is accurate. The implication — that 28g of David bar protein is equivalent to 28g of whey protein — is not.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>David has no published clinical trials on its bars as formulated. The endorsements from Attia and Huberman carry implied scientific authority — Attia is a practicing physician, Huberman is a published neuroscientist — but neither has conducted or published independent research on David's specific product. Their endorsements are personal testimony from equity holders, not scientific evaluation.</p>
+        <p>The collagen protein issue is well-established in peer-reviewed literature. The superiority of complete proteins (whey, casein, egg) over collagen for muscle protein synthesis is not a contested scientific question. The fact that David's primary equity-holder promoters — both of whom are trained in relevant scientific disciplines and have built audiences on scientific credibility — have not prominently communicated this distinction to their audiences while promoting the product is the most significant scientific backing failure in this profile.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>The label claims are technically accurate. 28g protein — accurate. 150 calories — accurate. 0g sugar — accurate. No FDA enforcement actions. No FTC complaints filed specifically against David's product labeling as of this writing.</p>
+        <p>The yellow score reflects the gap between label accuracy and marketing implication. The "28g protein" claim is accurate as a total protein figure but does not communicate protein quality. A consumer who has learned from Attia or Huberman that leucine threshold and amino acid completeness matter for muscle protein synthesis — which both have discussed extensively — is not given the information they need to evaluate David's protein blend against those criteria the bar's own promoters have taught them.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>David is not NSF Certified for Sport. The brand does publish third-party batch testing results through Light Labs — certificates of analysis are available on their website and batches are tested for protein content and contaminants. This is meaningfully better than no testing, but Light Labs is not equivalent to NSF Certified for Sport: NSF screens for 270+ substances banned in competitive sport and requires annual facility audits. A competitive athlete who cannot risk a failed drug test needs NSF or Informed Sport certification, not an independent lab COA alone. Momentous holds NSF Certified for Sport status; David does not.</p>
+        <p>The sweetener system warrants scrutiny: David uses maltitol, sucralose, and acesulfame potassium. Maltitol is a sugar alcohol known for gastrointestinal effects at higher doses and a moderate glycemic index (unlike erythritol). Sucralose and acesulfame potassium are artificial sweeteners with ongoing debates about long-term effects. David's marketing of "0g sugar" is technically accurate but does not address the glycemic or GI effects of maltitol — a distinction worth communicating to the blood-sugar-conscious audience the brand explicitly targets.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value">28g</div><div class="aside-stat-label">Total protein per bar — accurate on the label. Blend achieves 1.0 PDCAAS. Collagen proportion within the blend is undisclosed.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">Feb 2026</div><div class="aside-stat-label">Peter Attia resigned as CSO following Epstein document release. Was equity investor + executive team member + active promoter simultaneously.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">$3.50</div><div class="aside-stat-label">Price per bar. ~40% premium to comparable bars (Quest, Barebells) with no NSF certification and undisclosed collagen proportion.</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">The Attia / Huberman Pattern</div>
+      <ul class="aside-list">
+        <li>Both held equity in <strong>AG1</strong> and <strong>David</strong> simultaneously. Attia additionally served as David's Chief Science Officer.</li>
+        <li>Both built audiences on scientific credibility and rigorous nutritional analysis — making equity conflicts in the products they endorse more consequential, not less</li>
+        <li>Equity relationship not prominently disclosed in podcast promotion reviewed; standard "sponsored by" language does not meet FTC equity disclosure guidance</li>
+        <li>Attia's February 2026 departure shows how reputational risk cascades across personality-dependent brands</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Better Alternatives</div>
+      <ul class="aside-list">
+        <li><strong>Momentous protein bars / powder:</strong> NSF Certified for Sport, whey isolate, published batch COAs, Huberman-adjacent but with disclosed transparent relationships</li>
+        <li><strong>Barebells:</strong> 20g whey protein, comparable macros, no collagen, ~$2.50/bar</li>
+        <li><strong>Quest bars:</strong> 20–21g whey/milk protein blend, NSF certified options, widely available, ~$2.50/bar</li>
+        <li>For pure protein quality: whey isolate powder (Thorne, Transparent Labs) at ~$1.50 per 25g serving is superior to any bar format at any price</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Timeline</div>
+      <ul class="aside-list">
+        <li>2017: Peter Rahal co-founds RXBar; Kellogg's acquires for $600M</li>
+        <li>Aug 2024: David launches with $10M seed. Attia (CSO + equity) and Huberman (equity) confirmed in CEO interview.</li>
+        <li>Sep 2024: Flagship bar launches publicly. Fastest-growing protein bar by search velocity and retail velocity.</li>
+        <li>May 2025: $75M Series A led by Greenoaks, Valor Equity Partners. On track for $100M+ first-year revenue.</li>
+        <li>Feb 2026: Attia named in 1,700+ Epstein documents. Resigns as CSO within days. Huberman remains equity holder.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>FTC Endorsement Guidelines, 2023 Update</strong>16 CFR Part 255. Equity relationships require explicit disclosure beyond standard sponsorship language.</div>
+    <div class="source-item"><strong>Protein Digestibility Corrected Amino Acid Score (PDCAAS)</strong>FAO/WHO methodology. Collagen alone scores ~0 due to tryptophan deficiency. David's full blend achieves 1.0 per company claim and Light Labs testing.</div>
+    <div class="source-item"><strong>Witard et al., Journal of Nutrition, 2014</strong>Leucine threshold for muscle protein synthesis. Establishes why amino acid completeness and leucine content matter beyond total gram count.</div>
+    <div class="source-item"><strong>David Protein website / FAQ / ingredient labels</strong>Full ingredient breakdown by system (Protein System, Binding System, Fat System, Flavor System). Protein System: Milk Protein Isolate, Collagen, Whey Protein Concentrate, Egg White. davidprotein.com</div>
+    <div class="source-item"><strong>Light Labs COA — David Protein, Dec 2025</strong>65/65 tests passed for protein content and contaminants. Published publicly at davidprotein.com. Not NSF Certified for Sport.</div>
+    <div class="source-item"><strong>AlleyWatch CEO Interview — Peter Rahal, Sep 2024</strong>Confirms seed round investors: "Peter Attia, M.D., and Andrew Huberman, Ph.D." Attia role as CSO confirmed.</div>
+    <div class="source-item"><strong>Business Wire — David $75M Series A, May 2025</strong>"Notable investors include Dr. Layne Norton, Ph.D., Dr. Andrew Huberman, Ph.D., and Dr. Peter Attia, M.D., who serves as the brand's Chief Science Officer."</div>
+    <div class="source-item"><strong>TechCrunch — Attia departure, Feb 2026</strong>"Attia served on the executive team of the food startup and was also an early investor." Departure confirmed following Epstein document release.</div>
+    <div class="source-item"><strong>Huberman Lab / The Drive Podcast</strong>Multiple episodes featuring David promotion. Sponsorship disclosed; equity relationship disclosure reviewed for adequacy under FTC 2023 guidelines.</div>
+    <div class="source-item"><strong>NSF International — Certified for Sport</strong>David does not appear on the NSF Certified for Sport database as of February 2026.</div>
+    <div class="source-item"><strong>Kerksick et al., JISSN, 2018</strong>International Society of Sports Nutrition position stand on protein and exercise. Whey protein superior to collagen for muscle protein synthesis outcomes.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#d0b5b4b9a4bfa2b9b1bc90a4a2b1b3b5b4feb3bf" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="6b0e0f021f0419020a072b1f190a080e0f450804">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="trac

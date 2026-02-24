@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RXBAR — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(212,168,75,0.08);border-bottom:1px solid rgba(212,168,75,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .ownership-chain{margin:20px 0 0 36px;position:relative;}
+  .chain-item{display:flex;align-items:flex-start;gap:14px;position:relative;}
+  .chain-item:not(:last-child)::after{content:'';position:absolute;left:10px;top:28px;bottom:-24px;width:1px;background:var(--border-light);}
+  .chain-dot{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .chain-dot.current{background:var(--yellow-dim);border-color:rgba(212,168,75,0.3);}
+  .chain-dot-inner{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+  .chain-dot.current .chain-dot-inner{background:var(--yellow);}
+  .chain-content{padding-bottom:28px;flex:1;}
+  .chain-year{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:2px;}
+  .chain-owner{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .chain-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}.aside-stat-value.yellow{color:var(--yellow);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="traced-index.html">TRACED <span>/ Food Transparency</span></a>
+  <nav class="site-nav"><a href="traced-index.html">Database</a><a href="#">Methodology</a><a href="traced-deep-dives.html">Deep Dives</a><a href="#">About</a></nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">○ Ownership Watch</span>
+  <span class="alert-text"><strong>Dec 2025:</strong> Mars Inc. completed its $35.9B acquisition of Kellanova, making RXBAR — "No B.S." ingredients, simple packaging, CrossFit roots — a brand inside the maker of Snickers, M&Ms, Twix, and Skittles. The third ownership transfer in eight years.</span>
+</div>
+
+<section class="hero">
+  <div>
+    <div class="hero-breadcrumb">
+      <span>Traced</span><span class="sep">/</span>
+      <span class="hero-category">Food · Protein Bar</span>
+    </div>
+    <h1 class="product-name">RXBAR</h1>
+    <p class="product-sub">"No B.S." — Now owned by Mars Inc.</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      RXBAR is genuinely what it claims to be: <strong>dates, egg whites, nuts, and nothing else.</strong> The ingredients are listed on the front of the package in bold type — the brand's entire identity was built on this transparency. Peter Rahal started the company in his parents' basement in 2013, bootstrapped to $120 million in annual sales by 2017, and sold to Kellogg for $600 million. That was the beginning of an ownership chain that has now traveled through three corporations in eight years. Kellogg acquired it in 2017. Kellogg became Kellanova in 2023. Mars Inc. acquired Kellanova for $35.9 billion in December 2025. <strong>RXBAR's "No B.S." positioning now sits inside the parent company of Snickers, M&Ms, Twix, and Skittles.</strong> The product hasn't changed — yet. Post-acquisition: Rahal moved to a non-executive role in 2019, 20% of staff were laid off in 2018, and the brand has expanded into cereal, oatmeal, and AM breakfast bars under corporate ownership. The bar itself remains clean. The ownership distance from its founding values is now extraordinary.
+    </p>
+  </div>
+  <div class="scorecard">
+    <div class="scorecard-header">
+      <span class="scorecard-title">Transparency Score</span>
+      <div class="score-summary">
+        <span class="score-count yellow">4🟡</span>
+        <span class="score-count green">3🟢</span>
+      </div>
+    </div>
+    <div class="scorecard-rows">
+      <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill green">Green</span></div>
+      <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill green">Green</span></div>
+      <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+    </div>
+    <div class="scorecard-footer">
+      <div class="scorecard-footer-label">Current Owner</div>
+      <div class="scorecard-footer-value">Mars Inc. (via Kellanova acquisition, Dec 2025). Third owner in 8 years. Rahal departed executive role 2019.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">01</span>
+        <span class="dim-title">Ownership Structure</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>RXBAR has the most dramatic ownership chain in the Traced database — not for the complexity of any single deal, but for the sheer distance traveled from origin to current owner in eight years.</p>
+        <div class="ownership-chain">
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2013</div>
+              <div class="chain-owner">Peter Rahal & Jared Smith (Founders)</div>
+              <div class="chain-note">$10,000 total starting capital. Made in Rahal's parents' basement, Glen Ellyn, Illinois. Sold door-to-door to CrossFit gyms. Zero outside investment.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">Oct 2017</div>
+              <div class="chain-owner">Kellogg Company — $600 million</div>
+              <div class="chain-note">Kellogg paid $600M ($400M net of tax). RXBAR's projected 2017 sales: $120M. Rahal stayed as CEO. Company rebranded as Insurgent Brands in 2019; Rahal moved to non-executive role.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">Oct 2023</div>
+              <div class="chain-owner">Kellanova (Kellogg spin-off)</div>
+              <div class="chain-note">Kellogg split into two public companies. RXBAR moves to Kellanova (snacks/international) alongside Pringles, Cheez-It, Pop-Tarts.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">Dec 2025</div>
+              <div class="chain-owner">Mars Inc. — $35.9B (Kellanova acquisition)</div>
+              <div class="chain-note">Mars — maker of Snickers, M&Ms, Twix, Skittles, and KIND — acquires Kellanova. RXBAR now part of Mars Snacking's "Accelerator" division alongside Nutri-Grain and Special K bars.</div>
+            </div>
+          </div>
+        </div>
+        <p>The yellow score reflects an unresolved question rather than a current failure: the product is unchanged, but Mars now controls every formulation, sourcing, and pricing decision for a brand whose identity is "No B.S. ingredients." The structural question is whether Mars's incentive structure — maximize portfolio margin across a $63B snacking business — is compatible with RXBAR's ingredient ethos over a sustained period. The Annie's profile (also in this database) shows what General Mills ownership of a clean-label brand looks like seven years in. That's the reference case for this watch.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">02</span>
+        <span class="dim-title">Marketing Alignment</span>
+        <span class="score-pill green">Green</span>
+      </div>
+      <div class="dim-body">
+        <p>RXBAR's marketing was and remains the most transparent in the protein bar category. The founding insight — move the ingredients from the back of the package to the front, in large type — created a brand whose identity is indistinguishable from its ingredient list. "12 egg whites. 6 almonds. 4 cashews. 2 dates. No B.S." is not a marketing slogan. It is the label.</p>
+        <p>No paid influencer equity conflicts. No scientific advisor arrangements layered over promotional fees. No proprietary blend obscuring what is actually in the product. The green score reflects the most straightforward marketing alignment in the database among bars in the same category as David and Momentous. What you see is what you get.</p>
+        <p>The one post-acquisition nuance: the RX AM breakfast bars — launched under Kellogg ownership — use honey and coconut sugar rather than dates, and carry 10–14g total sugars. They share the "RX" branding and the front-of-pack ingredient transparency, but are a meaningfully different product from the original bar. The brand's expansion under corporate ownership is worth watching.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">03</span>
+        <span class="dim-title">Revenue Model</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>RXBAR retails at approximately $2.50–$3.00 per bar — premium but not extreme for the protein bar category. The pricing reflects real ingredient costs: dates, egg whites, and premium nuts are not cheap at scale. No subscription model, no DTC funnel dark patterns, no auto-renewing membership.</p>
+        <p>The yellow reflects the corporate ownership dynamic: under Mars, pricing decisions are made by a $65B+ family-owned company optimizing across a global snacking portfolio. The product currently earns its price. Whether that continues, or whether margin pressure leads to ingredient substitution or portion size changes, is the forward-looking question this score is holding open.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">04</span>
+        <span class="dim-title">Ingredient Integrity</span>
+        <span class="score-pill green">Green</span>
+      </div>
+      <div class="dim-body">
+        <p>The current RXBAR ingredient list is what the brand was built on: egg whites, dates, almonds, cashews (or other nuts depending on flavor), and natural flavors. No modified food starch. No hydrogenated oils. No protein isolate blends masking cheaper sources. No artificial sweeteners. The bar delivers 12g of protein from egg whites — a complete protein source — at a PDCAAS of 1.0.</p>
+        <p>This is the clearest green in the bar category. The product is genuinely clean, the ingredient count is low, and nothing has been substituted since the 2017 acquisition. The green score reflects current ingredient reality — the ownership watch (Dimension 1) is where the forward concern lives.</p>
+        <div class="callout">
+          <div class="callout-label">The Comparison That Matters</div>
+          <div class="callout-body">David bar: milk protein isolate, collagen, whey protein concentrate, egg white — 18+ ingredient system, undisclosed collagen proportion, $3.50/bar. RXBAR: egg whites, dates, almonds, cashews — 4 primary ingredients, front-of-pack disclosure, $2.75/bar. Both are marketed to the same performance-health audience. The gap in ingredient simplicity is the entire point of the Traced bar category analysis.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">05</span>
+        <span class="dim-title">Scientific Backing</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>RXBAR makes no unusual scientific claims. "12g protein, real food ingredients" is not a contested assertion — egg whites are complete protein, the macros are accurately stated, and the brand has never claimed therapeutic benefits. No scientific advisory arrangements, no commissioned studies, no health claims requiring FDA substantiation beyond standard nutrition labeling.</p>
+        <p>The yellow reflects the same mild concern that applies to any bar in this category: no product-specific clinical research, and some of the newer RX line extensions (cereal, oatmeal) carry "better for you" positioning that is harder to substantiate than the original bar's simple ingredient list.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">06</span>
+        <span class="dim-title">Label Claim Accuracy</span>
+        <span class="score-pill green">Green</span>
+      </div>
+      <div class="dim-body">
+        <p>Clean record. No FDA warning letters, no FTC enforcement actions, no class action suits for label misrepresentation. The one notable event — a January 2019 recall of 15 flavors of RXBAR and RXBAR Kids for undeclared peanut allergen — was handled with a standard voluntary recall. Peanut allergen contamination in shared manufacturing facilities is an industry-wide risk, not specific to the brand's label accuracy practices.</p>
+        <p>The front-of-pack ingredient transparency has also never generated enforcement concern: what is stated on the front matches what is in the product. This is the standard Traced holds all brands to, and RXBAR meets it clearly.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">07</span>
+        <span class="dim-title">Safety Transparency</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>No NSF Certified for Sport status. No published third-party batch COAs. For a bar sold in gym environments to performance-oriented consumers — some of whom are competitive athletes subject to anti-doping testing — the absence of sport-specific certification is a gap relative to Momentous (green benchmark) and even Quest (NSF options available). The bar is manufactured in a US SQF-certified facility, which is meaningful for general food safety but not equivalent to sport-specific contamination screening.</p>
+        <p>The 2019 peanut recall is logged here as a transparency positive, not a negative: the voluntary recall was prompt and appropriately handled. No enforcement action required.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value yellow">3×</div><div class="aside-stat-label">Ownership transfers in 8 years. Founders → Kellogg ($600M) → Kellanova → Mars ($35.9B).</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">$10K</div><div class="aside-stat-label">Starting capital, 2013. Bootstrapped, no outside investment before the Kellogg sale.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">$120M</div><div class="aside-stat-label">Projected annual sales at time of 2017 Kellogg acquisition. Rahal departed executive role two years later.</div></div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">The Annie's Parallel</div>
+      <ul class="aside-list">
+        <li>Annie's (2012): clean-label, values-driven → General Mills acquisition ($820M) → sodium increases, product line expansion, General Mills logo in fine print only</li>
+        <li>RXBAR (2017): clean-label, "No B.S." → Kellogg → Kellanova → Mars → currently unchanged product, but corporate portfolio incentives now govern all formulation decisions</li>
+        <li>The timeline for post-acquisition compromise at Annie's was approximately 3–5 years. RXBAR is 8 years post-acquisition. The ingredient list has held. This profile will be updated if that changes.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Post-Acquisition Timeline</div>
+      <ul class="aside-list">
+        <li>Oct 2017: Kellogg acquires for $600M. Rahal stays as CEO.</li>
+        <li>Dec 2018: 20% staff layoff (40 employees) — company miscalculated growth rate.</li>
+        <li>Jan 2019: Peanut allergen recall — 15 flavors of RXBAR and RXBAR Kids.</li>
+        <li>Mar 2019: Rebranded as Insurgent Brands. Rahal moves to non-executive role.</li>
+        <li>2022–2023: RX expands into cereal, oatmeal, AM breakfast bars under Kellogg/Kellanova.</li>
+        <li>Oct 2023: Kellogg splits; RXBAR moves to Kellanova alongside Pringles, Cheez-It.</li>
+        <li>Dec 2025: Mars acquires Kellanova for $35.9B. RXBAR now in Mars Snacking's Accelerator division.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Kellogg PR Newswire — Acquisition Announcement, Oct 2017</strong>"Kellogg Company today announced that it has entered into an agreement to acquire Chicago Bar Company LLC, maker of RXBAR." Purchase price $600M.</div>
+    <div class="source-item"><strong>Wikipedia — RXBAR</strong>"Their company, Chicago Bar Co., was acquired by Kellogg's in 2017, and later became part of Kellanova, a spin-off of Kellogg's and eventually, part of Mars Inc."</div>
+    <div class="source-item"><strong>Mars Global PR — Kellanova Acquisition, Dec 2025</strong>"Mars, Incorporated...is pleased to announce the successful completion of its acquisition of Kellanova." RXBAR cited as Accelerator division brand.</div>
+    <div class="source-item"><strong>Food Dive — RXBAR Restructuring, Mar 2019</strong>Rahal moves to non-executive role. Chicago Bar Co. rebranded as Insurgent Brands. Company laid off 40 staff December 2018.</div>
+    <div class="source-item"><strong>Inc. Magazine — Rahal Exit Interview, 2018</strong>Rahal confirms founders explicitly avoided PE, chose Kellogg for "cultural fit." "We never planned on exiting."</div>
+    <div class="source-item"><strong>RXBAR.com — Current Product Label</strong>Protein System: egg whites, dates, almonds, cashews. 12g protein, 210 calories. Ingredient list verified against current packaging.</div>
+    <div class="source-item"><strong>Chicago Tribune — Acquisition Coverage, Oct 2017</strong>Rahal: "If you're a customer of ours, you won't feel a change." Company projected $120M in 2017 revenue at time of sale.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">RXBAR's current ingredient integrity is genuine. The ownership watch score reflects structural concern, not current product failure. This profile will be updated if formulation changes.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#cda8a9a4b9a2bfa4aca18db9bfacaea8a9e3aea2a0edeba0a4a9a9a2b9f6edf1aceda5bfa8abf0" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fe9b9a978a918c979f92be8a8c9f9d9b9ad09d9193">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{col

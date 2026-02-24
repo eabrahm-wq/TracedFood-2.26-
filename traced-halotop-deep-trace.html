@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halo Top — Deep Trace | Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0908; --bg-card: #111009; --bg-hover: #161410;
+      --border: #232018; --border-light: #2d2a20;
+      --text: #ede9e0; --text-muted: #9a9284; --text-dim: #625c50;
+      --amber: #c8943a; --amber-dim: rgba(200,148,58,0.08);
+      --green: #4e9b6f; --green-dim: rgba(78,155,111,0.08);
+      --yellow: #d4a84b; --yellow-dim: rgba(212,168,75,0.08);
+      --red: #c94d3c; --red-dim: rgba(201,77,60,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 300; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* ── NAV ── */
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,9,8,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .nav-logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--amber); letter-spacing: -0.01em; text-decoration: none; }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 12px; font-weight: 400; color: var(--text-dim); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text-muted); }
+    .nav-links a.active { color: var(--amber); }
+
+    /* ── ALERT BANNER ── */
+    .alert-bar { background: rgba(201,77,60,0.07); border-bottom: 1px solid rgba(201,77,60,0.2); padding: 10px 40px; display: flex; align-items: center; gap: 12px; }
+    .alert-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: pulse 2.5s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.75);} }
+    .alert-text { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: rgba(237,233,224,0.6); }
+    .alert-text strong { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero { max-width: 1100px; margin: 0 auto; padding: 72px 40px 0; display: grid; grid-template-columns: 1fr 320px; gap: 64px; align-items: start; }
+    .hero-breadcrumb { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 24px; display: flex; gap: 8px; align-items: center; }
+    .bc-sep { color: var(--border-light); }
+    .bc-current { color: var(--amber); }
+    .hero-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .hero-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--red); }
+    .hero-title { font-family: var(--font-display); font-size: clamp(56px, 8vw, 96px); font-weight: 900; line-height: 0.88; letter-spacing: -0.03em; color: var(--text); margin-bottom: 12px; }
+    .hero-title em { font-style: italic; color: var(--amber); }
+    .hero-subtitle { font-family: var(--font-display); font-style: italic; font-size: 22px; font-weight: 700; color: var(--text-muted); margin-bottom: 36px; line-height: 1.3; }
+    .hero-verdict { font-size: 15.5px; font-weight: 300; color: rgba(237,233,224,0.8); line-height: 1.78; padding-top: 20px; border-top: 1px solid var(--border); }
+    .hero-verdict strong { color: var(--text); font-weight: 500; }
+
+    /* ── SCORECARD ── */
+    .scorecard { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; position: sticky; top: 80px; }
+    .scorecard-head { padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--red-dim); }
+    .scorecard-head-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .overall-verdict { font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--red); letter-spacing: -0.02em; }
+    .overall-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 4px; }
+    .score-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid var(--border); }
+    .score-dim { font-size: 12px; font-weight: 300; color: var(--text-muted); }
+    .score-pill { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+    .score-pill.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .score-pill.yellow { color: var(--yellow); background: var(--yellow-dim); border: 1px solid rgba(212,168,75,0.2); }
+    .score-pill.green { color: var(--green); background: var(--green-dim); border: 1px solid rgba(78,155,111,0.2); }
+    .scorecard-meta { border-top: 1px solid var(--border); padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+    .meta-row { display: flex; justify-content: space-between; gap: 12px; }
+    .meta-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+    .meta-val { font-size: 12px; font-weight: 400; color: var(--text-muted); text-align: right; }
+    .meta-val.red { color: var(--red); }
+
+    /* ── ACQUISITION TIMELINE ── */
+    .acq-timeline { display: flex; align-items: center; gap: 0; padding: 14px 20px; border-top: 1px solid var(--border); background: var(--bg); overflow-x: auto; }
+    .acq-node { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+    .acq-dot-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .acq-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .acq-dot.found { background: var(--green); }
+    .acq-dot.acq { background: var(--red); }
+    .acq-dot.event { background: var(--amber); }
+    .acq-dot.warn { background: var(--yellow); }
+    .acq-year { font-family: var(--font-mono); font-size: 8px; color: var(--text-dim); letter-spacing: 0.06em; }
+    .acq-label { font-family: var(--font-mono); font-size: 8px; color: var(--text-dim); letter-spacing: 0.04em; max-width: 80px; text-align: center; line-height: 1.3; }
+    .acq-line { flex: 1; min-width: 20px; height: 1px; background: var(--border-light); }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 64px 40px 80px; }
+    .section-divider { display: flex; align-items: center; gap: 16px; margin: 64px 0 36px; }
+    .section-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); flex-shrink: 0; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .section-title { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; color: var(--text); margin-bottom: 24px; }
+    .section-title em { font-style: italic; color: var(--amber); }
+    .prose { font-size: 15px; font-weight: 300; color: rgba(237,233,224,0.8); line-height: 1.8; max-width: 720px; }
+    .prose p { margin-bottom: 18px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+
+    /* ── CALLOUT ── */
+    .callout { background: var(--bg-card); border: 1px solid var(--border-light); border-left: 3px solid var(--amber); border-radius: 0 3px 3px 0; padding: 18px 22px; margin: 28px 0; }
+    .callout.red { border-left-color: var(--red); }
+    .callout.yellow { border-left-color: var(--yellow); }
+    .callout.green { border-left-color: var(--green); }
+    .callout-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+    .callout.red .callout-label { color: var(--red); }
+    .callout.yellow .callout-label { color: var(--yellow); }
+    .callout.green .callout-label { color: var(--green); }
+    .callout-body { font-size: 13.5px; font-weight: 300; line-height: 1.65; color: rgba(237,233,224,0.75); }
+    .callout-body strong { color: var(--text); font-weight: 500; }
+
+    /* ── CHAIN ── */
+    .chain { margin: 28px 0; position: relative; }
+    .chain-item { display: flex; align-items: flex-start; gap: 16px; position: relative; }
+    .chain-item:not(:last-child)::after { content: ''; position: absolute; left: 9px; top: 24px; bottom: -8px; width: 1px; background: var(--border-light); }
+    .chain-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 3px; }
+    .chain-dot.found { background: var(--green-dim); border-color: rgba(78,155,111,0.3); }
+    .chain-dot.acq { background: var(--red-dim); border-color: rgba(201,77,60,0.3); }
+    .chain-dot.warn { background: var(--yellow-dim); border-color: rgba(212,168,75,0.3); }
+    .chain-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: var(--text-dim); }
+    .chain-dot.found .chain-dot-inner { background: var(--green); }
+    .chain-dot.acq .chain-dot-inner { background: var(--red); }
+    .chain-dot.warn .chain-dot-inner { background: var(--yellow); }
+    .chain-content { padding-bottom: 28px; flex: 1; }
+    .chain-year { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; margin-bottom: 3px; }
+    .chain-owner { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .chain-note { font-size: 12.5px; font-weight: 300; color: var(--text-muted); line-height: 1.5; }
+    .chain-note.warn { color: var(--yellow); opacity: 0.85; }
+    .chain-note.red { color: var(--red); opacity: 0.85; }
+
+    /* ── DOSE TABLE ── */
+    .dose-table { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin: 28px 0; }
+    .dose-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
+    .dose-row:last-child { border-bottom: none; }
+    .dose-row.head { background: var(--bg-card); }
+    .dose-cell { padding: 12px 18px; font-size: 13px; font-weight: 300; color: var(--text-muted); }
+    .dose-row.head .dose-cell { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+    .dose-cell.highlight { color: var(--red); font-weight: 500; }
+    .dose-cell.amber { color: var(--amber); font-weight: 500; }
+    .dose-cell:not(:last-child) { border-right: 1px solid var(--border); }
+
+    /* ── STAT GRID ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; }
+    .stat-grid.two { grid-template-columns: repeat(2, 1fr); }
+    .stat-grid.four { grid-template-columns: repeat(4, 1fr); }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; padding: 16px 18px; }
+    .stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .stat-value { font-family: var(--font-display); font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--text); }
+    .stat-value.red { color: var(--red); }
+    .stat-value.amber { color: var(--amber); }
+    .stat-value.yellow { color: var(--yellow); }
+    .stat-note { font-size: 11.5px; font-weight: 300; color: var(--text-muted); line-height: 1.4; }
+
+    /* ── ALTERNATIVES ── */
+    .alt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0; }
+    .alt-card { background: var(--bg-card); border: 1px solid var(--border); border-top: 2px solid var(--green); border-radius: 0 0 3px 3px; padding: 16px 18px; }
+    .alt-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+    .alt-desc { font-size: 12px; font-weight: 300; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── SOURCES ── */
+    .sources { border-top: 1px solid var(--border); padding: 48px 40px 80px; max-width: 1100px; margin: 0 auto; }
+    .sources-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 20px; }
+    .sources-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+    .source-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 2px; padding: 12px 14px; font-size: 12px; font-weight: 300; color: var(--text-dim); line-height: 1.5; }
+    .source-card strong { display: block; color: var(--text-muted); font-weight: 400; margin-bottom: 3px; }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); }
+    .footer-note { font-size: 11.5px; font-weight: 300; color: var(--text-dim); max-width: 400px; text-align: right; line-height: 1.5; }
+
+    @media(max-width:900px) {
+      .hero { grid-template-columns: 1fr; padding: 48px 24px 0; }
+      .scorecard { position: static; }
+      .content, .sources { padding-left: 24px; padding-right: 24px; }
+      .stat-grid, .stat-grid.four { grid-template-columns: 1fr 1fr; }
+      .alt-grid { grid-template-columns: 1fr; }
+      .dose-row { grid-template-columns: 1fr 1fr; }
+      .dose-row .dose-cell:last-child { display: none; }
+      .nav { padding: 16px 24px; }
+      .alert-bar { padding: 10px 24px; }
+      .footer { flex-direction: column; gap: 12px; }
+      .footer-note { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">Traced</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="traced-protein-supplements.html">Proteins</a></li>
+    <li><a href="traced-electrolytes.html">Electrolytes</a></li>
+    <li><a href="traced-greens-powders.html">Greens</a></li>
+    <li><a href="traced-chocolate.html">Chocolate</a></li>
+    <li><a href="traced-protein-bars.html">Bars</a></li>
+    <li><a href="traced-deep-dives.html" class="active">Deep Dives</a></li>
+  </ul>
+</nav>
+
+<div class="alert-bar">
+  <div class="alert-dot"></div>
+  <span class="alert-text"><strong>Active issue:</strong> February 2023 — Witkowski et al. (Nature Medicine) found erythritol associated with elevated cardiovascular risk at doses the brand's own marketing encourages. Halo Top has issued zero consumer communications in response. Wells Enterprises has made no labeling or marketing changes.</span>
+</div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div>
+    <div class="hero-breadcrumb">
+      <a href="traced-deep-dives.html" style="color:var(--text-dim);text-decoration:none;">Deep Dives</a>
+      <span class="bc-sep">/</span>
+      <span class="bc-current">Halo Top</span>
+    </div>
+    <div class="hero-label">Investigation 005 — Low Transparency</div>
+    <h1 class="hero-title">Halo<em><br>Top.</em></h1>
+    <div class="hero-subtitle">Light Ice Cream &amp; the Dose It Hides</div>
+    <div class="hero-verdict">
+      <p>Halo Top built a category around a single permission slip: low-calorie ice cream you could eat in quantity without guilt. <strong>"Go ahead, eat the whole pint"</strong> — the tagline was an instruction. That instruction is also the mechanism by which the product's most significant risk is delivered.</p>
+      <p>Halo Top achieves its low-calorie profile primarily through <strong>erythritol</strong>, a sugar alcohol. A full pint — the consumption pattern the brand actively encouraged — delivers roughly 28–36 grams. In February 2023, a study in <em>Nature Medicine</em> found that elevated erythritol blood levels were associated with increased platelet aggregation and higher risk of major cardiovascular events. The study's authors noted that a single 30g erythritol dose kept blood levels elevated for days.</p>
+      <p>Wells Enterprises acquired Halo Top in 2019 for an estimated $1B+. <strong>No labeling change, no marketing modification, no consumer communication has followed the 2023 findings.</strong> The incentive to update the brand's core permission structure — which depends entirely on the safety of erythritol at high doses — is structurally absent.</p>
+    </div>
+  </div>
+
+  <!-- SCORECARD -->
+  <div>
+    <div class="scorecard">
+      <div class="scorecard-head">
+        <div class="scorecard-head-label">Traced assessment</div>
+        <div class="overall-verdict">Low Transparency</div>
+        <div class="overall-sub">4 red · 2 yellow · 1 green</div>
+      </div>
+      <div class="score-row"><span class="score-dim">Ownership &amp; Control</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Green</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="scorecard-meta">
+        <div class="meta-row"><span class="meta-key">Current owner</span><span class="meta-val">Wells Enterprises</span></div>
+        <div class="meta-row"><span class="meta-key">Acquisition year</span><span class="meta-val">2019</span></div>
+        <div class="meta-row"><span class="meta-key">Est. acquisition price</span><span class="meta-val">~$1B+</span></div>
+        <div class="meta-row"><span class="meta-key">Primary sweetener</span><span class="meta-val red">Erythritol</span></div>
+        <div class="meta-row"><span class="meta-key">Nature Medicine study</span><span class="meta-val red">Feb 2023 — unaddressed</span></div>
+        <div class="meta-row"><span class="meta-key">Label updates post-study</span><span class="meta-val red">None</span></div>
+        <div class="meta-row"><span class="meta-key">Last reviewed</span><span class="meta-val">Feb 2026</span></div>
+      </div>
+      <!-- Acquisition Timeline -->
+      <div class="acq-timeline">
+        <div class="acq-node">
+          <div class="acq-dot-wrap">
+            <div class="acq-dot found"></div>
+            <div class="acq-year">2011</div>
+            <div class="acq-label">Founded LA</div>
+          </div>
+        </div>
+        <div class="acq-line"></div>
+        <div class="acq-node">
+          <div class="acq-dot-wrap">
+            <div class="acq-dot event"></div>
+            <div class="acq-year">2017</div>
+            <div class="acq-label">#1 US pint</div>
+          </div>
+        </div>
+        <div class="acq-line"></div>
+        <div class="acq-node">
+          <div class="acq-dot-wrap">
+            <div class="acq-dot acq"></div>
+            <div class="acq-year">2019</div>
+            <div class="acq-label">Wells Enterprises</div>
+          </div>
+        </div>
+        <div class="acq-line"></div>
+        <div class="acq-node">
+          <div class="acq-dot-wrap">
+            <div class="acq-dot warn"></div>
+            <div class="acq-year">2023</div>
+            <div class="acq-label">Nature Med study — no response</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONTENT ── -->
+<div class="content">
+
+  <!-- Section 01 — Ownership -->
+  <div class="section-divider"><span class="section-num">Section 01</span><div class="section-line"></div></div>
+  <h2 class="section-title">The Acquisition <em>Pattern</em></h2>
+  <div class="prose">
+    <p>Halo Top was founded in 2011 by Justin Woolverton, a Los Angeles attorney, initially as a home project. It grew from near-zero to the best-selling ice cream pint in the United States by 2017 — one of the most rapid CPG category ascents in recent memory — driven almost entirely by social media, the "eat the whole pint" permission structure, and essentially no traditional advertising budget.</p>
+    <p>In 2019, Wells Enterprises — the family-owned maker of Blue Bunny, Bomb Pop, and other mainstream ice cream brands — acquired Halo Top for a price estimated at over $1 billion. Wells operates at the opposite end of the ice cream spectrum from what Halo Top represented: conventional, sugar-forward, mainstream products with no particular health or transparency positioning.</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain-item">
+      <div class="chain-dot found"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">2011</div>
+        <div class="chain-owner">Justin Woolverton — Founder</div>
+        <div class="chain-note">Founded in Los Angeles. Self-funded initially. Zero traditional advertising. Grew to #1 US ice cream pint by 2017 on social media and the "eat the whole pint" permission structure alone.</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot acq"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">2019 — present</div>
+        <div class="chain-owner">Wells Enterprises</div>
+        <div class="chain-note">Private, family-owned. Maker of Blue Bunny, Bomb Pop. Acquired Halo Top for an undisclosed sum estimated at $1B+. Operates Halo Top as a standalone brand with original identity intact. No formula changes. No marketing changes. No response to 2023 erythritol findings.</div>
+        <div class="chain-note red" style="margin-top:6px;">Incentive to disclose cardiovascular risk from primary sweetener is structurally absent — disclosure would undermine the brand's entire value proposition.</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot warn"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">February 2023</div>
+        <div class="chain-owner">Witkowski et al., Nature Medicine</div>
+        <div class="chain-note">Large prospective cohort found erythritol associated with major adverse cardiovascular events. 30g dose elevated blood levels for 2+ days. Authors specifically flagged widespread erythritol use in diet products as a public health concern warranting further study.</div>
+        <div class="chain-note warn" style="margin-top:6px;">Wells Enterprises and Halo Top: zero consumer communications issued. Marketing and labeling unchanged through February 2026.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-label">Pattern — Same as Annie's / General Mills</div>
+    <div class="callout-body">The acquisition structure mirrors General Mills / Annie's: buy brand equity built on health positioning, maintain the narrative, extract the premium, and create no structural incentive to disclose information that would complicate the acquisition thesis. The difference is that Wells's inaction is not about ingredient substitution — it is about non-disclosure of emerging safety data for an ingredient that is the product's entire reason for existing.</div>
+  </div>
+
+  <!-- Section 02 — The Dose Deception -->
+  <div class="section-divider"><span class="section-num">Section 02</span><div class="section-line"></div></div>
+  <h2 class="section-title">The <em>Dose Deception</em></h2>
+  <div class="prose">
+    <p>Halo Top's marketing is built around a specific behavioral instruction: eat more. "Go ahead, eat the whole pint" is not passive positioning — it is an active directive to a consumption pattern that maximizes erythritol dose per occasion. This is the dose deception pattern in its most direct form: the brand's marketing explicitly encourages consumers to consume at the level where the product's emerging risk profile becomes most relevant.</p>
+    <p>A single serving (½ cup) contains approximately 7–9 grams of erythritol. A full pint — four servings — delivers 28–36 grams. The 2023 Nature Medicine study used a 30g erythritol dose in its mechanistic follow-up experiments, specifically because that dose produced sustained blood level elevation for over two days and enhanced platelet aggregation in ex vivo experiments. A full Halo Top pint delivers approximately that dose.</p>
+  </div>
+
+  <div class="dose-table">
+    <div class="dose-row head">
+      <div class="dose-cell">Consumption pattern</div>
+      <div class="dose-cell">Erythritol dose</div>
+      <div class="dose-cell">Study relevance</div>
+    </div>
+    <div class="dose-row">
+      <div class="dose-cell">1 serving (½ cup) — label serving size</div>
+      <div class="dose-cell">~7–9g</div>
+      <div class="dose-cell">Below study dose threshold</div>
+    </div>
+    <div class="dose-row">
+      <div class="dose-cell">Half pint — 2 servings</div>
+      <div class="dose-cell">~14–18g</div>
+      <div class="dose-cell">Approaching study range</div>
+    </div>
+    <div class="dose-row">
+      <div class="dose-cell" style="color:var(--amber);font-weight:500;">"Go ahead, eat the whole pint" — 4 servings</div>
+      <div class="dose-cell highlight">~28–36g</div>
+      <div class="dose-cell highlight">Matches 30g mechanistic dose used in Witkowski et al. 2023</div>
+    </div>
+  </div>
+
+  <div class="callout yellow">
+    <div class="callout-label">The Dose Deception — Inverted Pattern</div>
+    <div class="callout-body"><strong>Cheerios uses real science applied at a dose consumers don't actually reach.</strong> Halo Top is the inverse: a risk that only materializes at the dose the brand's marketing explicitly instructs consumers to consume. In both cases, the marketing obscures the dose reality. The mechanism is opposite; the failure is the same.</div>
+  </div>
+
+  <div class="prose">
+    <p>The population mismatch compounds this. Halo Top's original marketing targeted diet-conscious consumers — those managing caloric intake, weight, or metabolic health. This audience is statistically more likely to have elevated baseline cardiovascular risk factors. The Witkowski et al. study found erythritol's cardiovascular associations were strongest in individuals with pre-existing risk factors. Halo Top markets most aggressively to the consumers the research identifies as most at risk from the finding it has not disclosed.</p>
+  </div>
+
+  <!-- Section 03 — The Erythritol Research -->
+  <div class="section-divider"><span class="section-num">Section 03</span><div class="section-line"></div></div>
+  <h2 class="section-title">The <em>2023 Research</em></h2>
+  <div class="prose">
+    <p>The Witkowski et al. study in <em>Nature Medicine</em> (February 2023) is not a fringe finding. It is a large prospective cohort study from the Cleveland Clinic, published in one of the highest-impact medical journals in the world. The methodology included both a discovery cohort, a validation cohort, and mechanistic follow-up experiments — a rigorous three-part structure designed to move from association to mechanism.</p>
+    <p>The study found that elevated plasma erythritol levels were independently associated with major adverse cardiovascular events (MACE) — including heart attack and stroke — over a three-year follow-up period. The follow-up mechanistic experiments showed that erythritol enhanced platelet aggregation in human blood samples and accelerated thrombosis formation in mouse models. Platelet aggregation is the mechanism underlying blood clot formation.</p>
+    <p>Critically, the study found that consuming a single 30g erythritol drink produced blood level elevation that persisted for approximately 2–3 days post-consumption. This extended elevation means that regular pint-level consumption could theoretically maintain chronically elevated erythritol blood levels — a concern the authors explicitly raised.</p>
+  </div>
+
+  <div class="stat-grid four">
+    <div class="stat-card">
+      <div class="stat-label">Study cohort size</div>
+      <div class="stat-value amber">1,157</div>
+      <div class="stat-note">Patients undergoing cardiac evaluation. Discovery + validation cohorts.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Blood elevation duration</div>
+      <div class="stat-value red">2–3 days</div>
+      <div class="stat-note">Post-consumption blood level elevation after 30g erythritol dose.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Mechanistic dose used</div>
+      <div class="stat-value red">30g</div>
+      <div class="stat-note">Dose used in follow-up experiments. A full Halo Top pint delivers this dose.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Halo Top response</div>
+      <div class="stat-value red">Zero</div>
+      <div class="stat-note">No consumer communications, label updates, or marketing changes through Feb 2026.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">What the science does and doesn't say</div>
+    <div class="callout-body">The 2023 research is an association study — it does not prove causation. The science is not settled. Erythritol remains FDA GRAS (Generally Recognized as Safe), and GRAS status has not changed. What the study does is raise a credible mechanistic question that Halo Top's labeling and marketing are not designed to help consumers ask: <strong>what is the dose, how does the brand encourage me to consume it, and what does the emerging science say about that dose?</strong> A company with genuine transparency commitments would communicate proactively about this finding. Wells has not.</div>
+  </div>
+
+  <!-- Section 04 — The Numbers -->
+  <div class="section-divider"><span class="section-num">Section 04</span><div class="section-line"></div></div>
+  <h2 class="section-title">The <em>Numbers</em></h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Est. acquisition price</div>
+      <div class="stat-value amber">~$1B+</div>
+      <div class="stat-note">Wells Enterprises acquired Halo Top in 2019. Price undisclosed; estimated $1B+ in press reporting.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Erythritol — full pint</div>
+      <div class="stat-value red">28–36g</div>
+      <div class="stat-note">Dose delivered by the consumption pattern the brand actively encourages. Matches study dose.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Consumer communications</div>
+      <div class="stat-value red">0</div>
+      <div class="stat-note">Issued by Halo Top or Wells Enterprises about the 2023 erythritol cardiovascular findings.</div>
+    </div>
+  </div>
+
+  <!-- Section 05 — What Still Works -->
+  <div class="section-divider"><span class="section-num">Section 05</span><div class="section-line"></div></div>
+  <h2 class="section-title">What <em>Still Gets Right</em></h2>
+  <div class="callout green">
+    <div class="callout-label">The green scores are real</div>
+    <div class="callout-body">Halo Top's calorie counts are accurate. Ingredient disclosures are complete. No FDA enforcement actions. No class action for label fraud. The revenue model is clean — single retail purchase, no subscription traps. The product is genuinely lower-calorie than conventional ice cream. The green score on Revenue Model is unambiguous. The red scores are about a specific emerging safety question and the brand's non-response to it — not about outright fraud.</div>
+  </div>
+  <div class="prose">
+    <p>The ingredient list is not dramatically adulterated relative to conventional ice cream. No artificial dyes. No high-fructose corn syrup. The erythritol concern is specific: it is about dose, the marketing instruction around dose, and the post-2023 information gap. The product is better than most conventional ice cream by ingredient quality standards. The question Traced is documenting is whether the brand has a transparency obligation to its consumers about emerging findings regarding its primary functional ingredient — and whether Wells has met that obligation.</p>
+    <p>It has not.</p>
+  </div>
+
+  <!-- Section 06 — Alternatives -->
+  <div class="section-divider"><span class="section-num">Section 06</span><div class="section-line"></div></div>
+  <h2 class="section-title"><em>Alternatives</em></h2>
+  <div class="alt-grid">
+    <div class="alt-card">
+      <div class="alt-name">Enlightened Ice Cream</div>
+      <div class="alt-desc">Uses chicory root fiber plus smaller amounts of erythritol per serving — meaningfully lower erythritol dose than Halo Top at comparable calorie count. Similar health-halo positioning, better dose profile.</div>
+    </div>
+    <div class="alt-card">
+      <div class="alt-name">Siggi's Frozen Bars</div>
+      <div class="alt-desc">Skyr-based frozen bars. Higher protein, lower sugar, no erythritol, no artificial sweeteners. Different texture but zero cardiovascular risk questions around the sweetener system.</div>
+    </div>
+    <div class="alt-card">
+      <div class="alt-name">Regular ice cream, smaller portion</div>
+      <div class="alt-desc">A half-cup of Breyers Natural Vanilla: 130 calories, 14g sugar, zero erythritol. The permission to eat a full pint is the product's value proposition — not the ice cream itself. Smaller portions of clean-ingredient conventional ice cream eliminate the dose risk entirely.</div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- ── SOURCES ── -->
+<div class="sources">
+  <div class="sources-label">Sources &amp; Documentation</div>
+  <div class="sources-grid">
+    <div class="source-card"><strong>Witkowski et al., Nature Medicine, Feb 2023</strong>"The artificial sweetener erythritol and cardiovascular event risk." Cleveland Clinic. Large prospective cohort (n=1,157) + mechanistic follow-up. Primary source for all erythritol cardiovascular findings cited here.</div>
+    <div class="source-card"><strong>FDA GRAS Database — Erythritol</strong>Erythritol GRAS status. Current regulatory classification. GRAS status unchanged by 2023 study findings — Traced is not claiming regulatory violation, only information gap.</div>
+    <div class="source-card"><strong>Halo Top product label / website (Feb 2026)</strong>Full ingredient list, nutrition facts panel. Erythritol listed as ingredient but not quantified by gram on Nutrition Facts. No labeling updates post-2023.</div>
+    <div class="source-card"><strong>Wells Enterprises — company overview</strong>Acquisition of Halo Top, 2019. Portfolio context: Blue Bunny, Bomb Pop, Halo Top. Acquisition price undisclosed; ~$1B+ per press reporting at time of acquisition.</div>
+    <div class="source-card"><strong>USDA FoodData Central — Halo Top Vanilla Bean</strong>Full ingredient list and nutrition facts per serving and per pint. Source for erythritol dose calculations.</div>
+    <div class="source-card"><strong>Nichol et al., Regulatory Toxicology and Pharmacology, 2021</strong>Erythritol safety review predating the 2023 findings. Context for the pre-existing evidence base that established GRAS status.</div>
+  </div>
+</div>
+
+<footer class="footer">
+  <span class="footer-logo">Traced</span>
+  <p class="footer-note">Traced surfaces the financial and ingredient structures behind food and supplement products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#d0b5b4b9a4bfa2b9b1bc90a4a2b1b3b5b4feb3bf" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="ef8a8b869b809d868e83af9b9d8e8c8a8bc18c80">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="trace

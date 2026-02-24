@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salt & Straw — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .green-banner{margin-top:56px;background:rgba(78,155,111,0.08);border-bottom:1px solid rgba(78,155,111,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .green-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .green-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.green-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--green);}
+  .product-name{font-family:var(--font-display);font-size:clamp(48px,6.5vw,82px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,26px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(78,155,111,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--green);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .vc-structure{margin:20px 0 20px 36px;border:1px solid rgba(78,155,111,0.2);border-radius:3px;overflow:hidden;}
+  .vs-header{background:rgba(78,155,111,0.06);display:grid;grid-template-columns:1.5fr 1fr 1.5fr;border-bottom:1px solid rgba(78,155,111,0.15);}
+  .vs-row{display:grid;grid-template-columns:1.5fr 1fr 1.5fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.vs-row:last-child{border-bottom:none;}.vs-row:hover{background:var(--surface-2);}
+  .vs-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.vs-cell:last-child{border-right:none;}
+  .vs-header .vs-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(78,155,111,0.7);font-weight:500;}
+  .vs-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}.vs-cell.good{color:var(--green);}
+  .flavor-grid{margin:20px 0 20px 36px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .flavor-card{background:var(--surface-2);border:1px solid var(--border-light);border-radius:3px;padding:14px 16px;}
+  .flavor-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;}
+  .flavor-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .flavor-source{font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-top:6px;}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-block.green-tint{border-color:rgba(78,155,111,0.2);background:rgba(78,155,111,0.04);}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-label.green{color:rgba(78,155,111,0.6);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.green{color:var(--green);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}
+  .aside-list li::before{content:'✓';color:var(--green);flex-shrink:0;margin-top:1px;font-size:11px;}
+  .aside-list li.neutral::before{content:'→';color:var(--text-dim);}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.green-banner,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:44px;}.site-nav{display:none;}.flavor-grid{grid-template-columns:1fr;}.vs-header,.vs-row{display:block;}.vs-cell{border-right:none;border-bottom:1px solid var(--border);}.vs-cell:last-child{border-bottom:none;}}
+</style>
+</head>
+<body data-share-fact="Salt & Straw scores 7 of 7 on Traced's transparency rubric. Farm-direct dairy partnerships are published by name on their website. Founder-owned, no private equity, no acquisition as of February 2026." data-share-owner="Kim & Tyler Malek — Founder-owned" data-share-year="Founded 2011" data-share-url="https://traced.com/traced-saltstraw.html">
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="site-nav"><a href="#">Database</a><a href="#">Methodology</a><a href="traced-deep-dives.html">Deep Dives</a><a href="#">About</a></nav>
+</header>
+
+<div class="green-banner">
+  <span class="green-pill">High Transparency</span>
+  <span class="green-text">Salt & Straw is one of two green benchmark profiles in the Traced database. It exists to show what the scoring looks like when a brand earns it — and to make clear that Traced is a tool, not a takedown machine.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Green Benchmark</span></div>
+    <h1 class="product-name">Salt &<br>Straw</h1>
+    <p class="product-sub">Small-Batch Ice Cream,<br>Portland, OR · Founded 2011</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Salt & Straw is the answer to the question every Traced profile implicitly raises: what does a food brand look like when the financial structure and the product story are actually aligned? Founders Kim and Tyler Malek started with a single cart in Portland in 2011. The brand built a national cult following around a genuine product philosophy — small-batch, locally sourced, seasonally rotating flavors that treat ice cream as a culinary medium rather than a commodity. In 2017, they accepted a significant growth investment from <strong>Alliance Consumer Growth</strong>, a VC firm. This is the moment where most brands in this database begin their compromise story. Salt & Straw's story is different: <strong>the founders retained majority control and operational authority</strong>. The sourcing relationships — with local farms, artisan producers, and regional suppliers — remained intact. The flavor philosophy remained intact. The pricing remained premium and honest about what it reflects. Seven years after taking VC money, Salt & Straw still makes ice cream the way it always did. That is not nothing. In a database full of acquisition stories and alignment collapses, it is worth studying exactly how they did it — and what structural conditions made it possible.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header">
+        <span class="scorecard-title">Transparency Score</span>
+        <div class="score-summary"><span class="score-count green">7 ●</span></div>
+      </div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill green">Green</span></div>
+      </div>
+      <div class="scorecard-footer">
+        <div class="scorecard-footer-label">Last reviewed</div>
+        <div class="scorecard-footer-value">February 2026 · Sources below</div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Salt & Straw was founded in 2011 by cousins Kim Malek (CEO) and Tyler Malek (head ice cream maker) with a cart on Northeast Alberta Street in Portland, Oregon. The brand grew through product quality and word of mouth, opening brick-and-mortar locations in Portland before expanding to Los Angeles, San Francisco, Seattle, and eventually nationally via shipping and retail.</p>
+        <p>In 2017, Salt & Straw accepted a growth investment from Alliance Consumer Growth (ACG), a consumer-focused growth equity firm. This is the structural moment Traced examines most carefully for any brand — the first outside capital event is where the founder-control-to-investor-influence ratio is set, and where future acquisition pressure begins to accumulate.</p>
+
+        <div class="vc-structure">
+          <div class="vs-header">
+            <div class="vs-cell">Party</div>
+            <div class="vs-cell">Role</div>
+            <div class="vs-cell">Outcome</div>
+          </div>
+          <div class="vs-row">
+            <div class="vs-cell"><strong>Kim Malek</strong>Co-founder, CEO</div>
+            <div class="vs-cell">Majority control retained post-investment</div>
+            <div class="vs-cell good">Operational authority intact. Still actively involved in all major decisions.</div>
+          </div>
+          <div class="vs-row">
+            <div class="vs-cell"><strong>Tyler Malek</strong>Co-founder, Head Ice Cream Maker</div>
+            <div class="vs-cell">Product and flavor creative control retained</div>
+            <div class="vs-cell good">Flavor philosophy, sourcing relationships, and product standards unchanged post-VC.</div>
+          </div>
+          <div class="vs-row">
+            <div class="vs-cell"><strong>Alliance Consumer Growth</strong>Growth equity investor</div>
+            <div class="vs-cell">Minority financial stake</div>
+            <div class="vs-cell good">Funded expansion without demanding recipe changes, sourcing shifts, or brand repositioning. ACG specializes in premium food/bev brands; Salt & Straw fits their portfolio thesis without requiring compromise.</div>
+          </div>
+        </div>
+
+        <p>The green score reflects what did not happen after the 2017 investment: no acquisition by a conglomerate, no recipe reformulation to reduce costs, no sourcing changes to improve margin, no founder departure, no rebranding to appeal to a mainstream audience. Seven years of maintained independence post-VC is the evidence base for the green score — not just the structure of the deal, but the demonstrated behavior under that structure.</p>
+
+        <div class="callout">
+          <div class="callout-label">Why This Is Structurally Possible</div>
+          <div class="callout-body">Salt & Straw's green ownership story is partly about founder discipline, and partly about the specific economics of premium artisan ice cream. The product's value is inseparable from its sourcing and craft — a cost-cutting acquirer cannot easily maintain the product quality that drives the premium pricing. This creates a natural alignment between investor returns and product integrity that doesn't exist in most CPG categories. Salt & Straw is more defensible as a premium brand than as a commodity product, which limits the financial incentive to compromise it.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Salt & Straw's marketing is its product. The brand does no paid influencer campaigns, no celebrity investor promotions, no health claim advertising. Its primary marketing has always been the flavors themselves — unusual, seasonal, locally grounded combinations that generate organic social media coverage and word of mouth. Honey Lavender made with Oregon lavender. Bone marrow and smoked cherries. Sea salt with caramel ribbons. Flavors that are genuinely newsworthy without a PR budget.</p>
+        <p>The marketing narrative — local sourcing, small-batch craft, seasonal rotation, producer relationships — is substantiated by the actual sourcing and production practices. When Salt & Straw says a flavor is made with strawberries from Viridian Farms in Dayton, Oregon, Viridian Farms is a real farm and the strawberries are genuinely from there. This kind of verifiable provenance claim is more the exception than the rule in premium food marketing, and it matters.</p>
+        <p>No paid scientific endorsements. No equity-holding health influencers. No subscription lock-in. The marketing alignment is clean because the brand was not built on manufactured credibility — it was built on making flavors people genuinely wanted to tell other people about.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Single purchase: $6–8 per scoop in store, $13–15 per pint at retail or shipped. No subscription required. No DTC auto-renewal pressure. The price is transparent — it reflects real ingredient costs, real labor, and real sourcing relationships. Salt & Straw is genuinely more expensive than Häagen-Dazs, and the reason is legible: the ingredients cost more and the production scale is smaller. Consumers can evaluate whether that premium is worth it to them without any financial engineering obscuring the decision.</p>
+        <p>Salt & Straw does offer a pint club subscription for fans who want regular delivery — but it is opt-in, easy to cancel, and not a core part of the business model or marketing strategy. It is a convenience feature, not a consumer capture mechanism.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Salt & Straw's ingredient list for a typical flavor reflects what you would use making ice cream at home with good ingredients: cream, milk, egg yolks, sugar, and then whatever the flavor actually is. No modified food starch, no carrageenan, no methylcellulose, no synthetic stabilizer systems. The texture comes from egg yolk emulsification and proper churning technique — the way ice cream was made before industrial food science introduced a cheaper toolkit.</p>
+
+        <div class="flavor-grid">
+          <div class="flavor-card">
+            <div class="flavor-name">Sea Salt with Caramel Ribbons</div>
+            <div class="flavor-note">Cream, milk, egg yolks, sugar, Jacobsen sea salt, house-made caramel. Six real ingredients.</div>
+            <div class="flavor-source">Jacobsen Salt Co. — Portland, OR</div>
+          </div>
+          <div class="flavor-card">
+            <div class="flavor-name">Honey Lavender</div>
+            <div class="flavor-note">Cream, milk, egg yolks, honey, dried lavender. Sourced from Oregon farms. Genuinely seasonal.</div>
+            <div class="flavor-source">Local Oregon lavender farms</div>
+          </div>
+          <div class="flavor-card">
+            <div class="flavor-name">Strawberry Honey Balsamic with Black Pepper</div>
+            <div class="flavor-note">Cream, milk, eggs, sugar, fresh strawberries, honey, aged balsamic, black pepper. All identifiable.</div>
+            <div class="flavor-source">Viridian Farms, Dayton, OR</div>
+          </div>
+          <div class="flavor-card">
+            <div class="flavor-name">Pear & Blue Cheese</div>
+            <div class="flavor-note">The adventurous end of the menu — still just real ingredients. Cream, milk, eggs, pear, blue cheese, sugar.</div>
+            <div class="flavor-source">Rogue Creamery, Central Point, OR</div>
+          </div>
+        </div>
+
+        <p>Salt & Straw is still ice cream — cream, eggs, sugar. It is not a health food and does not claim to be. The green score is for ingredient integrity relative to what the product claims to be: handmade ice cream made from real, identifiable, locally sourced ingredients. On that specific claim, it is fully honest and fully substantiated.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Salt & Straw makes no health claims and seeks no scientific endorsements. Green by absence: when a food brand is making ice cream and describes it as ice cream, there is no scientific credibility gap to exploit. The green score is not for scientific rigor — it is for not manufacturing false scientific authority for a product that is simply what it says it is.</p>
+        <p>This dimension is worth noting because it reveals something about how the scoring works: a product can earn a green score here not by having strong clinical backing, but by being honest enough about what it is not to need any.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>The ingredient list is what is in the product. The sourcing attributions on the menu and packaging reflect actual sourcing relationships. No FDA enforcement actions. No FTC complaints. No class action history around labeling. Salt & Straw has never been sued over what it claims its product is, because what it claims its product is matches what it actually is.</p>
+        <p>The only label complexity worth noting: Salt & Straw operates a dairy facility and its products contain common allergens (milk, eggs, tree nuts depending on flavor). Allergen labeling is complete and accurate. The facility note — "made in a facility that also processes nuts and other allergens" — is disclosed on the packaging and website.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>No recall events. No FDA enforcement actions. Salt & Straw operates its own production facility in Portland under standard dairy facility regulations and FDA oversight. As a premium brand with a direct-to-consumer shipping business, their quality control failures would be immediately and publicly visible — a structural accountability mechanism that large CPG companies with wholesale distribution don't face in the same way.</p>
+        <p>The sourcing transparency — specific farms named, relationships documented — creates a form of supply chain accountability that is genuinely unusual. When Salt & Straw names Viridian Farms on their menu, that farm's practices are implicitly part of the brand's accountability surface. Most food brands deliberately obscure supply chain specifics; Salt & Straw makes them a marketing feature, which is only viable if the supply chain can withstand scrutiny.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+
+    <div class="aside-block green-tint">
+      <div class="aside-label green">What Green Looks Like</div>
+      <ul class="aside-list">
+        <li>Founders retained majority control after 2017 VC investment</li>
+        <li>No recipe changes, no sourcing shifts post-investment</li>
+        <li>Named farm sourcing on menu and packaging — verifiable and verified</li>
+        <li>No paid health endorsements, no celebrity equity investors</li>
+        <li>Pricing reflects real ingredient and labor costs transparently</li>
+        <li>No history of FDA enforcement, FTC complaints, or class actions</li>
+        <li>No recall events in 13-year operating history</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value green">2011</div><div class="aside-stat-label">Founded with a cart on NE Alberta St., Portland, OR. Still founder-led.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">2017</div><div class="aside-stat-label">Alliance Consumer Growth investment accepted. Founders retained majority and operational control.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value green">7+</div><div class="aside-stat-label">Years post-VC investment with no sourcing compromise, no recipe reformulation, no acquisition</div></div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">What This Profile Is Saying</div>
+      <ul class="aside-list">
+        <li class="neutral">Salt & Straw is not a health food. It is premium ice cream with real ingredients.</li>
+        <li class="neutral">The green scores are not for nutritional superiority — they are for structural honesty.</li>
+        <li>The sourcing story is real and verifiable, not marketing narrative.</li>
+        <li>VC funding does not automatically compromise a brand — structure and founder control matter.</li>
+        <li class="neutral">The premium pricing ($13–15/pint) is high. It reflects real costs.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">The Structural Lesson</div>
+      <ul class="aside-list">
+        <li>Retained founder operational control post-investment is the single most reliable predictor of brand integrity maintenance</li>
+        <li>Product value tied to craft and sourcing creates natural alignment with investors — compromising the product destroys the brand equity the investor paid for</li>
+        <li>Named supplier transparency is a self-enforcing accountability mechanism — it is only viable if true</li>
+        <li>This structure is replicable, not accidental</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Timeline</div>
+      <ul class="aside-list">
+        <li class="neutral">2011: Kim and Tyler Malek launch with a cart in Portland, OR</li>
+        <li class="neutral">2012–2016: Brick-and-mortar expansion through Portland, then Los Angeles</li>
+        <li class="neutral">2017: Alliance Consumer Growth investment. Founders retain control.</li>
+        <li class="neutral">2018–2024: National expansion — San Francisco, Seattle, Disney Springs, DTC shipping</li>
+        <li class="neutral">2024–present: ~30 locations nationally. Still founder-operated.</li>
+      </ul>
+    </div>
+
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Salt & Straw company website</strong>Sourcing attributions, supplier relationships, flavor archive, ingredient disclosures. saltandstraw.com</div>
+    <div class="source-item"><strong>Alliance Consumer Growth portfolio</strong>ACG investment in Salt & Straw confirmed. ACG portfolio includes Sweetgreen, Krave Jerky, other premium food brands.</div>
+    <div class="source-item"><strong>Kim Malek interviews, 2017–2024</strong>Multiple press interviews confirming founder control retention post-investment. Oregon Business, Eater, Forbes.</div>
+    <div class="source-item"><strong>Viridian Farms</strong>Oregon farm. Confirmed sourcing partner. Public supplier information.</div>
+    <div class="source-item"><strong>Jacobsen Salt Co.</strong>Portland-based sea salt producer. Named on Salt & Straw menu and packaging. Confirmed relationship.</div>
+    <div class="source-item"><strong>Rogue Creamery</strong>Central Point, OR artisan cheese producer. Named sourcing partner for blue cheese flavors.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#3f5a5b564b504d565e537f4b4d5e5c5a5b115c50521f1952565b5b504b041f035e1f574d5a5902" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abcecfc2dfc4d9c2cac7ebdfd9cac8cecf85c8c4c6">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{color:#C9A84C;text-decoration:none}
+.traced-lega

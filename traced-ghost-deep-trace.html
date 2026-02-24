@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghost Whey — Deep Trace | Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0908;
+      --bg-card: #111009;
+      --bg-hover: #161410;
+      --border: #232018;
+      --border-light: #2d2a20;
+      --text: #ede9e0;
+      --text-muted: #9a9284;
+      --text-dim: #625c50;
+      --amber: #c8943a;
+      --amber-dim: rgba(200,148,58,0.08);
+      --green: #4e9b6f;
+      --green-dim: rgba(78,155,111,0.08);
+      --yellow: #d4a84b;
+      --yellow-dim: rgba(212,168,75,0.08);
+      --red: #c94d3c;
+      --red-dim: rgba(201,77,60,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 300; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,9,8,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .nav-logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--amber); letter-spacing: -0.01em; text-decoration: none; }
+    .nav-cat { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 12px; font-weight: 400; color: var(--text-dim); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text-muted); }
+
+    .live-alert { background: rgba(201,77,60,0.07); border-bottom: 1px solid rgba(201,77,60,0.2); padding: 10px 40px; display: flex; align-items: center; gap: 12px; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: pulse 2s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.75); } }
+    .live-alert-text { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: rgba(237,233,224,0.65); }
+    .live-alert-text strong { color: var(--text); }
+
+    .hero { max-width: 1100px; margin: 0 auto; padding: 72px 40px 0; display: grid; grid-template-columns: 1fr 320px; gap: 64px; align-items: start; }
+    .hero-breadcrumb { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 24px; display: flex; gap: 8px; align-items: center; }
+    .bc-sep { color: var(--border-light); }
+    .bc-current { color: var(--amber); }
+    .hero-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .hero-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--red); }
+    .hero-title { font-family: var(--font-display); font-size: clamp(56px, 8vw, 100px); font-weight: 900; line-height: 0.85; letter-spacing: -0.03em; color: var(--text); margin-bottom: 16px; }
+    .hero-title em { font-style: italic; color: var(--amber); }
+    .hero-subtitle { font-family: var(--font-display); font-style: italic; font-size: 20px; font-weight: 700; color: var(--text-muted); margin-bottom: 36px; line-height: 1.3; }
+    .hero-verdict { font-size: 15.5px; font-weight: 300; color: rgba(237,233,224,0.8); max-width: 560px; line-height: 1.75; padding-top: 20px; border-top: 1px solid var(--border); }
+    .hero-verdict strong { color: var(--text); font-weight: 500; }
+
+    .scorecard { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; position: sticky; top: 80px; }
+    .scorecard-head { padding: 16px 20px; border-bottom: 1px solid var(--border); background: rgba(201,77,60,0.04); }
+    .scorecard-head-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .overall-verdict { font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--red); letter-spacing: -0.02em; }
+    .overall-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 4px; }
+    .score-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid var(--border); }
+    .score-row:last-of-type { border-bottom: none; }
+    .score-dim { font-size: 12px; font-weight: 300; color: var(--text-muted); }
+    .score-pill { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+    .score-pill.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .score-pill.yellow { color: var(--yellow); background: var(--yellow-dim); border: 1px solid rgba(212,168,75,0.2); }
+    .score-pill.green { color: var(--green); background: var(--green-dim); border: 1px solid rgba(78,155,111,0.2); }
+    .scorecard-meta { border-top: 1px solid var(--border); padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+    .meta-row { display: flex; justify-content: space-between; gap: 12px; }
+    .meta-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+    .meta-val { font-size: 12px; font-weight: 400; color: var(--text-muted); text-align: right; }
+    .meta-val.red { color: var(--red); }
+
+    .content { max-width: 1100px; margin: 0 auto; padding: 64px 40px 80px; }
+    .section-divider { display: flex; align-items: center; gap: 16px; margin: 60px 0 36px; }
+    .section-divider:first-child { margin-top: 0; }
+    .section-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); flex-shrink: 0; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .section-title { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; color: var(--text); margin-bottom: 24px; }
+    .section-title em { font-style: italic; color: var(--amber); }
+
+    .prose { font-size: 15px; font-weight: 300; color: rgba(237,233,224,0.8); line-height: 1.8; max-width: 720px; }
+    .prose p { margin-bottom: 18px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+    .prose em { color: var(--amber); font-style: normal; }
+
+    .findings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin: 36px 0; }
+    .finding-block { background: var(--bg-card); padding: 24px 26px; }
+    .finding-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+    .finding-title { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; margin-bottom: 10px; }
+    .finding-body { font-size: 13px; font-weight: 300; color: var(--text-muted); line-height: 1.65; }
+    .finding-flag { margin-top: 12px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 2px; display: inline-block; }
+    .finding-flag.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .finding-flag.yellow { color: var(--yellow); background: var(--yellow-dim); border: 1px solid rgba(212,168,75,0.2); }
+
+    .callout { border: 1px solid var(--border-light); border-left: 3px solid var(--amber); background: var(--bg-card); padding: 20px 24px; margin: 28px 0; border-radius: 0 2px 2px 0; }
+    .callout.red { border-left-color: var(--red); }
+    .callout-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+    .callout.red .callout-label { color: var(--red); }
+    .callout-text { font-size: 13.5px; font-weight: 300; color: var(--text-muted); line-height: 1.7; }
+    .callout-text strong { color: var(--text); font-weight: 500; }
+
+    /* Comparison table for "before / after KDP" */
+    .compare-table { width: 100%; border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin: 28px 0; }
+    .ct-head { display: grid; grid-template-columns: 200px 1fr 1fr; background: var(--bg-card); border-bottom: 1px solid var(--border); }
+    .ct-row { display: grid; grid-template-columns: 200px 1fr 1fr; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    .ct-row:last-child { border-bottom: none; }
+    .ct-row:hover { background: var(--bg-hover); }
+    .ct-cell { padding: 12px 16px; font-size: 13px; font-weight: 300; color: var(--text-muted); border-right: 1px solid var(--border); line-height: 1.5; }
+    .ct-cell:last-child { border-right: none; }
+    .ct-head .ct-cell { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); font-weight: 400; }
+    .ct-cell strong { color: var(--text); font-weight: 500; }
+    .ct-cell.before { border-top: 2px solid var(--green); }
+    .ct-cell.after { border-top: 2px solid var(--red); }
+    .status-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; display: inline-block; margin-top: 4px; }
+    .status-tag.green { color: var(--green); background: var(--green-dim); border: 1px solid rgba(78,155,111,0.2); }
+    .status-tag.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .status-tag.yellow { color: var(--yellow); background: var(--yellow-dim); border: 1px solid rgba(212,168,75,0.2); }
+    .status-tag.grey { color: var(--text-dim); background: rgba(98,92,80,0.1); border: 1px solid var(--border); }
+
+    /* Collab table */
+    .collab-table { width: 100%; border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin: 28px 0; }
+    .colt-head { display: grid; grid-template-columns: 160px 1fr 1fr 120px; background: var(--bg-card); border-bottom: 1px solid var(--border); }
+    .colt-row { display: grid; grid-template-columns: 160px 1fr 1fr 120px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    .colt-row:last-child { border-bottom: none; }
+    .colt-row:hover { background: var(--bg-hover); }
+    .colt-cell { padding: 12px 16px; font-size: 13px; font-weight: 300; color: var(--text-muted); border-right: 1px solid var(--border); line-height: 1.5; }
+    .colt-cell:last-child { border-right: none; }
+    .colt-head .colt-cell { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); font-weight: 400; }
+    .colt-cell strong { color: var(--text); font-weight: 500; }
+
+    .pull-quote { border-left: 3px solid var(--amber); padding: 16px 24px; margin: 36px 0; }
+    .pq-text { font-family: var(--font-display); font-style: italic; font-size: clamp(18px, 2.5vw, 26px); font-weight: 700; color: var(--text); line-height: 1.35; margin-bottom: 10px; }
+    .pq-source { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+
+    .timeline { position: relative; padding-left: 0; margin: 28px 0; }
+    .timeline::before { content: ''; position: absolute; left: 88px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+    .tl-row { display: grid; grid-template-columns: 88px 1fr; margin-bottom: 0; position: relative; }
+    .tl-row::after { content: ''; position: absolute; left: 84px; top: 20px; width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); border: 1px solid var(--border); }
+    .tl-row.red::after { background: var(--red); border-color: var(--red); }
+    .tl-row.amber::after { background: var(--amber); border-color: var(--amber); }
+    .tl-row.green::after { background: var(--green); border-color: var(--green); }
+    .tl-year { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); padding: 14px 0; text-align: right; padding-right: 20px; }
+    .tl-content { padding: 14px 0 14px 20px; border-bottom: 1px solid var(--border); }
+    .tl-row:last-child .tl-content { border-bottom: none; }
+    .tl-event { font-size: 13.5px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .tl-detail { font-size: 13px; font-weight: 300; color: var(--text-muted); line-height: 1.55; }
+    .tl-flag { display: inline-block; margin-top: 5px; font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+    .tl-flag.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .tl-flag.amber { color: var(--amber); background: var(--amber-dim); border: 1px solid rgba(200,148,58,0.2); }
+    .tl-flag.green { color: var(--green); background: var(--green-dim); border: 1px solid rgba(78,155,111,0.2); }
+
+    .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin: 28px 0; }
+    .stat-block { background: var(--bg-card); padding: 20px 22px; }
+    .stat-num { font-family: var(--font-display); font-size: 32px; font-weight: 900; letter-spacing: -0.03em; color: var(--red); margin-bottom: 4px; }
+    .stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+    .stat-sub { font-size: 12px; font-weight: 300; color: var(--text-muted); margin-top: 6px; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 40px; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--amber); text-decoration: none; }
+    .footer-note { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--text-dim); }
+
+    @media (max-width: 900px) {
+      .nav { padding: 16px 20px; }
+      .live-alert { padding: 10px 20px; }
+      .hero { grid-template-columns: 1fr; padding: 48px 20px 0; gap: 40px; }
+      .scorecard { position: static; }
+      .content { padding: 40px 20px 60px; }
+      .findings-grid { grid-template-columns: 1fr; }
+      .ct-head, .ct-row { grid-template-columns: 1fr 1fr; }
+      .ct-cell:first-child { grid-column: span 2; font-weight: 500; }
+      .colt-head, .colt-row { grid-template-columns: 1fr 1fr; }
+      .colt-cell:nth-child(3), .colt-cell:nth-child(4) { grid-column: span 1; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 12px; padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">Traced</a>
+  <span class="nav-cat">Deep Trace — Ghost Whey</span>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="traced-protein-supplements.html">Proteins</a></li>
+    <li><a href="traced-electrolytes.html">Electrolytes</a></li>
+    <li><a href="traced-greens-powders.html">Greens</a></li>
+    <li><a href="traced-chocolate.html">Chocolate</a></li>
+    <li><a href="traced-protein-bars.html">Protein Bars</a></li>
+    <li><a href="traced-ag1-deep-trace.html">AG1 Deep Trace</a></li>
+    <li><a href="traced-musclepharm-deep-trace.html">MusclePharm</a></li>
+    <li><a href="traced-ghost-deep-trace.html">Ghost</a></li><li><a href="traced-deep-dives.html">Deep Dives</a></li></ul>
+</nav>
+
+<div class="live-alert">
+  <div class="live-dot"></div>
+  <p class="live-alert-text"><strong>Updated Oct 2024:</strong> Ghost acquired by Keurig Dr Pepper — not Nestlé as widely reported earlier · Founders Hughes &amp; Lourenco remain in operational roles · Brand positioning unchanged on all channels · Formula and certifications unchanged post-acquisition</p>
+</div>
+
+<div style="max-width:1100px;margin:0 auto;padding:0 40px;">
+  <div class="hero" style="padding-left:0;padding-right:0;">
+    <div>
+      <div class="hero-breadcrumb">
+        <span>Traced</span><span class="bc-sep">/</span>
+        <span>Protein Supplements</span><span class="bc-sep">/</span>
+        <span class="bc-current">Ghost — Deep Trace</span>
+      </div>
+      <div class="hero-label">Low Transparency · Deep Trace</div>
+      <h1 class="hero-title"><em>Ghost</em></h1>
+      <div class="hero-subtitle">Built on independence. Acquired by Dr Pepper.<br>The collaboration flavors remain. The identity does not.</div>
+      <div class="hero-verdict">
+        Ghost built the most sophisticated brand identity in sports nutrition: radical transparency as an aesthetic, founded-in-a-garage mythology, limited-edition collaborations with Oreo and Sour Patch Kids, and a direct parasocial relationship with its audience cultivated over years of YouTube and social content. The brand's entire value proposition — <strong>the reason consumers paid a premium</strong> — was independence, authenticity, and the idea that Ghost was not like other supplement companies. In October 2024, Ghost was acquired by Keurig Dr Pepper, the maker of Dr Pepper, 7UP, Canada Dry, Snapple, and Bai. The collaboration flavors remain. The Oreo protein is still on shelf. The independence is not. What makes Ghost the definitive case study in identity inversion is not the acquisition itself — it is that the acquisition happened <strong>to the brand that most loudly marketed its independence</strong>, and that this structural change has not been meaningfully communicated to the audience that was sold that independence as a core value.
+      </div>
+    </div>
+    <div class="scorecard">
+      <div class="scorecard-head">
+        <div class="scorecard-head-label">Transparency Score</div>
+        <div class="overall-verdict">Low Transparency</div>
+        <div class="overall-sub">3 Red · 3 Yellow · 1 Green</div>
+      </div>
+      <div class="score-row"><span class="score-dim">Ownership / Control</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Brand Identity Accuracy</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Third-Party Testing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Artificial Sweeteners</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Formula Quality</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Label Accuracy</span><span class="score-pill green">Green</span></div>
+      <div class="scorecard-meta">
+        <div class="meta-row"><span class="meta-key">Acquirer</span><span class="meta-val">Keurig Dr Pepper</span></div>
+        <div class="meta-row"><span class="meta-key">Acquisition date</span><span class="meta-val">October 2024</span></div>
+        <div class="meta-row"><span class="meta-key">Founders retained</span><span class="meta-val">Yes (operational)</span></div>
+        <div class="meta-row"><span class="meta-key">NSF Certified</span><span class="meta-val red">No</span></div>
+        <div class="meta-row"><span class="meta-key">Batch COAs</span><span class="meta-val red">Not published</span></div>
+        <div class="meta-row"><span class="meta-key">Blend ratios</span><span class="meta-val red">Undisclosed</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section-divider">
+    <span class="section-num">Key Findings</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="findings-grid">
+    <div class="finding-block">
+      <div class="finding-num">01</div>
+      <div class="finding-title">Ghost was acquired by Keurig Dr Pepper in October 2024 — a beverage conglomerate with no prior sports nutrition presence</div>
+      <div class="finding-body">KDP's portfolio includes Dr Pepper, 7UP, Canada Dry, Snapple, Bai, and Mott's. Ghost is their first and only sports nutrition brand. The acquisition was confirmed October 24, 2024. Ghost's founders — Ryan Hughes and Daniel Lourenco — remain in operational roles, which is consistent with KDP's strategy of retaining brand founders post-acquisition to maintain identity continuity.</div>
+      <div class="finding-flag red">Red — Identity brand acquired by conglomerate with opposite positioning</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">02</div>
+      <div class="finding-title">Ghost built its brand on "radical transparency" — but the protein formula uses undisclosed blend ratios</div>
+      <div class="finding-body">Ghost's founding ethos included publicizing its supply chain partners, its manufacturing relationships, and its ingredient sourcing — unusual transparency practices in a category that rarely discloses anything. Ghost Whey uses a three-form whey blend (concentrate, isolate, hydrolyzed) with ratios not disclosed. The brand most associated with transparency in the category does not disclose the proportions of its protein matrix.</div>
+      <div class="finding-flag red">Red — Brand claim vs. formula reality mismatch</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">03</div>
+      <div class="finding-title">The collaboration flavor model (Oreo, Cinnabon, Sour Patch Kids) is a youth-targeting strategy with undisclosed sweetener complexity</div>
+      <div class="finding-body">Ghost's licensed flavor collaborations — Oreo, Sour Patch Kids, Chips Ahoy, Cinnabon, Swedish Fish — are designed to attract 18-24 year olds through familiar candy and cookie brand associations. The formulas for collaboration SKUs include sucralose, proprietary flavor compounds, and in some cases natural flavors without full disclosure of constituent ingredients. The brands being licensed (Nabisco, Mondelēz) are owned by — among others — the same type of conglomerate that now owns Ghost.</div>
+      <div class="finding-flag red">Red — Youth-targeting strategy with sweetener and ingredient opacity</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">04</div>
+      <div class="finding-title">No NSF Certified for Sport, no batch COAs, no Informed Choice — the "transparent" brand has no verification stack</div>
+      <div class="finding-body">Ghost's transparency positioning was primarily operational and narrative — showing factory tours, naming suppliers. It was not reflected in formal third-party certification. Ghost Whey does not hold NSF Certified for Sport, does not publish batch certificates of analysis by lot number, and does not carry Informed Choice certification. The gap between the transparency brand claim and the actual verification infrastructure is the most direct finding in this report.</div>
+      <div class="finding-flag red">Red — Transparency as aesthetic, not verified standard</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">05</div>
+      <div class="finding-title">The acquisition has not been foregrounded in brand communications — the independence narrative continues</div>
+      <div class="finding-body">As of early 2026, Ghost's owned channels — YouTube, Instagram, the Ghost website — continue to feature the founding story, the "founded in a garage" mythology, and the independent ethos content that built the brand. The KDP acquisition is not featured or foregrounded on the brand's consumer-facing platforms. A first-time Ghost consumer in early 2026 would have no clear path to learning that Ghost is owned by the maker of Dr Pepper.</div>
+      <div class="finding-flag yellow">Yellow — Acquisition not hidden, but not disclosed at point of consumption</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">06</div>
+      <div class="finding-title">The formula is functional — the product quality has not changed post-acquisition, and label accuracy is not a documented concern</div>
+      <div class="finding-body">Ghost Whey is a real product with real protein content. Consumer testing and retailer reviews do not flag label accuracy concerns. The protein blend — even with undisclosed ratios — delivers the amino acid profile consistent with whey protein. No heavy metal contamination incidents are in the public record. This is a brand and ownership story, not a product safety story. The green dimension is label accuracy.</div>
+      <div class="finding-flag green">Green — Product quality is not the concern here</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: THE BRAND -->
+  <div class="section-divider">
+    <span class="section-num">01</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">What <em>Ghost Sold</em>:<br>Independence as Product</h2>
+
+  <div class="prose">
+    <p>Ghost was founded in 2015 by Ryan Hughes and Daniel Lourenco. From the beginning, the brand's positioning was built not on clinical claims or athlete performance but on a cultural proposition: Ghost was a lifestyle brand that happened to make supplements, for people who viewed their supplement choice as an expression of identity. The "See Through" ethos — Ghost's founding transparency commitment — meant naming suppliers publicly, showing manufacturing, publishing ingredient sourcing decisions. In a category where opacity was standard, this was genuinely unusual.</p>
+    <p>The brand's YouTube channel built an audience by documenting the founders' work and decisions in real time — the type of content that creates parasocial trust rather than brand transaction. Ghost's collaboration strategy, launching limited-edition flavors in partnership with Oreo, Sour Patch Kids, Cinnabon, and Swedish Fish, created artificial scarcity and consumer excitement that most supplement brands generate only through athlete sponsorships. The audience understood that Ghost was not a legacy brand; it was a brand that they had watched be built from nothing.</p>
+    <p>This history matters because <strong>the brand's value to Keurig Dr Pepper is precisely the trust it built on that independence claim.</strong> KDP did not acquire Ghost's protein formula. There is nothing in Ghost Whey that is proprietary — the three-form whey blend is standard. KDP acquired the audience, the identity, and the cultural permission that Ghost had earned by positioning itself as the opposite of the kind of company that would acquire it.</p>
+  </div>
+
+  <div class="pull-quote">
+    <div class="pq-text">"We wanted to build a brand that we would actually want to buy from. That meant showing everything — who makes our stuff, where it comes from, why we make decisions."</div>
+    <div class="pq-source">Ghost founder Ryan Hughes, brand founding narrative (pre-acquisition)</div>
+  </div>
+
+  <!-- SECTION 2: THE ACQUISITION -->
+  <div class="section-divider">
+    <span class="section-num">02</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">The <em>KDP Acquisition</em>:<br>October 2024</h2>
+
+  <div class="prose">
+    <p>Keurig Dr Pepper acquired Ghost in October 2024. The acquisition price was not publicly disclosed. KDP's rationale was strategic: the company wanted to expand into the energy and lifestyle nutrition category, where its legacy soda portfolio faces declining volume. Ghost's energy drink — Ghost Energy — had been growing rapidly in convenience store channels, where KDP has strong distribution infrastructure. The protein powder was part of the acquisition but not the primary driver.</p>
+    <p>KDP's CEO Brian Kelley described the acquisition as part of the company's strategy to build exposure to "better-for-you" beverages and lifestyle nutrition. Ghost's founders were retained in operational roles — a standard KDP integration pattern, used to maintain the brand identity and audience relationship that drove the acquisition in the first place.</p>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-label">The Structural Irony</div>
+    <div class="callout-text">Ghost was acquired by a company whose core product portfolio — Dr Pepper, 7UP, Canada Dry, Snapple — is exactly the type of legacy beverage brand that Ghost's founding narrative positioned itself against. The "anti-establishment" supplement brand is now a division of the establishment. <strong>The founders remain. The independence does not.</strong> When a Ghost consumer posts about their Sour Patch Kids protein, they are engaging with a Keurig Dr Pepper product — sold to them through the identity infrastructure that the founders built before the sale.</div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-block">
+      <div class="stat-num">2015</div>
+      <div class="stat-label">Founded</div>
+      <div class="stat-sub">Ryan Hughes &amp; Daniel Lourenco, Henderson NV</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">Oct '24</div>
+      <div class="stat-label">Acquired</div>
+      <div class="stat-sub">Keurig Dr Pepper — undisclosed price</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">0</div>
+      <div class="stat-label">NSF Certs</div>
+      <div class="stat-sub">No NSF, no Informed Choice, no batch COAs published</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Whey Forms</div>
+      <div class="stat-sub">Concentrate + isolate + hydrolyzed — ratios undisclosed</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: BEFORE / AFTER -->
+  <div class="section-divider">
+    <span class="section-num">03</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">Ghost <em>Before vs. After</em>:<br>What Changed and What Didn't</h2>
+
+  <div class="prose">
+    <p>The acquisition matters primarily for what it changes about the brand's integrity claim, not the product. Below is a dimension-by-dimension comparison of what the acquisition actually changed versus what remained the same.</p>
+  </div>
+
+  <div class="compare-table">
+    <div class="ct-head">
+      <div class="ct-cell">Dimension</div>
+      <div class="ct-cell before">Before KDP (2015–Oct 2024)</div>
+      <div class="ct-cell after">After KDP (Oct 2024–Present)</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell"><strong>Ownership</strong></div>
+      <div class="ct-cell">Founder-controlled, VC-backed (3 institutional investors). Hughes &amp; Lourenco in control.<div class="status-tag green">Independent</div></div>
+      <div class="ct-cell">Keurig Dr Pepper, publicly traded beverage conglomerate. Founders retained operationally but no longer owners.<div class="status-tag red">Conglomerate</div></div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell"><strong>Brand narrative</strong></div>
+      <div class="ct-cell">Authentic — the independence story was true. "See Through" ethos grounded in actual founder ownership.<div class="status-tag green">Accurate</div></div>
+      <div class="ct-cell">The independence narrative continues on all channels. The structural reality no longer supports it.<div class="status-tag red">Inaccurate</div></div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell"><strong>Formula</strong></div>
+      <div class="ct-cell">Whey blend (concentrate + isolate + hydrolyzed), undisclosed ratios. No NSF, no COAs.<div class="status-tag yellow">Unchanged</div></div>
+      <div class="ct-cell">Same formula. No certification changes. No COA publication added. No change to ingredient disclosure.<div class="status-tag yellow">Unchanged</div></div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell"><strong>Collaboration flavors</strong></div>
+      <div class="ct-cell">Oreo, Cinnabon, Sour Patch Kids, Swedish Fish, Chips Ahoy — licensed from Nabisco, Mondelēz, others.<div class="status-tag grey">Ongoing</div></div>
+      <div class="ct-cell">Collaborations continue. The flavors are now a KDP product line, marketed through Ghost's independent-brand aesthetics.<div class="status-tag grey">Ongoing</div></div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell"><strong>Founder presence</strong></div>
+      <div class="ct-cell">Hughes &amp; Lourenco as genuine owners, operators, and public faces. YouTube channel authenticity was real.<div class="status-tag green">Genuine</div></div>
+      <div class="ct-cell">Hughes &amp; Lourenco retained in operational roles. Their public presence continues. The owner-founder authenticity is now a retained hire, not a structural fact.<div class="status-tag yellow">Performed</div></div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell"><strong>Distribution</strong></div>
+      <div class="ct-cell">DTC website, specialty retailers, GNC, online channels. Limited convenience store presence.<div class="status-tag grey">Limited</div></div>
+      <div class="ct-cell">KDP distribution infrastructure expands retail footprint, particularly in convenience and mass channels. Scale increases.<div class="status-tag amber">Expanded</div></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: THE COLLABORATION MODEL -->
+  <div class="section-divider">
+    <span class="section-num">04</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">The <em>Collaboration Flavor</em><br>Model: What It Is</h2>
+
+  <div class="prose">
+    <p>Ghost's collaboration strategy is the most sophisticated youth-targeting mechanism in the protein supplement category. The premise: license a recognizable consumer brand — Oreo, Sour Patch Kids, Chips Ahoy, Cinnabon, Swedish Fish — and produce a protein powder flavored to taste like it. The limited-edition drop model creates artificial scarcity. The licensed brand association creates immediate consumer recognition and desire without requiring any nutritional education.</p>
+    <p>The demographic target is clear from the collaboration choices: 18-24 year olds who grew up eating Oreos and Sour Patch Kids, for whom those flavor associations are nostalgia-coded. Ghost is selling protein powder through a candy brand experience. This is not inherently problematic — flavoring works, and young adults are an entirely legitimate market for protein supplements. But it raises a transparency question that the brand's "See Through" ethos did not address: <strong>what is in the proprietary flavor compounds</strong> used to replicate these licensed tastes, and how are they disclosed?</p>
+  </div>
+
+  <div class="collab-table">
+    <div class="colt-head">
+      <div class="colt-cell">Collaboration</div>
+      <div class="colt-cell">Brand Owner</div>
+      <div class="colt-cell">Sweetener / Flavoring</div>
+      <div class="colt-cell">Flavor Transparency</div>
+    </div>
+    <div class="colt-row">
+      <div class="colt-cell"><strong>Ghost x Oreo</strong><br>Whey + Vegan</div>
+      <div class="colt-cell">Nabisco / Mondelēz International (Kraft spinoff)</div>
+      <div class="colt-cell">Sucralose + natural and artificial flavors. "Oreo cookie bits" listed but constituent ingredients not individually disclosed.</div>
+      <div class="colt-cell"><span class="status-tag yellow">Partial</span></div>
+    </div>
+    <div class="colt-row">
+      <div class="colt-cell"><strong>Ghost x Sour Patch Kids</strong></div>
+      <div class="colt-cell">Mondelēz International</div>
+      <div class="colt-cell">Sucralose + citric acid + natural and artificial flavors. Sour flavor profile requires acidulants not individually itemized.</div>
+      <div class="colt-cell"><span class="status-tag yellow">Partial</span></div>
+    </div>
+    <div class="colt-row">
+      <div class="colt-cell"><strong>Ghost x Cinnabon</strong></div>
+      <div class="colt-cell">Focus Brands (PE: Roark Capital)</div>
+      <div class="colt-cell">Sucralose + natural flavors. "Cinnabon cinnamon" listed as component. Constituent flavor compounds not disclosed.</div>
+      <div class="colt-cell"><span class="status-tag yellow">Partial</span></div>
+    </div>
+    <div class="colt-row">
+      <div class="colt-cell"><strong>Ghost x Swedish Fish</strong></div>
+      <div class="colt-cell">Mondelēz International</div>
+      <div class="colt-cell">Sucralose + natural and artificial flavors. Specific flavor compounds not individually listed.</div>
+      <div class="colt-cell"><span class="status-tag yellow">Partial</span></div>
+    </div>
+    <div class="colt-row">
+      <div class="colt-cell"><strong>Ghost x Chips Ahoy</strong></div>
+      <div class="colt-cell">Nabisco / Mondelēz International</div>
+      <div class="colt-cell">Sucralose + natural and artificial flavors. Cookie flavor compound proprietary.</div>
+      <div class="colt-cell"><span class="status-tag yellow">Partial</span></div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>A pattern emerges across every collaboration SKU: all use sucralose as primary sweetener, all use "natural and artificial flavors" as a grouping that doesn't disclose constituent compounds, and none publish batch COAs that would independently verify what is in the flavor complex. The collaboration model — which built Ghost's audience — is also the model that creates the most ingredient opacity per SKU, because each licensed flavor introduces proprietary compounds that are not individually disclosed.</p>
+    <p>This is not a safety concern. The individual ingredients in these formulas are generally recognized as safe. It is a transparency concern: <strong>the brand that built its identity on showing everything has a portfolio of SKUs where the flavoring layer is hidden behind "natural and artificial flavors."</strong></p>
+  </div>
+
+  <!-- SECTION 5: TIMELINE -->
+  <div class="section-divider">
+    <span class="section-num">05</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">The <em>Full Timeline</em>:<br>From Garage to Dr Pepper</h2>
+
+  <div class="timeline">
+    <div class="tl-row green">
+      <div class="tl-year">2015</div>
+      <div class="tl-content">
+        <div class="tl-event">Ghost founded by Ryan Hughes and Daniel Lourenco</div>
+        <div class="tl-detail">Henderson, Nevada. Two founders, genuine independence. "See Through" ethos established. YouTube channel documents the founding in real time. First products: pre-workout and protein powder.</div>
+        <div class="tl-flag green">Genuinely independent at founding</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">2016–18</div>
+      <div class="tl-content">
+        <div class="tl-event">Rapid brand growth through YouTube and social content</div>
+        <div class="tl-detail">Founders build parasocial audience through documented transparency. Supply chain partners named publicly. Factory tours shared. Unusual in a category where none of this was standard. Brand positioned as the anti-GNC.</div>
+      </div>
+    </div>
+    <div class="tl-row amber">
+      <div class="tl-year">2019</div>
+      <div class="tl-content">
+        <div class="tl-event">First collaboration: Ghost x Warheads — the collab model begins</div>
+        <div class="tl-detail">Licensed flavor collaboration strategy launches. Limited-edition drops. Scarcity marketing. Audience responds strongly. Template established for all subsequent collaborations.</div>
+        <div class="tl-flag amber">Strategic inflection — brand model shifts to collab-driven</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">2020–22</div>
+      <div class="tl-content">
+        <div class="tl-event">Oreo, Sour Patch Kids, Cinnabon collaborations — Ghost enters mass consumer consciousness</div>
+        <div class="tl-detail">Collaboration with Nabisco/Oreo is the breakthrough moment. Brand moves from supplement enthusiast audience to mainstream youth market. Ghost Energy drink launches. Revenue accelerates significantly. VC funding confirmed (3 institutional rounds).</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">2023–24</div>
+      <div class="tl-content">
+        <div class="tl-event">Acquisition process begins — Keurig Dr Pepper in discussions</div>
+        <div class="tl-detail">KDP interested primarily in Ghost Energy's convenience store growth trajectory and Ghost's youth demographic reach. Protein powder is part of the brand package. Founders retained as condition of deal.</div>
+      </div>
+    </div>
+    <div class="tl-row red">
+      <div class="tl-year">Oct 2024</div>
+      <div class="tl-content">
+        <div class="tl-event">Ghost acquired by Keurig Dr Pepper — undisclosed price</div>
+        <div class="tl-detail">Announcement confirms acquisition. Founders Hughes and Lourenco remain in operational roles. KDP describes Ghost as part of its "better-for-you" and "lifestyle nutrition" expansion strategy. Ghost brand channels do not foreground the acquisition in consumer-facing content.</div>
+        <div class="tl-flag red">Independence ends — KDP ownership begins</div>
+      </div>
+    </div>
+    <div class="tl-row red">
+      <div class="tl-year">2025–26</div>
+      <div class="tl-content">
+        <div class="tl-event">Brand operates under KDP — independence narrative continues unchanged on all consumer channels</div>
+        <div class="tl-detail">Collaboration flavors continue. YouTube content continues with founder faces. No NSF certification added. No COAs published. No blend ratio disclosure added. A new Ghost consumer in early 2026 encounters the same "See Through" independence branding that predated the KDP acquisition.</div>
+        <div class="tl-flag red">Post-acquisition: identity claim disconnected from structural reality</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: WHAT WOULD CHANGE THIS -->
+  <div class="section-divider">
+    <span class="section-num">06</span>
+    <div class="section-line"></div>
+  </div>
+  <h2 class="section-title">What Would <em>Change</em><br>This Assessment</h2>
+
+  <div class="prose">
+    <p>Ghost's low transparency score is driven by the identity inversion, the blend opacity, and the absence of any certification stack — not by product safety concerns. The following changes, independently verified, would meaningfully improve the assessment.</p>
+  </div>
+
+  <div class="findings-grid">
+    <div class="finding-block">
+      <div class="finding-num">Change 1</div>
+      <div class="finding-title">Disclose the whey protein blend ratios on the label</div>
+      <div class="finding-body">Ghost's "See Through" ethos was built on radical ingredient transparency. The flagship Ghost Whey uses a three-form blend with undisclosed ratios. Disclosing what percentage of the protein comes from concentrate, isolate, and hydrolyzed whey would align the product with the brand's founding transparency claim. This is a label decision, not a certification requirement.</div>
+      <div class="finding-flag yellow">Would move ingredient transparency from Red to Yellow</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">Change 2</div>
+      <div class="finding-title">Obtain NSF Certified for Sport on flagship SKUs</div>
+      <div class="finding-body">NSF certification would provide independent verification of label accuracy and contaminant levels — the exact claims Ghost's transparency positioning implies but does not certify. KDP has the infrastructure and resources to pursue this across Ghost's core SKUs. The collaboration flavors would need individual certifications but the core whey formula could be certified first.</div>
+      <div class="finding-flag yellow">Would move third-party testing from Yellow to Green</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">Change 3</div>
+      <div class="finding-title">Foreground the KDP acquisition clearly on the Ghost website and in brand communications</div>
+      <div class="finding-body">The acquisition is discoverable via business reporting and Wikipedia. It is not foregrounded on Ghost's owned consumer channels. A brand that built its identity on transparency about its supply chain and ownership should apply the same standard to its own ownership change. A simple, direct disclosure on the About page would be the minimum expected from a brand with Ghost's stated values.</div>
+      <div class="finding-flag yellow">Would move brand identity accuracy from Red to Yellow</div>
+    </div>
+    <div class="finding-block">
+      <div class="finding-num">Change 4</div>
+      <div class="finding-title">Publish batch COAs by lot number for all core SKUs</div>
+      <div class="finding-body">Lot-specific COAs for heavy metals and label accuracy would provide independent verification of each production run. This is the standard that Momentous, Transparent Labs, and Legion currently meet. For a brand that positioned itself as the transparency leader in supplements, publishing COAs would be the most direct way to substantiate that claim.</div>
+      <div class="finding-flag yellow">Would meaningfully change the verification picture</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Traced</a>
+  <span class="footer-note">Ghost Whey Deep Trace — sourced from brand communications, press coverage, Tracxn acquisition data, and product label review. Last reviewed February 2026.</span>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#e88d8c819c879a818984a89c9a898b8d8cc68b87" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="b1d4d5d8c5dec3d8d0ddf1c5c3d0d2d4d59fd2de">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="trace

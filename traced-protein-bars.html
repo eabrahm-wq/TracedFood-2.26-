@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traced — Protein Bars Category</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0d0b;
+      --bg-card: #141310;
+      --bg-hover: #1a1916;
+      --border: #242220;
+      --border-light: #2e2b28;
+      --text: #f0ece4;
+      --text-muted: #a09890;
+      --text-dim: #6a6460;
+      --amber: #c8943a;
+      --amber-dim: rgba(200,148,58,0.08);
+      --green: #4e9b6f;
+      --green-dim: rgba(78,155,111,0.08);
+      --yellow: #d4a84b;
+      --yellow-dim: rgba(212,168,75,0.08);
+      --red: #c94d3c;
+      --red-dim: rgba(201,77,60,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(14,13,11,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .nav-cat {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-muted); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 40px 56px;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(200,148,58,0.018) 40px,
+        rgba(200,148,58,0.018) 41px
+      );
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .live-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,77,60,0.12);
+      border: 1px solid rgba(201,77,60,0.3);
+      border-radius: 2px;
+      padding: 6px 12px;
+      margin-bottom: 24px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--red);
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--amber);
+    }
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 580px;
+      line-height: 1.65;
+      margin-bottom: 48px;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .meta-block { display: flex; flex-direction: column; gap: 4px; }
+    .meta-value {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .meta-value.red { color: var(--red); }
+    .meta-value.yellow { color: var(--yellow); }
+    .meta-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── THESIS BLOCK ── */
+    .thesis-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 40px;
+      border-top: 1px solid var(--border);
+    }
+    .thesis-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 20px;
+    }
+    .thesis-text {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+      max-width: 820px;
+      border-left: 3px solid var(--amber);
+      padding-left: 28px;
+    }
+
+    /* ── ACQUISITION TIMELINE ── */
+    .timeline-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 56px;
+    }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline {
+      position: relative;
+      padding-left: 2px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 80px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 32px;
+      margin-bottom: 0;
+      position: relative;
+    }
+    .timeline-row::after {
+      content: '';
+      position: absolute;
+      left: 76px;
+      top: 22px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--border-light);
+      border: 1px solid var(--border);
+    }
+    .timeline-row.red::after { background: var(--red); border-color: var(--red); }
+    .timeline-year {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      padding: 16px 0;
+      text-align: right;
+    }
+    .timeline-content {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0 16px 12px;
+    }
+    .timeline-row:last-child .timeline-content { border-bottom: none; }
+    .timeline-brand {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .timeline-detail {
+      font-size: 12.5px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .timeline-acquirer {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--red);
+      margin-top: 4px;
+    }
+
+    /* ── SPECTRUM ── */
+    .spectrum-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 40px;
+      border-top: 1px solid var(--border);
+    }
+    .spectrum-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--green), var(--yellow), var(--red));
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .spectrum-markers {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+    .spectrum-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .spectrum-tick {
+      width: 1px;
+      height: 14px;
+      background: var(--border-light);
+    }
+    .spectrum-name {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-align: center;
+    }
+    .spectrum-score {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .spectrum-score.red { color: var(--red); }
+    .spectrum-score.yellow { color: var(--yellow); }
+    .spectrum-score.green { color: var(--green); }
+
+    /* ── PROFILES ── */
+    .profiles-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    .profile-card {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      background: var(--bg-card);
+      transition: border-color 0.2s;
+    }
+    .profile-card:hover { border-color: var(--border-light); }
+
+    .profile-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .profile-header:hover { background: var(--bg-hover); }
+
+    .profile-name {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    .profile-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+    .profile-verdict {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+    .profile-verdict strong { color: var(--text); font-weight: 500; }
+
+    .profile-scores {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 200px;
+    }
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .score-dim {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--text-dim);
+    }
+    .score-pill {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .score-pill.red {
+      color: var(--red);
+      background: var(--red-dim);
+      border: 1px solid rgba(201,77,60,0.2);
+    }
+    .score-pill.yellow {
+      color: var(--yellow);
+      background: var(--yellow-dim);
+      border: 1px solid rgba(212,168,75,0.2);
+    }
+    .score-pill.green {
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid rgba(78,155,111,0.2);
+    }
+
+    .profile-body {
+      display: none;
+      padding: 28px 32px;
+    }
+    .profile-body.open { display: block; }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .detail-block {}
+    .detail-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .detail-text {
+      font-size: 13.5px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .detail-text strong { color: var(--text); font-weight: 500; }
+    .detail-text em { color: var(--amber); font-style: normal; }
+
+    .callout-box {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 2px 2px 0;
+      padding: 16px 20px;
+      margin-top: 20px;
+    }
+    .callout-box.red { border-left-color: var(--red); }
+    .callout-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .callout-box.red .callout-label { color: var(--red); }
+    .callout-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .callout-text strong { color: var(--text); font-weight: 500; }
+
+    .profile-expand {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .expand-arrow {
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    .open .expand-arrow { transform: rotate(180deg); }
+
+    /* signal bars for acquisition scale */
+    .acquisition-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      margin-bottom: 10px;
+    }
+    .acquisition-badge.conglomerate {
+      color: var(--red);
+      background: var(--red-dim);
+      border: 1px solid rgba(201,77,60,0.2);
+    }
+    .acquisition-badge.vc {
+      color: var(--yellow);
+      background: var(--yellow-dim);
+      border: 1px solid rgba(212,168,75,0.2);
+    }
+    .acquisition-badge.spac {
+      color: var(--text-dim);
+      background: rgba(106,100,96,0.1);
+      border: 1px solid var(--border);
+    }
+
+    /* ── OWNERSHIP MAP ── */
+    .ownership-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 40px;
+      border-top: 1px solid var(--border);
+    }
+    .ownership-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 28px;
+    }
+    .ownership-cell {
+      background: var(--bg-card);
+      padding: 20px 22px;
+    }
+    .ownership-parent {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .ownership-brands {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .ownership-tag {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+    .ownership-tag.highlight {
+      color: var(--amber);
+      border-color: rgba(200,148,58,0.25);
+      background: var(--amber-dim);
+    }
+    .ownership-tag.conflict {
+      color: var(--red);
+      border-color: rgba(201,77,60,0.2);
+      background: var(--red-dim);
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .comparison-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+    .comparison-table {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ct-head {
+      display: grid;
+      grid-template-columns: 180px repeat(5, 1fr);
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+    .ct-row {
+      display: grid;
+      grid-template-columns: 180px repeat(5, 1fr);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .ct-row:last-child { border-bottom: none; }
+    .ct-row:hover { background: var(--bg-hover); }
+    .ct-cell {
+      padding: 12px 16px;
+      font-size: 12.5px;
+      font-weight: 300;
+      color: var(--text-muted);
+      border-right: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .ct-cell:last-child { border-right: none; }
+    .ct-head .ct-cell {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+    .ct-cell.dim-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 400;
+      background: var(--bg-card);
+    }
+    .ct-red { color: var(--red) !important; }
+    .ct-yellow { color: var(--yellow) !important; }
+    .ct-green { color: var(--green) !important; }
+
+    /* ── EDITORIAL ── */
+    .editorial-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 40px 80px;
+      border-top: 1px solid var(--border);
+    }
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+    .editorial-block {}
+    .editorial-block-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .editorial-text {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    .editorial-text strong { color: var(--text); font-weight: 500; }
+    .editorial-text p { margin-bottom: 12px; }
+    .editorial-text p:last-child { margin-bottom: 0; }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--amber);
+    }
+    .footer-note {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .nav { padding: 16px 20px; }
+      .hero { padding: 48px 20px 40px; }
+      .hero-meta { gap: 28px; }
+      .thesis-section, .timeline-section, .spectrum-section,
+      .profiles-section, .ownership-section, .comparison-section,
+      .editorial-section { padding-left: 20px; padding-right: 20px; }
+      .profile-header { grid-template-columns: 1fr; }
+      .profile-scores { min-width: auto; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .ct-head, .ct-row { grid-template-columns: 120px repeat(5, 1fr); font-size: 11px; }
+      .editorial-grid { grid-template-columns: 1fr; }
+      .ownership-grid { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-note { text-align: center; }
+    }
+
+    /* ── WHAT TO LOOK FOR ── */
+    .wtlf-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 64px 40px 0;
+    }
+    .wtlf-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .wtlf-eyebrow {
+      font-family: var(--font-mono, 'DM Mono', monospace);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber, #c8943a);
+      flex-shrink: 0;
+    }
+    .wtlf-rule { flex: 1; height: 1px; background: var(--border, #232018); }
+    .wtlf-title {
+      font-family: var(--font-display, 'Playfair Display', serif);
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: var(--text, #ede9e0);
+      margin-bottom: 36px;
+    }
+    .wtlf-title em { font-style: italic; color: var(--amber, #c8943a); }
+    .wtlf-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border, #232018);
+      border: 1px solid var(--border, #232018);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .wtlf-card {
+      background: var(--bg-card, #111009);
+      padding: 22px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+    .wtlf-card:hover { background: var(--bg-hover, #161410); }
+    .wtlf-signal {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .wtlf-icon {
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      width: 18px;
+      text-align: center;
+    }
+    .wtlf-signal-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text, #ede9e0);
+      line-height: 1.3;
+    }
+    .wtlf-signal-body {
+      font-size: 12.5px;
+      font-weight: 300;
+      color: var(--text-muted, #9a9284);
+      line-height: 1.65;
+    }
+    .wtlf-flag {
+      display: inline-block;
+      margin-top: 6px;
+      font-family: var(--font-mono, 'DM Mono', monospace);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+    .wtlf-flag.red   { color: var(--red, #c94d3c);    background: rgba(201,77,60,0.08);   border: 1px solid rgba(201,77,60,0.2); }
+    .wtlf-flag.yellow{ color: var(--yellow, #d4a84b);  background: rgba(212,168,75,0.08);  border: 1px solid rgba(212,168,75,0.2); }
+    .wtlf-flag.amber { color: var(--amber, #c8943a);   background: rgba(200,148,58,0.08);  border: 1px solid rgba(200,148,58,0.2); }
+    .wtlf-flag.green { color: var(--green, #4e9b6f);   background: rgba(78,155,111,0.08);  border: 1px solid rgba(78,155,111,0.2); }
+    @media (max-width: 900px) {
+      .wtlf-section { padding: 40px 20px 0; }
+      .wtlf-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html">Traced</a>
+  <span class="nav-cat">Protein Bars — Category 05</span>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="traced-protein-supplements.html">Proteins</a></li>
+    <li><a href="traced-electrolytes.html">Electrolytes</a></li>
+    <li><a href="traced-greens-powders.html">Greens</a></li>
+    <li><a href="traced-chocolate.html">Chocolate</a></li>
+    <li><a href="traced-protein-bars.html" class="current">Protein Bars</a></li><li><a href="traced-deep-dives.html">Deep Dives</a></li></ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Traced Database · Category 05</div>
+  <div class="live-banner">
+    <span class="live-dot"></span>
+    David / Attia departure Feb 2026 · RXBar Kellogg's 8 years in · Clif 3 years post-Mondelēz
+  </div>
+  <h1 class="hero-title">Protein<br><em>Bars</em></h1>
+  <p class="hero-sub">Every protein bar brand that achieved meaningful scale has been acquired by a conglomerate. This is not a coincidence. It is the category's defining structural condition — and the reason Traced has no green profile to award here.</p>
+  <div class="hero-meta">
+    <div class="meta-block">
+      <span class="meta-value">5</span>
+      <span class="meta-label">Brands Traced</span>
+    </div>
+    <div class="meta-block">
+      <span class="meta-value red">4</span>
+      <span class="meta-label">Low Transparency</span>
+    </div>
+    <div class="meta-block">
+      <span class="meta-value yellow">1</span>
+      <span class="meta-label">Mixed Transparency</span>
+    </div>
+    <div class="meta-block">
+      <span class="meta-value" style="color:var(--text-dim)">0</span>
+      <span class="meta-label">High Transparency</span>
+    </div>
+  </div>
+</section>
+
+<!-- THESIS -->
+<section class="thesis-section">
+  <div class="thesis-label">Category Finding</div>
+  <p class="thesis-text">"Protein bars are the only Traced category with no green profile. Not because the standard is too high — but because the acquisition pipeline absorbed every brand that came close to meeting it."</p>
+</section>
+
+<!-- ACQUISITION TIMELINE -->
+<section class="timeline-section">
+  <div class="section-label">Acquisition Timeline — The Pattern Made Visible</div>
+  <div class="timeline">
+    <div class="timeline-row">
+      <div class="timeline-year">2000</div>
+      <div class="timeline-content">
+        <div class="timeline-brand">Clif Bar rejects Quaker Oats</div>
+        <div class="timeline-detail">Gary Erickson walks away from $120M offer. Brands independence as core identity.</div>
+      </div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-year">2008</div>
+      <div class="timeline-content">
+        <div class="timeline-brand">KIND — VMG Partners minority stake</div>
+        <div class="timeline-detail">First outside capital. Company later buys VMG out in 2014.</div>
+      </div>
+    </div>
+    <div class="timeline-row red">
+      <div class="timeline-year">2017</div>
+      <div class="timeline-content">
+        <div class="timeline-brand">RXBar → Kellogg's, $600M</div>
+        <div class="timeline-detail">"No BS" brand acquired by the maker of Froot Loops and Pop-Tarts. Founders say "nothing is changing."</div>
+        <div class="timeline-acquirer">Kellogg's (now WK Kellogg / Kellanova)</div>
+      </div>
+    </div>
+    <div class="timeline-row red">
+      <div class="timeline-year">2017</div>
+      <div class="timeline-content">
+        <div class="timeline-brand">KIND — Mars minority stake, ~$3–4B valuation</div>
+        <div class="timeline-detail">The M&M's and Snickers maker takes 40% of the "healthy snack" company. Full acquisition follows in 2020 for ~$5B.</div>
+        <div class="timeline-acquirer">Mars, Inc.</div>
+      </div>
+    </div>
+    <div class="timeline-row red">
+      <div class="timeline-year">2019</div>
+      <div class="timeline-content">
+        <div class="timeline-brand">Quest → Simply Good Foods, $1B</div>
+        <div class="timeline-detail">SPAC-formed PE vehicle — parent of Atkins Nutritionals — acquires Quest for $1 billion. Founder Tom Bilyeu had already left in 2016.</div>
+        <div class="timeline-acquirer">Simply Good Foods (Nasdaq: SMPL) / Atkins</div>
+      </div>
+    </div>
+    <div class="timeline-row red">
+      <div class="timeline-year">2022</div>
+      <div class="timeline-content">
+        <div class="timeline-brand">Clif Bar → Mondelēz, $2.9B</div>
+        <div class="timeline-detail">After 30 years and multiple rejected offers, Gary Erickson finally sells. Mondelēz now owns Clif, Hu chocolate, and Cadbury — simultaneously.</div>
+        <div class="timeline-acquirer">Mondelēz International (Nasdaq: MDLZ)</div>
+      </div>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-year">2024</div>
+      <div class="timeline-content">
+        <div class="timeline-brand">David — $10M seed, Attia + Huberman as investors</div>
+        <div class="timeline-detail">Peter Rahal (RXBar founder) launches new brand. Series A of $75M follows in May 2025. Attia departs CSO role Feb 2026.</div>
+        <div class="timeline-acquirer">VC-backed — Valor Siren, Greenoaks</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECTRUM -->
+<section class="wtlf-section">
+  <div class="wtlf-header">
+    <span class="wtlf-eyebrow">Before You Buy</span>
+    <div class="wtlf-rule"></div>
+  </div>
+  <h2 class="wtlf-title">What to <em>Look For</em> in Protein Bars</h2>
+  <div class="wtlf-grid">
+    <div class="wtlf-card">
+      <div class="wtlf-card-head">
+        <span class="wtlf-icon">🧪</span>
+        <span class="wtlf-signal-label">Protein source in bars is almost always a blend — ratios almost never disclosed</span>
+      </div>
+      <ul class="wtlf-bullets">
+          <li>Most bars mix <strong>whey concentrate, soy isolate, milk protein isolate, and collagen</strong> to hit the gram count at lowest cost</li>
+          <li><strong>Collagen inflates the number</strong> without providing complete protein (PDCAAS 0)</li>
+          <li>The bar that says "20g protein" may deliver <strong>meaningfully less functional protein</strong> depending on the undisclosed blend</li>
+      </ul>
+      <span class="wtlf-flag red">Red flag — Protein blend with collagen and no ratio disclosure</span>
+    </div>
+    <div class="wtlf-card">
+      <div class="wtlf-card-head">
+        <span class="wtlf-icon">🍬</span>
+        <span class="wtlf-signal-label">"Net carb" math doesn't reflect digestive reality</span>
+      </div>
+      <ul class="wtlf-bullets">
+          <li>Many bars subtract sugar alcohols from total carbs. <strong>Maltitol</strong> (common in bars) has a glycemic index of ~52 — nearly half of glucose — and raises blood sugar meaningfully</li>
+          <li><strong>Erythritol</strong> is lower-GI but causes GI distress at bar-sized doses for many people</li>
+          <li>"Net carbs" is a <strong>marketing construct with no regulatory definition</strong></li>
+      </ul>
+      <span class="wtlf-flag red">Red flag — "Net carbs" claim with maltitol as primary sweetener</span>
+    </div>
+    <div class="wtlf-card">
+      <div class="wtlf-card-head">
+        <span class="wtlf-icon">📊</span>
+        <span class="wtlf-signal-label">The full macro ratio tells you what the bar is actually for</span>
+      </div>
+      <ul class="wtlf-bullets">
+          <li><strong>20g protein + 25g carbs + 8g fat</strong> = meal replacement</li>
+          <li><strong>20g protein + 5g net carbs + 12g fat</strong> = keto snack</li>
+          <li><strong>12g protein + 28g sugar</strong> = candy bar with protein branding — most bars show only the protein number prominently</li>
+      </ul>
+      <span class="wtlf-flag amber">Ask — is this protein-first, or candy-with-protein?</span>
+    </div>
+    <div class="wtlf-card">
+      <div class="wtlf-card-head">
+        <span class="wtlf-icon">🏢</span>
+        <span class="wtlf-signal-label">Every independent brand that built toward clean ingredients has been acquired</span>
+      </div>
+      <ul class="wtlf-bullets">
+          <li><strong>RXBar → Kellogg's (2017, $600M). Quest → Simply Good Foods. Kind → Mars (2020). Clif → Mondelēz (2022).</strong></li>
+          <li>The "clean" positioning survived the acquisitions. The <strong>ownership accountability did not</strong></li>
+          <li>This is the only Traced category with <strong>no green-zone brand</strong></li>
+      </ul>
+      <span class="wtlf-flag red">Red flag — Independent heritage brand now owned by a major food conglomerate</span>
+    </div>
+    <div class="wtlf-card">
+      <div class="wtlf-card-head">
+        <span class="wtlf-icon">🎨</span>
+        <span class="wtlf-signal-label">Where the ingredient list lives on the package is a transparency signal</span>
+      </div>
+      <ul class="wtlf-bullets">
+          <li><strong>RXBar put ingredients on the front</strong>: "3 egg whites. 6 almonds. 4 cashews. 2 dates." — a deliberate transparency statement</li>
+          <li>Most bars lead with the protein gram count and <strong>bury the ingredient list in small print on the back</strong></li>
+          <li>A long ingredient list isn't automatically disqualifying. A brand that hides it <strong>usually has something to hide</strong>.</li>
+      </ul>
+      <span class="wtlf-flag amber">Ask — how many ingredients, and where are they disclosed?</span>
+    </div>
+    <div class="wtlf-card">
+      <div class="wtlf-card-head">
+        <span class="wtlf-icon">📣</span>
+        <span class="wtlf-signal-label">Heavy ad spend signals a commoditized formula trying to build a brand premium</span>
+      </div>
+      <ul class="wtlf-bullets">
+          <li>Heavy social rotation means <strong>significant VC or conglomerate spend subsidizing growth</strong> — that cost lives in margins or formula quality</li>
+          <li>The best-tasting bar and the best-formula bar are <strong>regularly different products</strong></li>
+          <li>Focus on the ingredient list and protein source first — <strong>then</strong> taste</li>
+      </ul>
+      <span class="wtlf-flag amber">Ask — is the marketing spend competing with the formula budget?</span>
+    </div>
+  </div>
+</section>
+
+<section class="spectrum-section">
+  <div class="section-label">Transparency Spectrum — Protein Bars</div>
+  <div class="spectrum-bar"></div>
+  <div class="spectrum-markers">
+    <div class="spectrum-brand" style="align-items:flex-start">
+      <div class="spectrum-tick"></div>
+      <div class="spectrum-name">David</div>
+      <div class="spectrum-score red">5R</div>
+    </div>
+    <div class="spectrum-brand">
+      <div class="spectrum-tick"></div>
+      <div class="spectrum-name">RXBar</div>
+      <div class="spectrum-score red">4R·1Y</div>
+    </div>
+    <div class="spectrum-brand">
+      <div class="spectrum-tick"></div>
+      <div class="spectrum-name">Clif</div>
+      <div class="spectrum-score red">4R·1Y</div>
+    </div>
+    <div class="spectrum-brand">
+      <div class="spectrum-tick"></div>
+      <div class="spectrum-name">KIND</div>
+      <div class="spectrum-score red">3R·2Y</div>
+    </div>
+    <div class="spectrum-brand" style="align-items:flex-end">
+      <div class="spectrum-tick"></div>
+      <div class="spectrum-name">Quest</div>
+      <div class="spectrum-score yellow">2R·3Y</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILES -->
+<section class="profiles-section">
+  <div class="section-label">Brand Profiles — 5 Brands Scored</div>
+
+  <!-- DAVID -->
+  <div class="profile-card">
+    <div class="profile-header" onclick="toggleProfile(this)">
+      <div>
+        <div class="acquisition-badge vc">VC-backed · $75M Series A</div>
+        <div class="profile-name">David</div>
+        <div class="profile-sub">Founded 2024 · Peter Rahal (ex-RXBar founder)</div>
+        <p class="profile-verdict">
+          David is <strong>the investor-endorser conflict in concentrated form.</strong> Peter Attia served as Chief Science Officer and equity investor while endorsing the product to his 2M+ longevity-focused podcast audience — until stepping down in February 2026 without public explanation. Andrew Huberman remains both investor and public endorser. The product's <strong>28g protein claim is technically accurate but structurally misleading</strong>: a meaningful portion derives from collagen, an incomplete protein that cannot substitute for whey, casein, or egg white in muscle protein synthesis. The bar also contains EPG — a novel modified fat with no long-term safety data in humans — and acesulfame potassium, despite early marketing claiming "no artificial sweeteners."
+        </p>
+      </div>
+      <div>
+        <div class="profile-scores">
+          <div class="score-row"><span class="score-dim">Ownership</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Label Claims</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+        </div>
+        <div class="profile-expand" style="margin-top:16px">
+          <span>Full analysis</span><span class="expand-arrow">↓</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-label">Ownership & Funding</div>
+          <div class="detail-text">Founded by Peter Rahal (RXBar) and Zach Ranen in 2024. <strong>$10M seed round</strong> led by Rahal with participation from Valor Siren Ventures, Dr. Peter Attia (also Chief Science Officer), and Dr. Andrew Huberman. <strong>$75M Series A</strong> closed May 2025 led by Greenoaks Capital (also an investor in Stripe, Canva, Discord). Company is on track for $100M+ first-year revenue. Attia listed as CSO in December 2025 archived pages; removed from website by February 2026 with no public explanation from the company.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">The Conflict Structure</div>
+          <div class="detail-text">Both Attia and Huberman held equity in David while serving as primary public voices recommending the product. <strong>Attia's entire brand is built on evidence-based longevity medicine</strong> and dispassionate scientific evaluation. His CSO title and equity stake made independent evaluation of David's claims structurally impossible — and his audience could not distinguish between scientific endorsement and financial self-interest. Huberman's equity relationship follows the same playbook as his AG1 arrangement.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">The Collagen Protein Problem</div>
+          <div class="detail-text">David's 28g protein comes from a four-protein blend: milk protein isolate, <em>collagen</em>, whey concentrate, and egg white. Collagen is an incomplete protein — it lacks tryptophan, an essential amino acid, and has a lower PDCAAS/DIAAS score for muscle protein synthesis than complete proteins. <strong>The company claims a perfect 1.0 PDCAAS for the blend</strong>, which is technically achievable by combining collagen with complete proteins — but the label does not disclose individual protein ratios, making independent verification impossible.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">EPG & "No Artificial" Claim</div>
+          <div class="detail-text">David uses <strong>EPG (Epoxidized Propoxylated Glycerol)</strong> — a modified plant fat derived from rapeseed oil that provides 92% fewer calories per gram than conventional fat. EPG is FDA-approved but has minimal long-term human safety data. The bar also contains <em>acesulfame potassium</em> (Ace-K), a synthetic artificial sweetener, despite early marketing claiming the product had no artificial sweeteners. This claim was updated after launch without explicit consumer notification.</div>
+        </div>
+      </div>
+      <div class="callout-box red">
+        <div class="callout-label">Attia Departure — February 2026</div>
+        <div class="callout-text">An archived version of David's website from December 2025 listed Peter Attia as Chief Science Officer. By February 2026, Attia's name, title, and photograph had been removed from the site. Rahal confirmed the departure but offered no explanation. A CSO equity holder who builds a brand on science-backed nutrition, then quietly exits a science-officer role, is a signal worth watching — particularly given the unresolved questions about collagen protein claims and EPG safety data.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RXBAR -->
+  <div class="profile-card">
+    <div class="profile-header" onclick="toggleProfile(this)">
+      <div>
+        <div class="acquisition-badge conglomerate">Kellogg's · $600M · 2017</div>
+        <div class="profile-name">RXBar</div>
+        <div class="profile-sub">Founded 2012 · Acquired by Kellogg's 2017</div>
+        <p class="profile-verdict">
+          RXBar built its brand on a single promise: <strong>radical ingredient transparency</strong>. The front of the package lists the ingredients — "3 Egg Whites, 6 Almonds, 4 Cashews, 2 Dates" — before anything else. In 2017, that brand was acquired by Kellogg's for $600 million. <strong>Kellogg's is the maker of Froot Loops, Pop-Tarts, Frosted Flakes, and Eggo waffles.</strong> The formula has held. The mission has not — it now serves the growth objectives of a company whose core business is the antithesis of what RXBar was built to represent.
+        </p>
+      </div>
+      <div>
+        <div class="profile-scores">
+          <div class="score-row"><span class="score-dim">Ownership</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+          <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Label Claims</span><span class="score-pill green">Green</span></div>
+          <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+        </div>
+        <div class="profile-expand" style="margin-top:16px">
+          <span>Full analysis</span><span class="expand-arrow">↓</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-label">Origin & Acquisition</div>
+          <div class="detail-text">Founded in Chicago in 2012 by Peter Rahal and Jared Smith, initially for the CrossFit community. <strong>Whole-food ingredients listed prominently on the front</strong> of the package — a genuinely differentiated transparency move in a category dominated by ingredient-hiding. Kellogg's acquired Chicago Bar Co. (RXBar's parent) for $600M in October 2017. At acquisition, RXBar was on track for ~$120M in annual sales. Founders said publicly: "Nothing is changing."</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">The Mission Contradiction</div>
+          <div class="detail-text">RXBar's founding premise was <em>no BS</em> — no B.S. ingredients, no B.S. labeling, no hiding behind marketing. <strong>Kellogg's business model is built on precisely what RXBar defined itself against</strong>: highly processed products with long ingredient lists, marketed to children, carrying health halos their formulas don't support. RXBar's "No BS" front-of-package claim now exists inside a corporation that has never applied that standard to its core brands. The brand promise is structurally impossible to keep under current ownership.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Formula Watch</div>
+          <div class="detail-text">The original formula has been largely maintained post-acquisition. RXBar's ingredient list remains short, whole-food-based, and front-facing. <strong>This is the category's best ingredient integrity score</strong> — and the reason for the yellow revenue model score rather than red. The formula is the only thing holding the brand together. Any change to the ingredient sourcing or processing would complete the acquisition arc. Eight years in, the formula holds. Watch conditions: date sourcing, egg white quality standards, and cost-reduction pressure as Kellogg's (now Kellanova, acquired by Mars in 2024) integrates further.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Kellanova — One More Layer</div>
+          <div class="detail-text">In 2024, Kellogg's spun off its cereal business (WK Kellogg) and renamed its snacking division Kellanova. <strong>Mars then acquired Kellanova for $36B in 2024</strong> — making Mars the owner of both KIND and RXBar simultaneously, through different corporate structures. The two brands that defined the "clean bar" category now share the same ultimate parent: the maker of Snickers, M&Ms, and Twix.</div>
+        </div>
+      </div>
+      <div class="callout-box">
+        <div class="callout-label">Mars Owns Both Kind and RXBar</div>
+        <div class="callout-text">The two brands most associated with clean-label protein bar transparency — KIND (acquired by Mars directly in 2020 for $5B) and RXBar (acquired by Kellogg's in 2017, then rolled into Kellanova, then into Mars in 2024 for $36B) — are now both subsidiaries of the same privately held candy conglomerate. Neither brand's packaging reflects this. This is the category's structural condition in a single fact.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIF BAR -->
+  <div class="profile-card">
+    <div class="profile-header" onclick="toggleProfile(this)">
+      <div>
+        <div class="acquisition-badge conglomerate">Mondelēz · $2.9B · 2022</div>
+        <div class="profile-name">Clif Bar</div>
+        <div class="profile-sub">Founded 1992 · Acquired by Mondelēz 2022</div>
+        <p class="profile-verdict">
+          For 30 years, Clif Bar was the category's best argument that independence was possible at scale. Gary Erickson walked away from a $120M buyout offer in 2000, took the company into debt to stay independent, and built a business that reached $1B in revenue without selling. <strong>In 2022, he sold to Mondelēz for $2.9B.</strong> Mondelēz owns Oreo, Cadbury, Ritz, and — through simultaneous acquisitions — Hu chocolate and Grenade performance bars. Clif Bar, the company that once defined itself against everything Mondelēz represents, is now a Mondelēz brand.
+        </p>
+      </div>
+      <div>
+        <div class="profile-scores">
+          <div class="score-row"><span class="score-dim">Ownership</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Label Claims</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+        </div>
+        <div class="profile-expand" style="margin-top:16px">
+          <span>Full analysis</span><span class="expand-arrow">↓</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-label">The 30-Year Independence Story</div>
+          <div class="detail-text">Erickson literally went into personal debt to avoid selling in 2000, buying out co-founder Lisa Thomas's 50% stake for $60M when she wanted to accept the Quaker Oats offer. He called it "the gamble of the century." He built a mission-first company — <strong>Five Aspirations model</strong> covering people, community, planet, brands, and business — and turned down acquisition offers for three decades. The company reached $1.5B in revenue and launched an employee stock ownership plan in 2010 giving employees 20% equity. When Mondelēz paid $2.9B in 2022, approximately $580M went to employees.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Why He Finally Sold</div>
+          <div class="detail-text">The pandemic disrupted impulse-channel sales (gyms, convenience stores). The company laid off 125 people in 2021 — a shock to a culture known for exceptional employee treatment. Erickson clashed with professional management. <strong>Revenue growth had stalled at ~1% CAGR over three years</strong> heading into the sale. The independence story ended not with an ideological surrender but a practical one: the business had stopped growing and the founder was exhausted.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Mondelēz Conflict Portfolio</div>
+          <div class="detail-text">Mondelēz acquired Clif Bar (organic energy bars), <strong>Hu chocolate</strong> (clean-label chocolate, 2021), and <strong>Grenade</strong> (UK performance nutrition, 2021) — all simultaneously with continuing to operate Oreo, Cadbury, Chips Ahoy, and Ritz. The company's stated strategy is "reshaping its portfolio toward well-being snacking." Owning both the clean-label brand and the processed-food brand creates the same structural conflict documented in the Hu chocolate profile: two competing standard-sets, one owner, zero incentive to hold the premium standard when margin pressure arrives.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Label Claims Under Watch</div>
+          <div class="detail-text">Clif Bar's energy bar formula uses <strong>organic rolled oats and organic brown rice syrup</strong> — a legitimately whole-food base. But the "organic" claim is most prominent on the traditional Clif Bar line. Extended product lines (Clif Kid, Clif Builders, Luna) carry varying ingredient integrity. Brown rice syrup — Clif's primary sweetener — has been flagged in independent research for elevated inorganic arsenic content. No formula changes have been documented post-Mondelēz, but <em>cost-reduction pressure is the watch condition</em>, not current ingredient quality.</div>
+        </div>
+      </div>
+      <div class="callout-box red">
+        <div class="callout-label">The Mondelēz Protein Bar Empire</div>
+        <div class="callout-text">Through its 2021–2022 acquisition spree, Mondelēz assembled a "well-being snacking" portfolio that includes <strong>Clif Bar, Hu chocolate, Grenade, and Perfect Snacks</strong> — while simultaneously owning Oreo, Cadbury, Chips Ahoy, Ritz, Triscuit, and Sour Patch Kids. No consumer looking at a Clif Bar wrapper knows that the same company made the Oreo they ate for dessert. This is the conglomerate acquisition pattern at full scale.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIND -->
+  <div class="profile-card">
+    <div class="profile-header" onclick="toggleProfile(this)">
+      <div>
+        <div class="acquisition-badge conglomerate">Mars, Inc. · ~$5B · 2020</div>
+        <div class="profile-name">KIND</div>
+        <div class="profile-sub">Founded 2004 · Acquired by Mars 2020</div>
+        <p class="profile-verdict">
+          KIND's origin story is one of the most compelling in American snacking: Daniel Lubetzky, the son of a Holocaust survivor, built a company around the belief that business could be a force for human good. The <strong>KIND Promise</strong> — that the first and predominant ingredient in every product would be a nutrient-dense food — is a genuine, auditable commitment. Mars acquired 40% in 2017, then the remainder for ~$5B in 2020. <strong>Mars also owns Snickers, M&Ms, Twix, Milky Way, and — since 2024 — RXBar</strong>. KIND operates as a distinct subsidiary. The KIND Promise remains in effect. The ownership conflict is structural, not yet operational.
+        </p>
+      </div>
+      <div>
+        <div class="profile-scores">
+          <div class="score-row"><span class="score-dim">Ownership</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Label Claims</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+        </div>
+        <div class="profile-expand" style="margin-top:16px">
+          <span>Full analysis</span><span class="expand-arrow">↓</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-label">The KIND Promise — What It Actually Says</div>
+          <div class="detail-text">The KIND Promise specifies that <strong>the first and predominant ingredient in every product must be a nutrient-dense food</strong> — whole nuts, whole grains, or whole fruit. This is a real, auditable commitment and it has held post-acquisition. The original KIND bar's ingredient list leads with almonds, dates, or other whole foods, not refined sugar or isolates. This is the basis for the yellow ingredient integrity score rather than red — the promise is documented, public, and so far maintained.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">FDA "Healthy" Warning — 2015</div>
+          <div class="detail-text">In 2015 the FDA sent KIND a warning letter requiring removal of the word "healthy" from four bar varieties. The issue: FDA regulations at the time required a "healthy" food to contain 1g or less of saturated fat, but KIND bars — built on whole nuts — have naturally higher saturated fat from the nuts themselves. <strong>KIND challenged the FDA's definition</strong> and the FDA ultimately acknowledged its definition needed updating. KIND was in the right scientifically; the regulatory framing was outdated. But the label claims dimension scores red because FDA scrutiny on claims is a documented risk.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Why Lubetzky Sold</div>
+          <div class="detail-text">Lubetzky told the New York Times he needed an international partner to prevent competitors from taking KIND's brand into new markets first. The Mars minority stake in 2017 was framed as a partnership, not a sale. <strong>The full acquisition in 2020 was always structurally likely</strong> — Mars had been granted a right of first acquisition in the original 2017 deal. Lubetzky retains a financial stake and advisory role. He has donated a majority of his proceeds to The KIND Foundation.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">The Mars Portfolio Conflict</div>
+          <div class="detail-text">Mars operates KIND under a separate business unit with its own leadership. <strong>The candy business and the health business have not visibly contaminated each other's formulas</strong>. But Mars is a privately held company with no public disclosure obligations and no external accountability structure. KIND's formula integrity depends entirely on Mars's internal decision not to apply margin pressure. No Mission Lock, no golden share, no legal protection equivalent to what Tony's Chocolonely built.</div>
+        </div>
+      </div>
+      <div class="callout-box">
+        <div class="callout-label">The Best Acquisition Story — Still Not Enough for Green</div>
+        <div class="callout-text">KIND has the most defensible post-acquisition story in the protein bar category. The KIND Promise is real. Lubetzky remains involved. The formula holds. The FDA dispute was one KIND mostly won. It scores yellow across multiple dimensions — the best outcome in this category — but cannot score green under current ownership. Mars is the world's largest candy company, privately held, with no accountability mechanism to enforce KIND's stated values if financial incentives ever shift.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUEST -->
+  <div class="profile-card">
+    <div class="profile-header" onclick="toggleProfile(this)">
+      <div>
+        <div class="acquisition-badge spac">Simply Good Foods (SMPL) · $1B · 2019</div>
+        <div class="profile-name">Quest</div>
+        <div class="profile-sub">Founded 2010 · Acquired by Simply Good Foods 2019</div>
+        <p class="profile-verdict">
+          Quest is the category's mixed transparency — <strong>better positioned than most on ingredient transparency, meaningfully compromised on label accuracy.</strong> The core issues are the net carb math and fiber source legitimacy questions. Quest bars use soluble corn fiber (formerly isomalto-oligosaccharides / IMO) as the primary fiber source, allowing a substantial reduction in "net carbs" through fiber subtraction. Independent tests and a class action lawsuit both raised questions about whether IMO/soluble corn fiber behaves metabolically the way the net carb math assumes.
+        </p>
+      </div>
+      <div>
+        <div class="profile-scores">
+          <div class="score-row"><span class="score-dim">Ownership</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill red">Red</span></div>
+          <div class="score-row"><span class="score-dim">Label Claims</span><span class="score-pill yellow">Yellow</span></div>
+          <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+        </div>
+        <div class="profile-expand" style="margin-top:16px">
+          <span>Full analysis</span><span class="expand-arrow">↓</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-body">
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-label">The Net Carb Math Problem</div>
+          <div class="detail-text">A standard Quest bar shows 21–25g total carbohydrates and 4–5g "net carbs" after subtracting 17–20g of fiber. <strong>The fiber primarily comes from soluble corn fiber (formerly IMO)</strong> — a synthetic fiber manufactured by applying enzymes to corn starch. IMO/soluble corn fiber is legally classified as dietary fiber, but research indicates it does not behave like inulin or other prebiotic fibers in the gut. A 2012 blood sugar study by a diabetes support group found significant glycemic response in some participants. Quest changed from IMO to soluble corn fiber in 2016 after reformulation complaints, but the metabolic math question persisted. The "net carb" claim is legal. Whether 4g net carbs accurately represents the metabolic impact for diabetic or keto consumers is an open question.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Sucralose & Sweetener Stack</div>
+          <div class="detail-text">Quest bars use a layered sweetener approach: erythritol, stevia, and <strong>sucralose</strong> (Splenda) across most SKUs. Sucralose is an artificial sweetener with ongoing research debate about gut microbiome impact, potential DNA alteration effects in high doses (animal studies), and possible digestive discomfort. It appears at the end of the Quest ingredient list — indicating small quantities — but its presence alongside erythritol (a known GI disruptor in some consumers) means the sweetener stack carries digestive risk for sensitive consumers. Quest's historical reformulation from IMO to soluble corn fiber already demonstrated the company's willingness to swap fiber sources under commercial pressure.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Simply Good Foods — The SPAC Structure</div>
+          <div class="detail-text">Simply Good Foods was formed in 2017 via a <strong>SPAC (Special Purpose Acquisition Company)</strong> from a Centerview Capital offshoot. SPACs exist specifically to acquire and consolidate consumer brands for financial return — not brand mission. Simply Good Foods already owned Atkins Nutritionals (diet bars, shakes) before acquiring Quest. The parent company explicitly stated its goal is to "become a broader nutritional snacking company" through ongoing acquisitions. Quest's "active lifestyle" and low-carb positioning serves the PE portfolio thesis, not an independent mission. Founder Tom Bilyeu left in 2016 — before the acquisition — to launch Impact Theory.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">The Class Action & Reformulation Record</div>
+          <div class="detail-text">A class action lawsuit alleged Quest understated calories and overstated dietary fiber in its bars. Quest disputed the claims. The company has also reformulated twice: from IMO to a different soluble corn fiber in 2016 (causing customer complaints about texture), and ongoing formula adjustments across flavors. <strong>The reformulation history is a yellow signal, not red</strong> — companies update formulas for legitimate reasons. But in the context of fiber-math-dependent health claims, undisclosed formula changes are a transparency failure for consumers who made purchasing decisions based on specific nutritional math.</div>
+        </div>
+      </div>
+      <div class="callout-box">
+        <div class="callout-label">Why Quest Is Yellow, Not Red</div>
+        <div class="callout-text">Quest scores better than the other four brands on ingredient integrity because: the ingredient list is disclosed in full, individual component amounts are partially visible (protein, fiber, fat), and no active investor-endorser conflict has been documented. The net carb math issue is real but is an industry-wide problem with the FDA's fiber classification system — not a Quest-specific deception. The ownership conflict is structural (SPAC/PE parent with no mission alignment), not formula-level. Quest is the category's least-bad option — which, in this category, is a damning thing to be.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OWNERSHIP MAP -->
+<section class="ownership-section">
+  <div class="section-label">Who Actually Owns the Protein Bar Category</div>
+  <div class="ownership-grid">
+    <div class="ownership-cell">
+      <div class="ownership-parent">Mars, Inc. (Private)</div>
+      <div class="ownership-brands">
+        <span class="ownership-tag highlight">KIND</span>
+        <span class="ownership-tag highlight">RXBar*</span>
+        <span class="ownership-tag">Snickers</span>
+        <span class="ownership-tag">M&Ms</span>
+        <span class="ownership-tag">Twix</span>
+        <span class="ownership-tag">Milky Way</span>
+      </div>
+    </div>
+    <div class="ownership-cell">
+      <div class="ownership-parent">Mondelēz International (MDLZ)</div>
+      <div class="ownership-brands">
+        <span class="ownership-tag highlight">Clif Bar</span>
+        <span class="ownership-tag highlight">Hu Chocolate</span>
+        <span class="ownership-tag highlight">Grenade</span>
+        <span class="ownership-tag highlight">Perfect Snacks</span>
+        <span class="ownership-tag">Oreo</span>
+        <span class="ownership-tag">Cadbury</span>
+        <span class="ownership-tag">Ritz</span>
+      </div>
+    </div>
+    <div class="ownership-cell">
+      <div class="ownership-parent">Simply Good Foods (SMPL)</div>
+      <div class="ownership-brands">
+        <span class="ownership-tag highlight">Quest</span>
+        <span class="ownership-tag">Atkins</span>
+        <span class="ownership-tag">SimplyProtein</span>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:var(--text-dim);margin-top:12px;font-family:var(--font-mono);letter-spacing:0.06em;">*RXBar via Kellogg's → Kellanova → Mars (2024 $36B acquisition). Highlighted brands traced in this category.</p>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison-section">
+  <div class="section-label">Quick Check — All 5 Brands</div>
+  <div class="comparison-table">
+    <div class="ct-head">
+      <div class="ct-cell">Dimension</div>
+      <div class="ct-cell">David</div>
+      <div class="ct-cell">RXBar</div>
+      <div class="ct-cell">Clif</div>
+      <div class="ct-cell">KIND</div>
+      <div class="ct-cell">Quest</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell dim-label">Ownership</div>
+      <div class="ct-cell ct-red">VC / opaque</div>
+      <div class="ct-cell ct-red">Mars (via Kellogg's)</div>
+      <div class="ct-cell ct-red">Mondelēz</div>
+      <div class="ct-cell ct-red">Mars</div>
+      <div class="ct-cell ct-red">SMPL / Atkins PE</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell dim-label">Marketing Alignment</div>
+      <div class="ct-cell ct-red">Attia/Huberman equity</div>
+      <div class="ct-cell ct-red">"No BS" → Kellogg's</div>
+      <div class="ct-cell ct-red">Mission → Mondelēz</div>
+      <div class="ct-cell ct-yellow">Promise holds, Mars</div>
+      <div class="ct-cell ct-yellow">No major conflict</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell dim-label">Ingredient Integrity</div>
+      <div class="ct-cell ct-red">Collagen as primary, EPG, Ace-K</div>
+      <div class="ct-cell ct-green">Whole food, fully disclosed</div>
+      <div class="ct-cell ct-yellow">Organic base, watch list</div>
+      <div class="ct-cell ct-yellow">KIND Promise holds</div>
+      <div class="ct-cell ct-yellow">Full list, net carb math issue</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell dim-label">Scientific Backing</div>
+      <div class="ct-cell ct-red">No independent trials</div>
+      <div class="ct-cell ct-yellow">Simple formula, low risk</div>
+      <div class="ct-cell ct-yellow">Organic/whole food base</div>
+      <div class="ct-cell ct-red">FDA "healthy" warning 2015</div>
+      <div class="ct-cell ct-red">Fiber efficacy disputed</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell dim-label">Label Claims</div>
+      <div class="ct-cell ct-red">Collagen protein; "no artificial" changed</div>
+      <div class="ct-cell ct-green">Ingredients listed on front</div>
+      <div class="ct-cell ct-red">Organic emphasis; extension lines vary</div>
+      <div class="ct-cell ct-red">FDA scrutiny on "healthy"</div>
+      <div class="ct-cell ct-yellow">Net carbs legal but contested</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-cell dim-label">Safety Transparency</div>
+      <div class="ct-cell ct-yellow">EPG novel ingredient, limited data</div>
+      <div class="ct-cell ct-yellow">No third-party batch COA</div>
+      <div class="ct-cell ct-red">Brown rice syrup arsenic; no COA</div>
+      <div class="ct-cell ct-yellow">No third-party batch COA</div>
+      <div class="ct-cell ct-yellow">Sucralose/erythritol GI risk</div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITORIAL -->
+<section class="editorial-section">
+  <div class="section-label">Editorial Context</div>
+  <div class="editorial-grid">
+    <div class="editorial-block">
+      <div class="editorial-block-label">Why There Is No Green Profile</div>
+      <div class="editorial-text">
+        <p>In every other Traced category, at least one brand scores green. Proteins has Momentous. Electrolytes has LMNT. Greens has Ritual. Chocolate has Tony's. Protein bars has no equivalent.</p>
+        <p>This is not because the standard is impossibly high. It's because the acquisition pipeline has been faster than the founding pipeline. Every brand that developed the kind of ingredient integrity, ownership transparency, and marketing alignment required for a green score was acquired before it could consolidate that identity at scale.</p>
+        <p>RXBar came closest — and was acquired at exactly the moment it was demonstrating proof of concept. The founder who built David specifically to do better has introduced new ingredient integrity questions (collagen fraction, EPG) and the investor-endorser conflict the category's green benchmark would need to avoid.</p>
+        <p>The absence of a green profile is the editorial finding. It tells you more about the category than any individual brand score does.</p>
+      </div>
+    </div>
+    <div class="editorial-block">
+      <div class="editorial-block-label">What to Watch For</div>
+      <div class="editorial-text">
+        <p><strong>David / Attia departure fallout.</strong> Peter Attia's quiet exit from the CSO role in February 2026 is unresolved. If the departure relates to disagreements over ingredient claims or EPG safety data, it will surface eventually. The collagen protein fraction question has not been answered publicly.</p>
+        <p><strong>Mars / RXBar + KIND consolidation.</strong> Mars now owns both brands. Whether they maintain separate supply chains, separate brand standards, and separate ingredient commitments — or whether cost synergies eventually compress the gap — is the watch condition for the next 3–5 years.</p>
+        <p><strong>Clif's Five Aspirations under Mondelēz.</strong> The 2022 acquisition is only 3 years old. Clif's organic sourcing standards and sustainability commitments have not visibly degraded yet. They may not. Or 2025 earnings pressure may produce the same outcome seen in every prior acquisition of a values-first food brand.</p>
+        <p><strong>The next independent bar brand.</strong> The category creates a business opportunity: a protein bar built with full dose transparency, no investor-endorser conflict, NSF certification, and founder-controlled governance. That brand does not currently exist at meaningful scale. When it does, it will score green.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;">
+  <a class="nav-logo" href="index.html">Traced</a>
+  <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;color:var(--text-dim);">No advertising · No affiliate revenue · No brand partnerships · February 2026</span>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#a5c0c1ccd1cad7ccc4c9e5d1d7c4c6c0c18bc6ca" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="4722232e3328352e262b07333526242223692428">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="traced-editorial-standards.html" style="color:var(--accent, #C9A84C);">Editorial Standards →</a>
+  </p>
+</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  function toggleProfile(header) {
+    const card = header.closest('.profile-card');
+    const body = card.querySelector('.profile-body');
+ 

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pasta Supply Co. — Traced Vendor Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surface:#111;--surface-2:#181818;--surface-3:#1e1e1e;
+  --border:#222;--border-lt:#2a2a2a;
+  --text:#e8e4dc;--muted:#7a7570;--dim:#4a4642;
+  --accent:#C9A84C;--accent-dim:rgba(201,168,76,.08);
+  --accent-dk:#a8863a;
+  --gold:#C9A84C;--gold-lt:rgba(201,168,76,.10);
+  --teal-lt:rgba(201,168,76,.08);--teal-md:rgba(201,168,76,.14);
+  --red:#D94F3D;--red-lt:rgba(217,79,61,.10);
+  --yellow:#D4A84B;--yellow-lt:rgba(212,168,75,.10);
+  --green:#4E9B6F;--green-lt:rgba(78,155,111,.10);
+  --ink:var(--text);--card:var(--surface);--bg2:var(--surface-2);
+  --shadow:0 16px 40px rgba(0,0,0,.5);--shadow-s:0 4px 14px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.W{max-width:1160px;margin:0 auto;padding:0 28px}
+.kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--accent);}
+.nav{position:sticky;top:0;z-index:200;background:rgba(8,8,8,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-i{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px;}
+.nav-logo{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:500;}
+.nav-bc{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);}
+.nav-bc a{color:var(--muted);transition:color .15s;}.nav-bc a:hover{color:var(--accent)}
+.nav-bc .sep{color:var(--border)}.nav-bc .cur{color:var(--ink);font-weight:700}
+.nav-cta{padding:9px 16px;border-radius:999px;background:var(--accent);color:#e8e4dc111;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:background .15s;}
+.nav-cta:hover{background:var(--accent-dk)}
+/* HERO */
+.vhero{padding:56px 0 0;background:var(--surface);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.vhero::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 60% at 80% 25%,rgba(176,122,0,.08),transparent),radial-gradient(ellipse 45% 55% at 20% 80%,rgba(201,168,76,.06),transparent);}
+.hero-grid{display:grid;grid-template-columns:1fr 370px;gap:52px;align-items:start;position:relative;padding-bottom:48px;}
+.vtypes{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.vbadge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--teal-lt);border:1px solid rgba(201,168,76,.22);color:var(--accent);}
+.vbadge.gold{background:var(--gold-lt);border-color:rgba(202,162,75,.28);color:var(--gold)}
+.vbadge.verified{display:flex;align-items:center;gap:5px;background:transparent;border:none;padding-left:0;color:var(--accent);}
+.vbadge.verified::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.vname{font-family:'Playfair Display',Georgia,serif;font-size:clamp(42px,4.8vw,68px);font-weight:800;letter-spacing:-.03em;line-height:.9;margin-bottom:16px;}
+.vclaim{font-size:17px;color:var(--muted);font-style:italic;font-family:'Playfair Display',Georgia,serif;font-weight:600;margin-bottom:20px;line-height:1.4;max-width:50ch;}
+.vmeta-row{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:22px;}
+.tnote{background:linear-gradient(135deg,rgba(176,122,0,.07),rgba(201,168,76,.05));border:1.5px solid rgba(176,122,0,.20);border-radius:16px;padding:20px;margin-top:4px;}
+.tnote-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.tnote-txt{font-size:14px;line-height:1.65;color:var(--ink);}
+.tnote-txt a{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px;}
+.tnote-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.tbtn{padding:9px 14px;border-radius:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:all .15s;cursor:pointer;text-decoration:none;display:inline-block;}
+.tbtn-p{background:var(--accent);color:#e8e4dc111;border:none;}.tbtn-p:hover{background:var(--accent-dk)}
+.tbtn-s{background:var(--surface);color:var(--ink);border:1px solid var(--border);}.tbtn-s:hover{border-color:var(--accent);color:var(--accent)}
+.icard{background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow-s);margin-bottom:16px;}
+.icard-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.irow{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(20,18,15,.05);}
+.irow:last-child{border-bottom:none;padding-bottom:0}
+.ikey{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.10em;text-transform:uppercase;color:var(--dim);flex-shrink:0;}
+.ival{font-size:13px;color:var(--ink);text-align:right;line-height:1.4}.ival a{color:var(--accent)}
+.sbar-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:7px;}
+.sbar-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);}
+.sbar-wrap{width:76px;height:4px;background:rgba(20,18,15,.08);border-radius:99px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:99px;}.fill-g{background:var(--accent)}.fill-a{background:var(--gold)}.fill-r{background:var(--red)}
+.pbody{padding:52px 0 80px}
+.player{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start;}
+.paside{position:sticky;top:80px;}
+.psec{margin-bottom:48px}
+.psec-h{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.psec-title{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;letter-spacing:-.01em;}
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ccard{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow-s);transition:border-color .2s;}
+.ccard:hover{border-color:var(--accent)}
+.ccard.vf{border-color:rgba(201,168,76,.24);background:var(--teal-lt);}
+.ccard.gd{border-color:rgba(202,162,75,.24);background:var(--gold-lt);}
+.cstat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.cstat.g{color:var(--accent)}.cstat.a{color:var(--gold)}.cstat.d{color:var(--dim)}
+.cclaim{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px;line-height:1.3}
+.cdetail{font-size:12px;color:var(--muted);line-height:1.5}
+.csrc{display:inline-block;margin-top:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
+.sched-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sched-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.sched-item.open{border-color:rgba(201,168,76,.28);background:var(--teal-lt);}
+.sched-day{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+.sched-item.open .sched-day{color:var(--accent)}
+.sched-hrs{font-size:14px;font-weight:700;color:var(--ink);}.sched-note{font-size:12px;color:var(--muted);margin-top:3px}
+.contact-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.cbtn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);font-size:13px;color:var(--ink);cursor:pointer;transition:all .15s;}
+.cbtn:hover{border-color:var(--accent);color:var(--accent)}
+.fq{background:linear-gradient(135deg,rgba(176,122,0,.07),rgba(201,168,76,.04));border:1px solid rgba(176,122,0,.16);border-left:3px solid var(--gold);border-radius:0 14px 14px 0;padding:22px 24px;margin:24px 0;}
+.fq-t{font-family:'Playfair Display',Georgia,serif;font-size:19px;font-style:italic;font-weight:600;line-height:1.4;color:var(--ink);margin-bottom:10px;}
+.fq-a{font-size:13px;color:var(--muted)}.fq-a strong{color:var(--ink)}
+.body-copy{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:16px}.body-copy strong{color:var(--ink)}
+.callout{padding:16px 18px;border-radius:12px;margin:16px 0;font-size:14px;line-height:1.6;}
+.callout.gold{background:var(--gold-lt);border:1px solid rgba(202,162,75,.24);color:var(--ink)}
+.callout.teal{background:var(--teal-lt);border:1px solid rgba(201,168,76,.18);color:var(--ink)}
+/* contrast table */
+.contrast-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.ct-head{background:var(--surface-2);}
+.ct-head th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
+.ct-head th:last-child{border-right:none}
+.ct-row td{padding:12px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid rgba(20,18,15,.05);border-right:1px solid var(--border);line-height:1.4;}
+.ct-row td:last-child{border-right:none}
+.ct-row td:first-child{font-weight:700;color:var(--ink)}
+.ct-row:last-child td{border-bottom:none}
+.ct-g{color:var(--accent)!important;font-weight:700!important}
+.ct-r{color:var(--red)!important;font-weight:700!important}
+/* commerce */
+.cblock{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-s);}
+.cblock-hd{background:linear-gradient(135deg,rgba(176,122,0,.08),rgba(201,168,76,.06));padding:20px 22px;border-bottom:1px solid var(--border);}
+.cblock-body{padding:20px 22px;}
+.copt{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.35);gap:12px;flex-wrap:wrap;}
+.copt:last-child{border-bottom:none;padding-bottom:0}
+.copt-lbl{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.copt-note{font-size:12px;color:var(--muted)}
+.coptbtn{padding:10px 16px;border-radius:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;flex-shrink:0;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;}
+.coptbtn-p{background:var(--accent);color:#e8e4dc111;border:none;}.coptbtn-p:hover{background:var(--accent-dk)}
+.coptbtn-s{border:1px solid var(--border);background:var(--bg);color:var(--ink);}.coptbtn-s:hover{border-color:var(--accent);color:var(--accent)}
+.intent-form{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.ii{width:100%;padding:10px 13px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);font-size:13px;font-family:inherit;color:var(--ink);transition:border-color .15s;}
+.ii:focus{outline:none;border-color:var(--accent)}
+.ibtn{width:100%;padding:12px;border-radius:10px;background:var(--accent);color:#e8e4dc111;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:background .15s;}
+.ibtn:hover{background:var(--accent-dk)}
+.aside-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow-s);margin-bottom:18px;}
+.ac-hd{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.ri{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;cursor:pointer;transition:background .14s;margin:-4px;text-decoration:none;display:flex;}
+.ri:hover{background:var(--teal-lt)}
+.ri-ico{width:38px;height:38px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
+.ri-ico.dk{background:#111;border-color:#7a7570;}
+.ri-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px;}
+.ri-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.ri-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.ri-why{font-size:11px;color:var(--accent);font-weight:700;margin-top:4px;}
+.nb-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid rgba(20,18,15,.05);}
+.nb-item:last-child{border-bottom:none}
+.nb-name{font-size:13px;font-weight:700;color:var(--ink)}.nb-meta{font-size:11px;color:var(--muted)}
+.nb-dist{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;margin-top:12px;border-top:1px solid var(--border);}
+.sbtn{padding:8px 12px;border-radius:9px;border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:var(--bg);color:var(--muted);cursor:pointer;transition:all .14s;}
+.sbtn:hover{border-color:var(--accent);color:var(--accent)}
+.lv-row{display:flex;align-items:center;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;background:var(--surface-2);border-radius:10px;border:1px solid var(--border);margin-bottom:16px;}
+.lv-label{color:var(--dim)}.lv-date{color:var(--accent)}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}.player{grid-template-columns:1fr}.paside{position:relative;top:auto}.cred-grid{grid-template-columns:1fr}.sched-grid{grid-template-columns:1fr}}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.vname{animation:up .6s ease both}.vclaim{animation:up .6s ease .1s both}.tnote{animation:up .65s ease .22s both}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="W nav-i">
+  <a href="index.html" class="nav-logo">TRACED</a>
+  <div class="nav-bc">
+    <a href="index.html">Home</a><span class="sep">/</span>
+    <a href="index.html#local">Local Discovery</a><span class="sep">/</span>
+    <span class="cur">Pasta Supply Co.</span>
+  </div>
+  <a href="index.html#local" class="nav-cta">Find more vendors</a>
+</div></nav>
+
+<div class="vhero"><div class="W">
+  <div class="hero-grid">
+    <div>
+      <div class="vtypes">
+        <span class="vbadge gold">Specialty Maker</span>
+        <span class="vbadge">Fresh Pasta</span>
+        <span class="vbadge verified">Traced verified</span>
+      </div>
+      <h1 class="vname">Pasta<br>Supply Co.</h1>
+      <p class="vclaim">"Small-batch fresh pasta from regionally-sourced grain. Founder-operated. No outside investors."</p>
+      <div class="vmeta-row">
+        <span>&#x1F4CD; Mission District, San Francisco</span>
+        <span>&#x1F550; Thu&ndash;Sun 11am&ndash;5pm</span>
+        <span>&#x1F6D2; In-studio retail + online orders</span>
+        <span>&#x1F4C5; Founded 2019</span>
+      </div>
+      <div class="tnote" id="tracedNote">
+        <div class="tnote-lbl" id="noteLabel">Traced Note</div>
+        <p class="tnote-txt" id="noteText">Pasta Supply Co. is on Traced because it represents what founder-controlled food production looks like in the same category where <a href="annies.html">Annie’s was acquired by General Mills for $820M in 2014</a>. Pasta Supply Co. is not a startup trying to get acquired &mdash; it’s a working food studio with no investor pressure and no acquisition ambition. The sourcing is transparent because the person making the pasta is the same person who chose the grain supplier.</p>
+        <div class="tnote-btns">
+          <a href="annies.html" class="tbtn tbtn-p" id="noteBtn1">Read the Annie’s investigation &rarr;</a>
+          <a href="index.html#local" class="tbtn tbtn-s" id="noteBtn2">More SF vendors</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="icard">
+        <div class="icard-lbl">Vendor at a glance</div>
+        <div class="irow"><span class="ikey">Type</span><span class="ival">Fresh pasta maker &middot; Studio retail</span></div>
+        <div class="irow"><span class="ikey">Ownership</span><span class="ival">Founder-operated &middot; No investors</span></div>
+        <div class="irow"><span class="ikey">Scale</span><span class="ival">Small batch &middot; Studio production</span></div>
+        <div class="irow"><span class="ikey">Grain sourcing</span><span class="ival">Regional semolina &middot; Named mills</span></div>
+        <div class="irow"><span class="ikey">Products</span><span class="ival">Fresh cut pasta, stuffed pasta, sauces</span></div>
+        <div class="irow"><span class="ikey">Founded</span><span class="ival">2019 &middot; San Francisco</span></div>
+        <div class="irow"><span class="ikey">Online orders</span><span class="ival"><a href="https://pastasupplyco.com" target="_blank">pastasupplyco.com</a></span></div>
+      </div>
+      <div class="icard">
+        <div class="icard-lbl">Traced transparency score</div>
+        <div class="sbar-row"><span class="sbar-lbl">Ownership transparency</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:100%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">Ingredient sourcing</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:90%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">No acquisition risk</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:100%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">Formula vs. marketing</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:95%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">3rd-party certification</span><div class="sbar-wrap"><div class="sbar-fill fill-a" style="width:30%"></div></div></div>
+        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.5">Low certification score reflects absence of formal certification, not sourcing failure. Traced verifies sourcing claims directly with the founder. No certification agency is involved in this category in a meaningful way for small-scale makers.</p>
+      </div>
+      <div class="lv-row">
+        <span class="lv-label">Last verified by Traced</span>
+        <span class="lv-date">January 2026</span>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="pbody"><div class="W"><div class="player">
+
+<div class="pmain">
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Business Background</span><h2 class="psec-title">What independence looks like in the pasta aisle</h2></div>
+    <p class="body-copy">Pasta Supply Co. was founded in 2019 by a San Francisco chef who wanted to make fresh pasta at retail scale without becoming a CPG brand. The model is deliberately narrow: <strong>a studio production space, a small retail window, and online orders for SF delivery</strong>. No distribution deals, no retail placement negotiations, no investor deck.</p>
+    <div class="fq"><p class="fq-t">&ldquo;The whole point is that I know every bag of flour I use. I can tell you the mill, the harvest region, the protein content. If I sold to a distributor that would stop being true.&rdquo;</p><p class="fq-a">&mdash; <strong>Founder</strong>, Pasta Supply Co.</p></div>
+    <p class="body-copy">The business is intentionally small. There is no growth target, no Series A, no exit strategy. The founder has explicitly declined interest from investors. <strong>This is a meaningful structural signal</strong> &mdash; not because small is inherently virtuous, but because no investor on the cap table means no pressure to substitute regional semolina with commodity flour when margins get tight.</p>
+    <div class="callout gold"><strong>Why Traced lists this vendor:</strong> The Annie’s investigation documents what happens to a founder-controlled food brand when it enters the institutional ownership cycle. Pasta Supply Co. is listed here specifically because it represents the alternative: a food producer whose sourcing decisions are made by the person whose name and reputation are on the product. That structural fact is more durable than any certification.</div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">The Annie’s Contrast</span><h2 class="psec-title">What the acquisition changes and what it doesn’t</h2></div>
+    <p class="body-copy" style="margin-bottom:18px">This table is not meant to be unfair to Annie’s &mdash; the formulas have largely held since the General Mills acquisition, and Annie’s continues to make products that are genuinely better than conventional alternatives. The contrast is structural, not about current quality:</p>
+    <table class="contrast-table">
+      <thead class="ct-head">
+        <tr><th>Dimension</th><th>Annie’s (General Mills)</th><th>Pasta Supply Co.</th></tr>
+      </thead>
+      <tbody>
+        <tr class="ct-row"><td>Ownership</td><td class="ct-r">General Mills ($820M acquisition, 2014)</td><td class="ct-g">Founder-owned, no investors</td></tr>
+        <tr class="ct-row"><td>Sourcing decisions made by</td><td class="ct-r">General Mills procurement team</td><td class="ct-g">Founder, personally</td></tr>
+        <tr class="ct-row"><td>Acquisition risk</td><td class="ct-r">Already acquired &mdash; any future sale possible</td><td class="ct-g">Not on a sale track</td></tr>
+        <tr class="ct-row"><td>Grain origin</td><td>Not publicly disclosed at farm level</td><td class="ct-g">Named mills, regional sourcing</td></tr>
+        <tr class="ct-row"><td>Reformulation pressure</td><td class="ct-r">Parent company cost management incentives</td><td class="ct-g">No outside cost pressure</td></tr>
+        <tr class="ct-row"><td>&ldquo;Homegrown&rdquo; claim</td><td class="ct-r">Marketing language under conglomerate ownership</td><td class="ct-g">Literal &mdash; made in the neighborhood</td></tr>
+        <tr class="ct-row"><td>Price point</td><td>Lower &mdash; benefits from GM distribution scale</td><td>Higher &mdash; reflects true production cost</td></tr>
+      </tbody>
+    </table>
+    <p class="body-copy" style="margin-top:14px">The bottom row matters: <strong>Pasta Supply Co. is more expensive than Annie’s</strong>. That’s not a bug. It’s an accurate signal that the cost of regional grain and small-batch production is not subsidized by a conglomerate’s distribution network. If you want Annie’s organic pasta for $2.79, that’s a reasonable choice. If you want pasta whose sourcing you can verify at the grain level, this is what it costs.</p>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Sourcing Credentials</span><h2 class="psec-title">The evidence for the claims</h2></div>
+    <div class="cred-grid">
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; direct conversation</div><div class="cclaim">Regional semolina sourced from named mills</div><div class="cdetail">Traced verified grain sourcing directly with the founder in January 2026. Primary mills are in California and the Pacific Northwest. Flour provenance is available on request at point of purchase.</div></div>
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; business records</div><div class="cclaim">No outside investors, no VC, no acquisition track</div><div class="cdetail">Sole proprietorship, no outside equity. Founder has declined investment interest on at least two occasions. Traced has found no LLC or Corp filings indicating outside ownership.</div></div>
+      <div class="ccard gd"><div class="cstat a">&#x25CF; Verified &mdash; label inspection</div><div class="cclaim">No artificial preservatives, no commodity additives</div><div class="cdetail">Ingredient lists on all reviewed products contain flour, eggs, semolina, and filling-specific ingredients. No carrageenan, no modified starch, no synthetic preservatives identified in Traced label review.</div></div>
+      <div class="ccard"><div class="cstat d">&mdash; No formal certification</div><div class="cclaim">No organic certification, no third-party audit</div><div class="cdetail">At current scale, organic certification is cost-prohibitive and not meaningfully available for fresh pasta made from regional flour. Traced verifies sourcing claims through direct founder conversation, not certification bodies.</div></div>
+    </div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Schedule &amp; Contact</span><h2 class="psec-title">Visit or order</h2></div>
+    <div class="sched-grid">
+      <div class="sched-item open"><div class="sched-day">Thu &ndash; Fri</div><div class="sched-hrs">11:00 AM &ndash; 5:00 PM</div><div class="sched-note">Studio retail window open</div></div>
+      <div class="sched-item open"><div class="sched-day">Sat &ndash; Sun</div><div class="sched-hrs">10:00 AM &ndash; 5:00 PM</div><div class="sched-note">Extended weekend hours</div></div>
+      <div class="sched-item"><div class="sched-day">Online orders</div><div class="sched-hrs">Year-round</div><div class="sched-note">SF delivery available</div></div>
+      <div class="sched-item"><div class="sched-day">Farmers Markets</div><div class="sched-hrs">Rotating &mdash; check Instagram</div><div class="sched-note">Ferry Plaza occasional</div></div>
+    </div>
+    <div class="contact-row">
+      <a href="https://pastasupplyco.com" target="_blank" class="cbtn">&#x1F310; pastasupplyco.com</a>
+      <a href="https://www.instagram.com/pastasupplyco" target="_blank" class="cbtn">&#x1F4F7; @pastasupplyco</a>
+      <a href="https://maps.google.com/?q=Mission+District+San+Francisco" target="_blank" class="cbtn">&#x1F4CD; Get directions</a>
+    </div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Shop &amp; Order</span><h2 class="psec-title">How to buy from Pasta Supply Co.</h2></div>
+    <div class="cblock">
+      <div class="cblock-hd"><div class="kicker">Current options</div><div style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;margin-top:5px;">Three ways to buy</div></div>
+      <div class="cblock-body">
+        <div class="copt"><div><div class="copt-lbl">Visit the studio</div><div class="copt-note">Mission District &middot; Thu&ndash;Sun &middot; Buy direct from the maker</div></div><a href="https://maps.google.com/?q=Mission+District+San+Francisco" target="_blank" class="coptbtn coptbtn-p">Get directions</a></div>
+        <div class="copt"><div><div class="copt-lbl">Order online for SF delivery</div><div class="copt-note">Fresh pasta ships same-day within SF, next-day Peninsula</div></div><a href="https://pastasupplyco.com/shop" target="_blank" class="coptbtn coptbtn-s">Order online &rarr;</a></div>
+        <div class="copt"><div><div class="copt-lbl">Express interest via Traced</div><div class="copt-note">Tell Pasta Supply you found them here &mdash; Traced pilot inquiry routing</div></div><button class="coptbtn coptbtn-s" onclick="document.getElementById('intentWrap').style.display='block';this.style.display='none'">Express interest</button></div>
+        <div id="intentWrap" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+          <div class="intent-form">
+            <input class="ii" type="text" placeholder="Your name">
+            <input class="ii" type="email" placeholder="Email address">
+            <input class="ii" type="text" placeholder="What are you looking for? (fresh pasta, gift, bulk order…)">
+            <button class="ibtn" onclick="this.textContent='Sent ✓';this.style.background='#145c4e';this.disabled=true">Send to Pasta Supply Co. &rarr;</button>
+            <p style="font-size:11px;color:var(--dim);text-align:center;line-height:1.4">Founder responds directly. Traced takes no fee in this pilot.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<aside class="paside">
+  <div class="aside-card">
+    <div class="ac-hd">Related investigations on Traced</div>
+    <a href="annies.html" class="ri" style="text-decoration:none"><div class="ri-ico dk">&#x1F430;</div><div><div class="ri-type">Story &middot; Direct connection</div><div class="ri-name">Annie’s / General Mills</div><div class="ri-desc">$820M acquisition, the bunny stayed, and the sourcing independence that justified the brand’s premium didn’t.</div><div class="ri-why">Pasta Supply Co. is the independent alternative to this story.</div></div></a>
+    <a href="owner-general-mills.html" class="ri" style="text-decoration:none"><div class="ri-ico" style="background:#f0ede6;border-color:rgba(176,122,0,.2)">&#x1F578;</div><div><div class="ri-type">Owner web &middot; Contextual</div><div class="ri-name">General Mills Portfolio</div><div class="ri-desc">Annie’s, L&auml;rabar, Cascadian Farm, Pillsbury. The full acquisition map.</div><div class="ri-why">Context for what a food conglomerate acquisition portfolio looks like.</div></div></a>
+    <a href="traced-chocolate.html" class="ri" style="text-decoration:none"><div class="ri-ico dk">&#x1F4CA;</div><div><div class="ri-type">Index &middot; Same pattern</div><div class="ri-name">Chocolate Index</div><div class="ri-desc">Dandelion Chocolate vs. Hershey and Mondelez &mdash; the same independent vs. conglomerate dynamic in a different category.</div><div class="ri-why">Same sourcing transparency principle across categories.</div></div></a>
+  </div>
+  <div class="aside-card">
+    <div class="ac-hd">Other Traced vendors nearby</div>
+    <div class="nb-item"><div><div class="nb-name">Dandelion Chocolate</div><div class="nb-meta">Specialty maker &middot; Mission</div></div><div class="nb-dist">0.2 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Bi-Rite Market</div><div class="nb-meta">Independent shop &middot; Mission</div></div><div class="nb-dist">0.3 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Rainbow Grocery Co-op</div><div class="nb-meta">Worker co-op &middot; Mission</div></div><div class="nb-dist">0.5 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Ferry Plaza Farmers Market</div><div class="nb-meta">Market &middot; Embarcadero</div></div><div class="nb-dist">2.1 mi</div></div>
+    <a href="index.html#local" style="display:block;margin-top:14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">View all SF vendors &rarr;</a>
+  </div>
+  <div class="aside-card">
+    <div class="ac-hd">Share this profile</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5">Useful for anyone who just read the Annie’s story and wants to know what the alternative looks like.</p>
+    <div class="share-btns">
+      <button class="sbtn" onclick="copySnap()">Copy Traced snapshot</button>
+      <button class="sbtn" onclick="navigator.clipboard.writeText(window.location.href).then(function(){document.getElementById('sc').style.display='block';setTimeout(function(){document.getElementById('sc').style.display='none'},2500)})">Copy URL</button>
+    </div>
+    <div id="sc" style="display:none;font-size:12px;color:var(--accent);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.08em">Copied &#x2713;</div>
+  </div>
+  <div class="aside-card">
+    <div class="ac-hd">Vendor status</div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Listed</span><span class="ival">Jan 2026</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Last verified</span><span class="ival">Jan 2026</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Via Annie’s story</span><span class="ival" style="color:var(--accent);font-weight:700">Coming soon</span></div>
+    <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.5">Is this your business? <a href="/cdn-cgi/l/email-protection#bbcdded5dfd4c9c8fbcfc9dad8dedf95d8d4d6" style="color:var(--accent)">Update your profile &rarr;</a></p>
+  </div>
+</aside>
+
+</div></div></div>
+
+<footer style="border-top:1px solid var(--border);padding:30px 0">
+  <div class="W" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Traced</div>
+    <div style="font-size:12px;color:var(--dim)">Pasta Supply Co. vendor profile &middot; Last verified January 2026</div>
+    <a href="index.html#local" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Find more vendors &rarr;</a>
+  </div>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#4b2e2f223f2439222a270b3f392a282e2f652824" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="41242528352e3328202d013533202224256f222e">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="traced-editorial-standards.html" style="color:var(--accent, #C9A84C);">Editorial Standards →</a>
+  </p>
+</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  var sp = new URLSearchParams(window.location.search);
+  var from = sp.get('from') || '';
+  var notes = {
+    'annies': {
+      text: 'You arrived from our <a href="annies.html" style="color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px">Annie’s / General Mills investigation</a>. Pasta Supply Co. is the direct local alternative to everything that investigation documents: what happens to sourcing independence when a food brand enters the institutional ownership cycle. Pasta Supply Co. is founder-controlled, no outside investors, regional grain sourcing you can verify at the mill level. That structural fact won’t change because of a conglomerate’s margin targets.',
+      b1t: 'Back to Annie’s story →', b1h: 'annies.html',
+      b2t: 'See General Mills portfolio', b2h: 'owner-general-mills.html'
+    }
+  };
+  if(from && notes[from]){
+    document.getElementById('noteText').innerHTML = notes[from].text;
+    document.getElementById('noteBtn1').textContent = notes[from].b1t;
+    document.getElementById('noteBtn1').href = notes[from].b1h;
+    document.getElementById('noteBtn2').textContent = notes[from].b2t;
+    document.getElementById('noteBtn2').href = notes[from].b2h;
+  }
+})();
+function copySnap(){
+  var t = "Pasta Supply Co. (SF Mission) is on Traced as the independent alternative to Annie’s pasta — which has been a General Mills brand since 2014. Founder-operated, no inve

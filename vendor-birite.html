@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bi-Rite Market — Traced Vendor Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surface:#111;--surface-2:#181818;--surface-3:#1e1e1e;
+  --border:#222;--border-lt:#2a2a2a;
+  --text:#e8e4dc;--muted:#7a7570;--dim:#4a4642;
+  --accent:#C9A84C;--accent-dim:rgba(201,168,76,.08);
+  --accent-dk:#a8863a;
+  --gold:#C9A84C;--gold-lt:rgba(201,168,76,.10);
+  --teal-lt:rgba(201,168,76,.08);--teal-md:rgba(201,168,76,.14);
+  --red:#D94F3D;--red-lt:rgba(217,79,61,.10);
+  --yellow:#D4A84B;--yellow-lt:rgba(212,168,75,.10);
+  --green:#4E9B6F;--green-lt:rgba(78,155,111,.10);
+  --ink:var(--text);--card:var(--surface);--bg2:var(--surface-2);
+  --shadow:0 16px 40px rgba(0,0,0,.5);--shadow-s:0 4px 14px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;border:none;background:none}
+.W{max-width:1160px;margin:0 auto;padding:0 28px}
+.kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--accent);}
+.nav{position:sticky;top:0;z-index:200;background:rgba(8,8,8,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-i{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px;}
+.nav-logo{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:500;}
+.nav-bc{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);}
+.nav-bc a{color:var(--muted);}.nav-bc a:hover{color:var(--accent)}.nav-bc .sep{color:var(--border)}.nav-bc .cur{color:var(--ink);font-weight:700}
+.nav-cta{padding:9px 16px;border-radius:999px;background:var(--accent);color:#e8e4dc111;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;font-weight:500;}
+.nav-cta:hover{background:var(--accent-dk)}
+.vhero{padding:56px 0 0;background:var(--surface);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.vhero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 60% at 80% 20%,rgba(201,168,76,.09),transparent),radial-gradient(ellipse 40% 50% at 18% 75%,rgba(202,162,75,.07),transparent);}
+.hero-grid{display:grid;grid-template-columns:1fr 370px;gap:52px;align-items:start;position:relative;padding-bottom:48px;}
+.vtypes{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.vbadge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--teal-lt);border:1px solid rgba(201,168,76,.22);color:var(--accent);}
+.vbadge.gold{background:var(--gold-lt);border-color:rgba(202,162,75,.28);color:var(--gold)}
+.vbadge.verified::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:5px;vertical-align:middle;}
+.vbadge.verified{background:transparent;border:none;padding-left:0;color:var(--accent);}
+.vname{font-family:'Playfair Display',Georgia,serif;font-size:clamp(40px,4.5vw,66px);font-weight:800;letter-spacing:-.03em;line-height:.9;margin-bottom:16px;}
+.vclaim{font-size:17px;color:var(--muted);font-style:italic;font-family:'Playfair Display',Georgia,serif;font-weight:600;margin-bottom:20px;line-height:1.4;max-width:50ch;}
+.vmeta-row{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:22px;}
+.tnote{background:linear-gradient(135deg,var(--teal-lt),rgba(202,162,75,.05));border:1.5px solid rgba(201,168,76,.20);border-radius:16px;padding:20px;margin-top:4px;}
+.tnote-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+.tnote-txt{font-size:14px;line-height:1.65;color:var(--ink);}
+.tnote-txt a{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px;}
+.tnote-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.tbtn{padding:9px 14px;border-radius:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:all .15s;cursor:pointer;text-decoration:none;display:inline-block;}
+.tbtn-p{background:var(--accent);color:#e8e4dc111;border:none;}.tbtn-p:hover{background:var(--accent-dk)}
+.tbtn-s{background:var(--surface);color:var(--ink);border:1px solid var(--border);}.tbtn-s:hover{border-color:var(--accent);color:var(--accent)}
+.icard{background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow-s);margin-bottom:16px;}
+.icard-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.irow{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(20,18,15,.05);}
+.irow:last-child{border-bottom:none;padding-bottom:0}
+.ikey{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.10em;text-transform:uppercase;color:var(--dim);flex-shrink:0;}
+.ival{font-size:13px;color:var(--ink);text-align:right;line-height:1.4}.ival a{color:var(--accent)}
+.sbar-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:7px;}
+.sbar-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);}
+.sbar-wrap{width:76px;height:4px;background:rgba(20,18,15,.08);border-radius:99px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:99px;}.fill-g{background:var(--accent)}.fill-a{background:var(--gold)}
+.pbody{padding:52px 0 80px}
+.player{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start;}
+.paside{position:sticky;top:80px;}
+.psec{margin-bottom:48px}
+.psec-h{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.psec-title{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;letter-spacing:-.01em;}
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ccard{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow-s);transition:border-color .2s;}
+.ccard:hover{border-color:var(--accent)}
+.ccard.vf{border-color:rgba(201,168,76,.24);background:var(--teal-lt);}
+.ccard.gd{border-color:rgba(202,162,75,.24);background:var(--gold-lt);}
+.cstat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.cstat.g{color:var(--accent)}.cstat.a{color:var(--gold)}.cstat.d{color:var(--dim)}
+.cclaim{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px;line-height:1.3}
+.cdetail{font-size:12px;color:var(--muted);line-height:1.5}
+.csrc{display:inline-block;margin-top:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
+.sched-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sched-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.sched-item.open{border-color:rgba(201,168,76,.28);background:var(--teal-lt);}
+.sched-day{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+.sched-item.open .sched-day{color:var(--accent)}
+.sched-hrs{font-size:14px;font-weight:700;color:var(--ink);}.sched-note{font-size:12px;color:var(--muted);margin-top:3px}
+.contact-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.cbtn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);font-size:13px;color:var(--ink);cursor:pointer;transition:all .15s;}
+.cbtn:hover{border-color:var(--accent);color:var(--accent)}
+.body-copy{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:16px}.body-copy strong{color:var(--ink)}
+.callout{padding:16px 18px;border-radius:12px;margin:16px 0;font-size:14px;line-height:1.6;}
+.callout.teal{background:var(--teal-lt);border:1px solid rgba(201,168,76,.18);color:var(--ink)}
+.callout.gold{background:var(--gold-lt);border:1px solid rgba(202,162,75,.24);color:var(--ink)}
+/* aisle table */
+.aisle-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.aisle-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:16px;}
+.aisle-cat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.aisle-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.aisle-note{font-size:12px;color:var(--muted);line-height:1.5}
+.aisle-why{font-size:11px;color:var(--accent);font-weight:700;margin-top:6px}
+.aside-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow-s);margin-bottom:18px;}
+.ac-hd{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.ri{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:10px;transition:background .14s;margin:-4px;text-decoration:none;}
+.ri:hover{background:var(--teal-lt)}
+.ri-ico{width:38px;height:38px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
+.ri-ico.dk{background:#111;border-color:#7a7570;}
+.ri-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:2px;}
+.ri-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.ri-desc{font-size:11px;color:var(--muted);line-height:1.4}.ri-why{font-size:11px;color:var(--accent);font-weight:700;margin-top:4px;}
+.nb-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid rgba(20,18,15,.05);}
+.nb-item:last-child{border-bottom:none}
+.nb-name{font-size:13px;font-weight:700;color:var(--ink)}.nb-meta{font-size:11px;color:var(--muted)}
+.nb-dist{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;margin-top:12px;border-top:1px solid var(--border);}
+.sbtn{padding:8px 12px;border-radius:9px;border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:var(--bg);color:var(--muted);cursor:pointer;transition:all .14s;}
+.sbtn:hover{border-color:var(--accent);color:var(--accent)}
+.lv-row{display:flex;align-items:center;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;background:var(--surface-2);border-radius:10px;border:1px solid var(--border);margin-bottom:16px;}
+.lv-label{color:var(--dim)}.lv-date{color:var(--accent)}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}.player{grid-template-columns:1fr}.paside{position:relative;top:auto}.cred-grid{grid-template-columns:1fr}.sched-grid{grid-template-columns:1fr}.aisle-grid{grid-template-columns:1fr}}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.vname{animation:up .6s ease both}.vclaim{animation:up .6s ease .1s both}.tnote{animation:up .65s ease .22s both}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="W nav-i">
+  <a href="index.html" class="nav-logo">TRACED</a>
+  <div class="nav-bc">
+    <a href="index.html">Home</a><span class="sep">/</span>
+    <a href="index.html#local">Local Discovery</a><span class="sep">/</span>
+    <span class="cur">Bi-Rite Market</span>
+  </div>
+  <a href="index.html#local" class="nav-cta">Find more vendors</a>
+</div></nav>
+
+<div class="vhero"><div class="W">
+  <div class="hero-grid">
+    <div>
+      <div class="vtypes">
+        <span class="vbadge gold">B Corp Certified</span>
+        <span class="vbadge">Independent Grocery</span>
+        <span class="vbadge verified">Traced verified</span>
+      </div>
+      <h1 class="vname">Bi-Rite<br>Market</h1>
+      <p class="vclaim">"Every product on this shelf was chosen by a person with a name."</p>
+      <div class="vmeta-row">
+        <span>&#x1F4CD; 3639 18th St, Mission District, SF</span>
+        <span>&#x1F550; Daily 9am&ndash;9pm</span>
+        <span>&#x1F6D2; Independent grocery + Bi-Rite Creamery</span>
+        <span>&#x1F4C5; Family-owned since 1964</span>
+      </div>
+      <div class="tnote" id="tracedNote">
+        <div class="tnote-lbl">Traced Note</div>
+        <p class="tnote-txt" id="noteText">Bi-Rite is on Traced because of how it curates. Staff actively evaluates sourcing and ownership before a product gets shelf space &mdash; not marketing language, actual sourcing verification. This matters specifically in categories Traced has investigated: <a href="traced-halotop.html">ice cream</a> (Wells Enterprises PE ownership), <a href="annies.html">pasta</a> (General Mills), and <a href="traced-protein-supplements.html">supplements</a> (Nestlé Health Science). Bi-Rite’s shelf in these categories reflects editorial judgment, not distributor deals.</p>
+        <div class="tnote-btns">
+          <a href="traced-halotop.html" class="tbtn tbtn-p" id="noteBtn1">Read the Halo Top investigation &rarr;</a>
+          <a href="index.html#local" class="tbtn tbtn-s" id="noteBtn2">More SF vendors</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="icard">
+        <div class="icard-lbl">Vendor at a glance</div>
+        <div class="irow"><span class="ikey">Type</span><span class="ival">Independent grocery &middot; Creamery</span></div>
+        <div class="irow"><span class="ikey">Ownership</span><span class="ival">Mogannam family &middot; Since 1964</span></div>
+        <div class="irow"><span class="ikey">Certification</span><span class="ival">B Corp certified</span></div>
+        <div class="irow"><span class="ikey">Locations</span><span class="ival">18th St, Divisadero &middot; Bi-Rite Creamery</span></div>
+        <div class="irow"><span class="ikey">Curation policy</span><span class="ival">Staff-sourced, no national distributor mandates</span></div>
+        <div class="irow"><span class="ikey">Community</span><span class="ival">1% of revenue to SF food orgs</span></div>
+        <div class="irow"><span class="ikey">Online</span><span class="ival"><a href="https://biritemarket.com" target="_blank">biritemarket.com</a></span></div>
+      </div>
+      <div class="icard">
+        <div class="icard-lbl">Traced transparency score</div>
+        <div class="sbar-row"><span class="sbar-lbl">Ownership transparency</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:100%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">Sourcing curation</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:92%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">No acquisition risk</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:100%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">B Corp verification</span><div class="sbar-wrap"><div class="sbar-fill fill-a" style="width:85%"></div></div></div>
+        <div class="sbar-row"><span class="sbar-lbl">Community investment</span><div class="sbar-wrap"><div class="sbar-fill fill-g" style="width:88%"></div></div></div>
+        <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.5">Score reflects Bi-Rite as a <em>distribution channel</em> for independently-sourced products. Individual products on its shelves carry their own scores &mdash; Bi-Rite’s value is the curation standard, not a blanket certification of every item it carries.</p>
+      </div>
+      <div class="lv-row">
+        <span class="lv-label">Last verified by Traced</span>
+        <span class="lv-date">February 2026</span>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="pbody"><div class="W"><div class="player">
+
+<div class="pmain">
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Why Bi-Rite is on Traced</span><h2 class="psec-title">Curation as a transparency act</h2></div>
+    <p class="body-copy">Bi-Rite has been family-owned in San Francisco’s Mission District since 1964. It became a B Corp in 2010 &mdash; among the first grocery retailers to do so. But the reason it’s on Traced is more specific than the B Corp status.</p>
+    <p class="body-copy"><strong>Bi-Rite’s shelves are curated by staff who actively evaluate sourcing and ownership before a product gets listed.</strong> In practice, this means that in the categories Traced has investigated &mdash; ice cream, chocolate, pasta, supplements &mdash; the Bi-Rite shelf tends to reflect independent producers and brands with genuine sourcing stories, not the conglomerate-owned alternatives that dominate national grocery.</p>
+    <div class="callout teal"><strong>The Halo Top case:</strong> Halo Top has been owned by Wells Enterprises (a conventional ice cream conglomerate) since 2019. Traced’s investigation documents the gap between the brand’s wellness positioning and its current ownership structure. Bi-Rite carries Bi-Rite Creamery (their own), Salt &amp; Straw, and other independently-owned ice cream producers instead. The shelf is the editorial judgment made visible.</div>
+    <p class="body-copy">This doesn’t mean every product at Bi-Rite is sourcing-transparent or independently owned. It means the curation standard is higher than conventional grocery, and the staff can explain <em>why</em> something is on the shelf. That’s a form of transparency that no amount of label redesign can replicate.</p>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">What’s on the Shelf</span><h2 class="psec-title">Category by category: what Bi-Rite carries instead</h2></div>
+    <p class="body-copy" style="margin-bottom:18px">These are the Traced-relevant categories where Bi-Rite’s curation creates a meaningful alternative to the brands in our investigations.</p>
+    <div class="aisle-grid">
+      <div class="aisle-card">
+        <div class="aisle-cat">Ice Cream &mdash; vs. Halo Top (Wells Enterprises)</div>
+        <div class="aisle-name">Bi-Rite Creamery + Salt &amp; Straw</div>
+        <div class="aisle-note">Bi-Rite’s own creamery uses local dairy and seasonal flavors with published sourcing. Salt &amp; Straw is independent, founder-owned, farm-direct dairy partnerships published.</div>
+        <div class="aisle-why">Neither is a PE-owned wellness brand using novel sweeteners without updated safety disclosures.</div>
+      </div>
+      <div class="aisle-card">
+        <div class="aisle-cat">Chocolate &mdash; vs. Hershey / Mondelez</div>
+        <div class="aisle-name">Dandelion + TCHO + independent bean-to-bar</div>
+        <div class="aisle-note">Bi-Rite curates bean-to-bar chocolate with farm-traceable sourcing. Dandelion (nearby) is available here and in their own shop. No Hershey family products.</div>
+        <div class="aisle-why">Direct-trade origin sourcing vs. commodity pool with compound coating substitution.</div>
+      </div>
+      <div class="aisle-card">
+        <div class="aisle-cat">Pasta &mdash; vs. Annie’s (General Mills)</div>
+        <div class="aisle-name">Independent pasta brands + local makers</div>
+        <div class="aisle-note">Staff curates independent pasta brands. Pasta Supply Co. (nearby) products available seasonally. No General Mills-parent brands on the pasta shelf per staff sourcing policy.</div>
+        <div class="aisle-why">Founder-controlled sourcing vs. conglomerate procurement team decisions.</div>
+      </div>
+      <div class="aisle-card">
+        <div class="aisle-cat">Supplements &mdash; vs. Nestlé Health Science portfolio</div>
+        <div class="aisle-name">Independent wellness brands, B Corp-verified</div>
+        <div class="aisle-note">Bi-Rite evaluates supplement brands by sourcing transparency and ownership. Vital Proteins (Nestlé) is not on the shelf. Independent brands with published COAs are preferred.</div>
+        <div class="aisle-why">Sourcing standard over shelf deal. No Nestlé Health Science portfolio presence.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Ownership &amp; Structure</span><h2 class="psec-title">What family-owned and B Corp actually means</h2></div>
+    <div class="cred-grid">
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; public records</div><div class="cclaim">Mogannam family-owned since 1964, no outside equity</div><div class="cdetail">Sam Mogannam (current owner) and family. No private equity investment, no institutional ownership, no acquisition on record. Traced found no public filings indicating outside ownership.</div><a href="https://biritemarket.com/about" target="_blank" class="csrc">biritemarket.com/about &rarr;</a></div>
+      <div class="ccard gd"><div class="cstat a">&#x2605; B Corp certified since 2010</div><div class="cclaim">Among the first grocery retailers to certify</div><div class="cdetail">B Corp certification covers governance, workers, community, environment, and customers. For a grocery retailer, the customer score includes curation policy and sourcing transparency. Recertified on schedule.</div><a href="https://www.bcorporation.net" target="_blank" class="csrc">B Corp database &rarr;</a></div>
+      <div class="ccard vf"><div class="cstat g">&#x2713; Verified &mdash; policy documentation</div><div class="cclaim">No national distributor mandates on shelf placement</div><div class="cdetail">Bi-Rite does not participate in national distributor slotting fee arrangements that dictate what must be on the shelf. Staff curate by sourcing standard, not by distributor relationships. Verified with store staff February 2026.</div></div>
+      <div class="ccard vf"><div class="cstat g">&#x2713; Community investment documented</div><div class="cclaim">1% of revenue donated to SF food access organizations</div><div class="cdetail">Bi-Rite 18 Reasons and related food access programs receive 1% of Bi-Rite revenue. Published annually. Creates structural accountability to neighborhood, not to shareholders.</div><a href="https://biritemarket.com/community" target="_blank" class="csrc">Community report &rarr;</a></div>
+    </div>
+  </div>
+
+  <div class="psec">
+    <div class="psec-h"><span class="kicker">Hours &amp; Locations</span><h2 class="psec-title">Find them</h2></div>
+    <div class="sched-grid">
+      <div class="sched-item open"><div class="sched-day">18th St (Main)</div><div class="sched-hrs">Daily 9:00 AM &ndash; 9:00 PM</div><div class="sched-note">3639 18th St, Mission District</div></div>
+      <div class="sched-item open"><div class="sched-day">Divisadero</div><div class="sched-hrs">Daily 9:00 AM &ndash; 9:00 PM</div><div class="sched-note">550 Divisadero St, NoPa</div></div>
+      <div class="sched-item"><div class="sched-day">Bi-Rite Creamery</div><div class="sched-hrs">Sun&ndash;Thu 11am&ndash;9pm &middot; Fri&ndash;Sat 11am&ndash;10pm</div><div class="sched-note">3692 18th St (across from market)</div></div>
+      <div class="sched-item"><div class="sched-day">Online ordering</div><div class="sched-hrs">biritemarket.com</div><div class="sched-note">SF delivery available</div></div>
+    </div>
+    <div class="contact-row">
+      <a href="https://biritemarket.com" target="_blank" class="cbtn">&#x1F310; biritemarket.com</a>
+      <a href="https://maps.google.com/?q=3639+18th+St+San+Francisco" target="_blank" class="cbtn">&#x1F4CD; Get directions</a>
+      <a href="https://www.instagram.com/biritemarket" target="_blank" class="cbtn">&#x1F4F7; @biritemarket</a>
+    </div>
+  </div>
+
+</div>
+
+<aside class="paside">
+  <div class="aside-card">
+    <div class="ac-hd">Related investigations on Traced</div>
+    <a href="traced-halotop.html" class="ri"><div class="ri-ico dk">&#x1F366;</div><div><div class="ri-type">Story &middot; High relevance</div><div class="ri-name">Halo Top / Wells Enterprises</div><div class="ri-desc">PE acquisition, wellness positioning maintained, erythritol cardiovascular data not disclosed.</div><div class="ri-why">Bi-Rite’s ice cream aisle is the local alternative to this story.</div></div></a>
+    <a href="annies.html" class="ri"><div class="ri-ico dk">&#x1F430;</div><div><div class="ri-type">Story &middot; High relevance</div><div class="ri-name">Annie’s / General Mills</div><div class="ri-desc">$820M acquisition, sourcing independence under conglomerate ownership.</div><div class="ri-why">Bi-Rite’s pasta aisle curates around the General Mills acquisition pattern.</div></div></a>
+    <a href="traced-protein-supplements.html" class="ri"><div class="ri-ico dk">&#x1F4CA;</div><div><div class="ri-type">Index &middot; Contextual</div><div class="ri-name">Protein Supplements</div><div class="ri-desc">Nestlé Health Science owns Vital Proteins. Bi-Rite doesn’t carry it.</div><div class="ri-why">Curation over shelf deal across supplement category.</div></div></a>
+    <a href="traced-chocolate.html" class="ri"><div class="ri-ico dk">&#x1F36B;</div><div><div class="ri-type">Index &middot; Contextual</div><div class="ri-name">Chocolate Index</div><div class="ri-desc">Bean-to-bar sourcing transparency vs. Hershey and Mondelez.</div><div class="ri-why">Bi-Rite carries Dandelion and TCHO — both in the high transparency.</div></div></a>
+  </div>
+  <div class="aside-card">
+    <div class="ac-hd">Other Traced vendors nearby</div>
+    <div class="nb-item"><div><div class="nb-name">Dandelion Chocolate</div><div class="nb-meta">Specialty maker &middot; Mission</div></div><div class="nb-dist">0.2 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Pasta Supply Co.</div><div class="nb-meta">Fresh pasta maker &middot; Mission</div></div><div class="nb-dist">0.3 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Rainbow Grocery Co-op</div><div class="nb-meta">Worker co-op &middot; Mission</div></div><div class="nb-dist">0.5 mi</div></div>
+    <div class="nb-item"><div><div class="nb-name">Ferry Plaza Farmers Market</div><div class="nb-meta">Market &middot; Embarcadero</div></div><div class="nb-dist">2.0 mi</div></div>
+    <a href="index.html#local" style="display:block;margin-top:14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">View all SF vendors &rarr;</a>
+  </div>
+  <div class="aside-card">
+    <div class="ac-hd">Share this profile</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5">Useful for anyone navigating the ice cream, pasta, or supplement aisle and wanting a curated alternative to conglomerate-owned brands.</p>
+    <div class="share-btns">
+      <button class="sbtn" onclick="copySnap()">Copy Traced snapshot</button>
+      <button class="sbtn" onclick="navigator.clipboard.writeText(window.location.href).then(function(){document.getElementById('sc').style.display='block';setTimeout(function(){document.getElementById('sc').style.display='none'},2500)})">Copy URL</button>
+    </div>
+    <div id="sc" style="display:none;font-size:12px;color:var(--accent);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:.08em">Copied &#x2713;</div>
+  </div>
+  <div class="aside-card">
+    <div class="ac-hd">Vendor status</div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Listed</span><span class="ival">Feb 2026</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Last verified</span><span class="ival">Feb 2026</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Views this month</span><span class="ival" style="color:var(--accent);font-weight:700">820</span></div>
+    <div class="irow" style="padding:8px 0"><span class="ikey">Via Halo Top story</span><span class="ival" style="color:var(--accent);font-weight:700">Coming soon</span></div>
+    <p style="font-size:11px;color:var(--dim);margin-top:10px;line-height:1.5">Is this your shop? <a href="/cdn-cgi/l/email-protection#a1d7c4cfc5ced3d2e1d5d3c0c2c4c58fc2cecc" style="color:var(--accent)">Update your profile &rarr;</a></p>
+  </div>
+</aside>
+
+</div></div></div>
+
+<footer style="border-top:1px solid var(--border);padding:30px 0">
+  <div class="W" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Traced</div>
+    <div style="font-size:12px;color:var(--dim)">Bi-Rite Market vendor profile &middot; Last verified February 2026</div>
+    <a href="index.html#local" style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Find more vendors &rarr;</a>
+  </div>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#1d78797469726f747c715d696f7c7e7879337e72" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="c7a2a3aeb3a8b5aea6ab87b3b5a6a4a2a3e9a4a8">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="traced-editorial-standards.html" style="color:var(--accent, #C9A84C);">Editorial Standards →</a>
+  </p>
+</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  var sp = new URLSearchParams(window.location.search);
+  var from = sp.get('from') || '';
+  var notes = {
+    'halotop': {
+      text: 'You arrived from our <a href="traced-halotop.html" style="color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px">Halo Top investigation</a>. Bi-Rite is listed here specifically because their ice cream aisle reflects an active curation decision: they carry Bi-Rite Creamery and Salt &amp; Straw, both independently-owned, instead of Wells Enterprises portfolio brands. The shelf is the editorial judgment made visible &mdash; not a marketing statement, a buying decision.',
+      b1t: 'Back to Halo Top story →', b1h: 'traced-halotop.html',
+      b2t: 'Ice cream alternatives', b2h: 'index.html#local?from=halotop&category=icecream'
+    },
+    'annies': {
+      text: 'You arrived from our <a href="annies.html" style="color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:2px">Annie’s / General Mills investigation</a>. Bi-Rite’s staff curate independently-owned pasta brands. The sourcing philosophy is the structural opposite of what General Mills brought to Annie’s — every product on this shelf was chosen by a person with a name, not an acquisition thesis.',
+      b1t: 'Back to Annie’s story →', b1h: 'annies.html',
+      b2t: 'More SF pasta alternatives', b2h: 'index.html#local?from=annies&category=pasta'
+    },
+    'vital-proteins': {
+      text: 'You arrived from a Nestlé portfolio story. Bi-Rite is listed here because they evaluate supplements by sourcing standard rather than shelf deal. Vital Proteins (Nestlé Health Science) is not on their supplement shelf. They prefer brands with published COAs and independent ownership.',
+      b1t: 'Back to investigation →', b1h: 'owner-nestle.html',
+      b2t: 'Supplement alternatives', b2h: 'index.html#local?from=vital-proteins&category=maker'
+    }
+  };
+  if(from && notes[from]){
+    document.getElementById('noteText').innerHTML = notes[from].text;
+    document.getElementById('noteBtn1').textContent = notes[from].b1t;
+    document.getElementById('noteBtn1').href = notes[from].b1h;
+    document.getElementById('noteBtn2').textContent = notes[from].b2t;
+    document.getElementById('noteBtn2').href = notes[from].b2h;
+  }
+})();
+function copySnap(){
+  var t = "Bi-Rite Market (SF Mission) is on Traced because of how it curates. Staff evaluates sourcing and ownership before a product gets shelf space. Ha

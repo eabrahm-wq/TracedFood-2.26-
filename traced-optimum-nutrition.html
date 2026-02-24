@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimum Nutrition — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(212,168,75,0.06);border-bottom:1px solid rgba(212,168,75,0.2);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(48px,6.5vw,80px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,26px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .ownership-chain{margin:20px 0 0 36px;position:relative;}
+  .chain-item{display:flex;align-items:flex-start;gap:14px;position:relative;}
+  .chain-item:not(:last-child)::after{content:'';position:absolute;left:10px;top:28px;bottom:-24px;width:1px;background:var(--border-light);}
+  .chain-dot{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .chain-dot.current{background:var(--yellow-dim);border-color:rgba(212,168,75,0.3);}
+  .chain-dot-inner{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+  .chain-dot.current .chain-dot-inner{background:var(--yellow);}
+  .chain-content{padding-bottom:28px;flex:1;}
+  .chain-year{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:2px;}
+  .chain-owner{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .chain-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.yellow{color:var(--yellow);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:860px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid{padding:0 24px;}.site-header{padding:0 24px;}.timeline-alert{padding:12px 24px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="traced-index.html" class="site-logo">Traced <span>/ by origin</span></a>
+  <nav class="site-nav">
+    <a href="traced-index.html">Index</a>
+    <a href="#">Methodology</a><a href="traced-deep-dives.html">Deep Dives</a>
+  </nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">Ownership Watch</span>
+  <span class="alert-text">Glanbia plc (Ireland) has owned Optimum Nutrition since 2008. The whey supplier became the brand — a vertically integrated structure with no independent oversight layer between raw ingredient sourcing and finished product claims.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb">
+      <a href="traced-index.html" style="color:var(--text-dim);text-decoration:none;">Traced</a>
+      <span class="sep">/</span>
+      <span class="hero-category">Protein Supplements</span>
+      <span class="sep">/</span>
+      <span>Profile 16</span>
+    </div>
+    <h1 class="product-name">Optimum<br>Nutrition</h1>
+    <p class="product-sub">Gold Standard 100% Whey</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      The world's bestselling protein powder earns that reputation honestly — the product is <strong>genuinely good</strong>, testing has held up across multiple independent analyses, and the label reflects what's in the tub. The structural concern isn't fraud. It's that <strong>Glanbia, the Irish dairy conglomerate that owns Optimum Nutrition, also supplies its own whey</strong> — meaning the company controls both the raw material and the brand that certifies its quality. No independent body sits between those two interests. For the current formulation, that arrangement hasn't produced a visible problem. But it defines the ceiling on what transparency here can actually mean.
+    </p>
+  </div>
+  <div class="scorecard">
+    <div class="scorecard-header">
+      <span class="scorecard-title">Transparency Score</span>
+      <div class="score-summary">
+        <span class="score-count red">1R</span>
+        <span class="score-count yellow">3Y</span>
+        <span class="score-count green">3G</span>
+      </div>
+    </div>
+    <div class="scorecard-rows">
+      <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill yellow">Watch</span></div>
+      <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Clean</span></div>
+      <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill yellow">Partial</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Verified</span></div>
+      <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill green">Verified</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Partial</span></div>
+      <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Gap</span></div>
+    </div>
+    <div class="scorecard-footer">
+      <div class="scorecard-footer-label">Last Verified</div>
+      <div class="scorecard-footer-value">February 2026 — Consumer Reports heavy metals data (Oct 2025), Informed Choice certification active</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">01</span>
+        <span class="dim-title">Ownership Structure</span>
+        <span class="score-pill yellow">Watch</span>
+      </div>
+      <div class="dim-body">
+        <p>Optimum Nutrition was founded in 1986 by brothers Tony and Michael Costello in Aurora, Illinois. For over two decades it operated as an independent supplement manufacturer, growing into the dominant brand in the whey protein category. In August 2008, <strong>Glanbia plc acquired Optimum Nutrition for $315 million</strong>.</p>
+        <p>Glanbia's origin matters here. The company is an Irish dairy cooperative that had been supplying Optimum Nutrition with whey protein before the acquisition. Buying ON wasn't a diversification move — it was vertical integration. Glanbia now controls the upstream ingredient (it operates a $470M cheese and whey manufacturing facility in Michigan) and the downstream brand that packages and sells that ingredient as a premium consumer product.</p>
+
+        <div class="ownership-chain">
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">1986</div>
+              <div class="chain-owner">Costello Brothers (founders)</div>
+              <div class="chain-note">Founded in Aurora, IL. Independent supplement manufacturer. Built Gold Standard into the category leader.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2008 — Present</div>
+              <div class="chain-owner">Glanbia plc (Ireland)</div>
+              <div class="chain-note">$315M acquisition. Glanbia is ON's whey supplier turned owner. Also owns BSN, Isopure, SlimFast, Amazing Grass, and Jacked Factory via its Nutra Holdings subsidiary. Revenue: €5.6B (2022).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout yellow">
+          <div class="callout-label">The Vertical Integration Problem</div>
+          <div class="callout-body">When a brand's owner also supplies its primary ingredient, the supply chain "audit" is internal. Glanbia certifies that Glanbia's whey meets Glanbia's standards. <strong>For now the product holds up under external testing.</strong> But no independent party has a structural mandate to catch it if that changes. This is a watch condition, not a current failure.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">02</span>
+        <span class="dim-title">Revenue Model</span>
+        <span class="score-pill green">Clean</span>
+      </div>
+      <div class="dim-body">
+        <p>Optimum Nutrition sells protein powder. The revenue model is transparent: product price covers manufacturing, distribution, marketing, and margin. No subscription traps, no ambassador equity schemes obscuring compensation, no third-party data monetization. Pricing is competitive — Gold Standard runs approximately <strong>$0.75–$1.00 per serving</strong> at major retailers, lower than premium-positioned competitors like Transparent Labs or Momentous while delivering comparable verified protein content.</p>
+        <p>Glanbia's vertical integration actually makes the economics cleaner in one sense: fewer middlemen between raw ingredient and finished product. The margin capture is direct. The concern about vertical integration is a transparency concern, not a revenue model concern.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">03</span>
+        <span class="dim-title">Marketing Alignment</span>
+        <span class="score-pill yellow">Partial</span>
+      </div>
+      <div class="dim-body">
+        <p>The "Gold Standard" name is a marketing claim, and it's partially earned. Gold Standard Whey is the world's bestselling whey protein by volume — that part is verifiable and verified. The product consistently performs well in independent lab testing. Where the marketing gets ahead of the reality is in the phrase <strong>"100% Whey"</strong>.</p>
+        <p>Gold Standard 100% Whey is not 100% whey protein isolate. It is a blend: <strong>whey protein isolate listed first</strong> (meaning it's the primary ingredient by weight), followed by whey protein concentrate and hydrolyzed whey peptides. This is disclosed on the label — the blend is listed — but the front-of-pack "100% Whey" framing leads many consumers to believe they're buying pure isolate. Whey protein concentrate contains more fat, lactose, and lower protein-per-gram than isolate.</p>
+        <p>ON sells a separate "Gold Standard 100% Isolate" product that is actually pure isolate at a higher price. The naming structure — where the cheaper blend is called "100% Whey" and the purer product gets the "Isolate" designation — creates a gap between what the average buyer hears and what they receive.</p>
+
+        <div class="callout yellow">
+          <div class="callout-label">The Blend Disclosure Gap</div>
+          <div class="callout-body">ON does not disclose the proportions of isolate vs. concentrate in Gold Standard Whey. When asked directly via their support site, the company confirms it's a blend but declines to specify ratios, citing proprietary formulation. <strong>This is legal. It is also the same information gap that enabled protein spiking in less honest brands.</strong> ON passes external label accuracy testing, but blend ratio opacity is an industry-wide problem they participate in rather than solve.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">04</span>
+        <span class="dim-title">Ingredient Integrity</span>
+        <span class="score-pill green">Verified</span>
+      </div>
+      <div class="dim-body">
+        <p>This is where Optimum Nutrition earns its market position. Multiple independent lab analyses confirm that Gold Standard Whey delivers on its core protein claim. Unbox Health lab testing awarded an A+ rating with a <strong>Label Accuracy Score of 10/10</strong> — protein content, carbohydrates, and fats all matched label claims precisely. Ellipse Analytics testing across 150+ protein powders placed multiple ON flavors in the top tier for purity.</p>
+        <p>The protein source is legitimate: whey is a complete protein with a PDCAAS of 1.0. BCAAs are naturally occurring in whey (5.5g per serving) rather than added as isolated amino acids, which eliminates the protein spiking risk (where brands add cheap free-form amino acids like taurine or glycine to inflate nitrogen readings). The 24g protein per 31.5g serving is a real 77% protein-by-weight ratio — honest math.</p>
+        <p>The artificial sweeteners (acesulfame potassium, sucralose) and artificial flavors are disclosed but represent the meaningful formulation tradeoff at the price point. For consumers who prioritize all-natural ingredient lists, this is a gap — but it's an accurately labeled gap, not deception.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">05</span>
+        <span class="dim-title">Label Claim Accuracy</span>
+        <span class="score-pill green">Verified</span>
+      </div>
+      <div class="dim-body">
+        <p>No FDA warning letters. No FTC enforcement actions. No class action settlements related to label claims. Optimum Nutrition's regulatory record on product claims is clean — a meaningful distinction in a category where Muscle Milk has FDA and FTC history, and David Protein's collagen proportion disclosure remains contested.</p>
+        <p>In the October 2025 Consumer Reports heavy metals investigation of 23 protein powders, <strong>Gold Standard Whey ranked #5 with lead levels below detection limits</strong> — the safest possible result. Consumer Reports noted ON as one of the products "better choices for daily consumption." ON's response to the testing was measured and on point: "We share Consumer Reports' commitment to consumer safety. All our products are made in compliance with FDA's Good Manufacturing Practices."</p>
+        <p>Notably, ON declined further comment on the heavy metals testing. That's a communications decision, not a product integrity failure — but it matters for the safety transparency score below.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">06</span>
+        <span class="dim-title">Scientific Backing</span>
+        <span class="score-pill yellow">Partial</span>
+      </div>
+      <div class="dim-body">
+        <p>Whey protein's efficacy is among the most researched topics in sports nutrition science. The case for whey protein supplementation — particularly for post-workout muscle protein synthesis — is strong and supported by decades of peer-reviewed research. This is not in dispute.</p>
+        <p>The partial score reflects two gaps. First, ON doesn't fund or publish product-specific clinical research — the science supporting whey protein generally is not the same as research validating Gold Standard Whey's specific formulation, blend ratio, or additives. Second, the blend-concentrate structure creates a subtle marketing-science misalignment: most of the whey protein research is conducted using whey isolate (faster absorption, higher leucine bioavailability), but Gold Standard Whey is a concentrate-dominant blend that may not fully replicate those outcomes. <strong>Both proteins are beneficial. The science that sells Gold Standard isn't precisely the science for Gold Standard.</strong></p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">07</span>
+        <span class="dim-title">Safety Transparency</span>
+        <span class="score-pill red">Gap</span>
+      </div>
+      <div class="dim-body">
+        <p>This is the most substantive gap in ON's otherwise strong transparency profile. Gold Standard Whey holds <strong>Informed Choice certification</strong> (LGC Group) — a legitimate third-party certification for banned substance testing, important for competitive athletes. It is <strong>not NSF Certified for Sport</strong>, which applies stricter contaminant testing standards that include heavy metals, pesticides, and herbicides, not just banned performance-enhancing substances.</p>
+        <p>ON does not publish batch-level certificates of analysis. Consumers cannot look up the specific lot number on their tub and verify that batch's test results. Momentous and Transparent Labs both publish batch COAs — this is the current best practice, and ON doesn't meet it.</p>
+        <p>The 2025 Consumer Reports results confirmed the product is currently clean. But the single most important point about ON's safety transparency is that the external testing that confirmed it — Consumer Reports' lab, Ellipse Analytics, Unbox Health — was conducted independently and without ON's facilitation. <strong>The product passed tests it didn't volunteer for.</strong> That's different from a brand that publishes its own test results proactively.</p>
+
+        <div class="callout red">
+          <div class="callout-label">Critical Distinction</div>
+          <div class="callout-body">Informed Choice certifies that a product is free from banned substances — WADA's prohibited list. NSF Certified for Sport additionally tests for contaminants including heavy metals. <strong>ON has the former, not the latter.</strong> For consumers who aren't competitive athletes, Informed Choice is less directly relevant to what they're concerned about.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">By the Numbers</div>
+      <div class="aside-stat">
+        <div class="aside-stat-value">$315M</div>
+        <div class="aside-stat-label">Glanbia acquisition price, 2008</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value">24g</div>
+        <div class="aside-stat-label">Protein per serving — confirmed by multiple independent labs</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value yellow">#5</div>
+        <div class="aside-stat-label">Consumer Reports heavy metals ranking (Oct 2025) — lead below detection limits</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value">38yr</div>
+        <div class="aside-stat-label">Founded 1986. Glanbia-owned since 2008. 16 years of corporate ownership with product integrity maintained.</div>
+      </div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Glanbia Portfolio (Selected)</div>
+      <ul class="aside-list">
+        <li>Optimum Nutrition — flagship, #1 global whey</li>
+        <li>BSN (Syntha-6, N.O.-Xplode) — mass market</li>
+        <li>Isopure — zero-carb pure isolate line</li>
+        <li>SlimFast — weight management</li>
+        <li>Amazing Grass — greens powders</li>
+        <li>Jacked Factory (via Nutra Holdings) — budget performance</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">What Third-Party Testing Covers</div>
+      <ul class="aside-list">
+        <li><strong style="color:var(--green)">Informed Choice (active):</strong> Banned substances per WADA list. 250+ prohibited compounds. Relevant for competitive athletes.</li>
+        <li><strong style="color:var(--yellow)">NSF GMP Certified:</strong> Manufacturing facility quality. Does not test finished product batches.</li>
+        <li><strong style="color:var(--red)">NSF Certified for Sport (not held):</strong> Banned substances + heavy metals + contaminants. No batch COAs published.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Compare In Category</div>
+      <ul class="aside-list">
+        <li><strong>Momentous:</strong> NSF Certified for Sport + batch COAs. $2.00+/serving. Green benchmark.</li>
+        <li><strong>Transparent Labs:</strong> Informed Choice + published COAs. ~$1.75/serving. Profile 17.</li>
+        <li><strong>Muscle Milk:</strong> No NSF cert, FTC/FDA enforcement history. Red. Profile 15.</li>
+        <li><strong>Gold Standard:</strong> Informed Choice, no batch COAs. ~$0.85/serving. Yellow-adjacent.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<div class="section-divider"></div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Verification</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Glanbia plc Press Release, Aug 2008</strong>Acquisition of Optimum Nutrition for $315M. foodingredientsfirst.com</div>
+    <div class="source-item"><strong>Irish Times, Mar 2023</strong>Optimum Nutrition becomes Glanbia's first billion-dollar brand. Revenue context.</div>
+    <div class="source-item"><strong>Consumer Reports, Oct 2025</strong>Heavy metals testing of 23 protein powders. ON Gold Standard ranked #5, lead below detection limits.</div>
+    <div class="source-item"><strong>Unbox Health Lab Testing</strong>Label accuracy score 10/10. Protein, carbs, fats all matched claims. Heavy metals all non-toxic.</div>
+    <div class="source-item"><strong>Optimum Nutrition Support Site</strong>Confirmed blend of WPI, WPC, and hydrolyzed whey. Declined to specify proportions as proprietary.</div>
+    <div class="source-item"><strong>Informed Choice (LGC Group)</strong>Gold Standard 100% Whey certified. 250+ banned substances tested. Certification active as of Feb 2026.</div>
+    <div class="source-item"><strong>Amazon product listing</strong>Current ingredient list: Protein Blend (Whey Protein Isolates, Whey Protein Concentrate, Whey Peptides), Cocoa, Lecithin, Natural and Artificial Flavors, Acesulfame Potassium, Lactase.</div>
+    <div class="source-item"><strong>Glanbia "Our Journey" — glanbia.com</strong>Vertical integration history. Michigan whey facility ($470M). Portfolio expansion timeline.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">Traced</span>
+  <span class="footer-note">Scored across 7 dimensions. Sources verified at time of publication. Claims subject to change — last review February 2026.</span>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#2742434e5348554e464b675355464442430944484a07014a4e434348531c071b46074f5542411a" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b7d2d3dec3d8c5ded6dbf7c3c5d6d4d2d399d4d8da">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{col

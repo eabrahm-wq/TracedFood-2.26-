@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chobani — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .callout.green{border-left-color:var(--green);}.callout.green .callout-label{color:var(--green);}
+  .ownership-chain{margin:20px 0 0 36px;position:relative;}
+  .chain-item{display:flex;align-items:flex-start;gap:14px;position:relative;}
+  .chain-item:not(:last-child)::after{content:'';position:absolute;left:10px;top:28px;bottom:-24px;width:1px;background:var(--border-light);}
+  .chain-dot{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .chain-dot.current{background:var(--yellow-dim);border-color:rgba(212,168,75,0.3);}
+  .chain-dot.question{background:rgba(217,79,61,0.08);border-color:rgba(217,79,61,0.3);}
+  .chain-dot-inner{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+  .chain-dot.current .chain-dot-inner{background:var(--yellow);}
+  .chain-dot.question .chain-dot-inner{background:var(--red);}
+  .chain-content{padding-bottom:28px;flex:1;}
+  .chain-year{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:2px;}
+  .chain-owner{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .chain-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .product-line-table{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .plt-header{background:var(--surface-2);display:grid;grid-template-columns:1.5fr 1fr 1fr;border-bottom:1px solid var(--border);}
+  .plt-row{display:grid;grid-template-columns:1.5fr 1fr 1fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.plt-row:last-child{border-bottom:none;}.plt-row:hover{background:var(--surface-2);}
+  .plt-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.plt-cell:last-child{border-right:none;}
+  .plt-header .plt-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .plt-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}.plt-cell.flag{color:var(--red);}.plt-cell.ok{color:var(--green);}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}.aside-stat-value.yellow{color:var(--yellow);}.aside-stat-value.green{color:var(--green);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}.plt-header,.plt-row{display:block;}.plt-cell{border-right:none;border-bottom:1px solid var(--border);}.plt-cell:last-child{border-bottom:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="site-nav"><a href="#">Database</a><a href="#">Methodology</a><a href="traced-deep-dives.html">Deep Dives</a><a href="#">About</a></nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Live Story</span>
+  <span class="alert-text"><strong>Oct 2025:</strong> Chobani raised $650M in equity from an <strong>unnamed investor</strong> at a $20B valuation. Goldman Sachs and BofA retained as IPO bookrunners. The identity of the $650M investor has not been publicly disclosed.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Founder-Led / IPO-Pending</span></div>
+    <h1 class="product-name">Chobani</h1>
+    <p class="product-sub">Greek Yogurt,<br>"Nothing But Good"</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      The Chobani story is one of the most compelling in American food: a Turkish immigrant buys a defunct Kraft factory in upstate New York on an SBA loan, builds the #1 yogurt brand in the country in under a decade, and becomes a billionaire while publicly championing workers and refugees. The core product — plain Greek yogurt — is genuinely clean: pasteurized nonfat milk and live cultures. Two ingredients. The reputation is earned.
+      What Traced surfaces is not a deception in the Tropicana or Jif sense. It is a <strong>transparency gap at an inflection point</strong>. In October 2025, Chobani raised $650 million in equity from an investor whose identity has not been publicly disclosed, at a $20 billion valuation. Founder Hamdi Ulukaya still holds majority control, but a meaningful equity stake in America's #1 yogurt brand — purchased at a valuation that implies significant future returns — now belongs to someone consumers cannot identify. Chobani has filed for IPO twice and withdrawn. Goldman Sachs and Bank of America are currently retained as bookrunners. The company is expanding aggressively beyond yogurt into coffee and frozen meals. The founder-led independent brand that consumers trust is actively in transition, and the ownership structure that will exist on the other side of that transition is not yet fully visible.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header"><span class="scorecard-title">Transparency Score</span><div class="score-summary"><span class="score-count yellow">3 ●</span><span class="score-count green">4 ●</span></div></div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill green">Green</span></div>
+      </div>
+      <div class="scorecard-footer"><div class="scorecard-footer-label">Last reviewed</div><div class="scorecard-footer-value">February 2026 · Sources below</div></div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Chobani was founded in 2005 by Hamdi Ulukaya, a Turkish-Kurdish immigrant who arrived in New York in 1994 to study English. He bought a defunct Kraft yogurt plant in South Edmeston, New York in 2005 using a Small Business Administration loan for approximately $700,000. By 2012, Chobani had become the best-selling yogurt brand in the United States, a rise that has few parallels in modern American food history.</p>
+        <p>Ulukaya remains CEO and holds an estimated 78% majority stake. The company is privately held. The known investor table:</p>
+
+        <div class="ownership-chain">
+          <div class="chain-item">
+            <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2005 – Present</div>
+              <div class="chain-owner">Hamdi Ulukaya (Founder / CEO)</div>
+              <div class="chain-note">~78% majority stake. Personal net worth ~$13.5B at $20B valuation. Still operationally active as CEO. Publicly committed to employee ownership and social mission.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">Strategic minority</div>
+              <div class="chain-owner">HOOPP (Healthcare of Ontario Pension Plan)</div>
+              <div class="chain-note">~7.6% stake. Canadian institutional pension fund. Disclosed.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot question"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">October 2025</div>
+              <div class="chain-owner">Unnamed Investor — $650M equity raise</div>
+              <div class="chain-note">Identity not publicly disclosed as of February 2026. $650M at $20B valuation implies a meaningful equity stake. Goldman Sachs and BofA retained as IPO bookrunners in the same period.</div>
+            </div>
+          </div>
+        </div>
+
+        <p>The yellow score reflects the unnamed investor gap specifically. Chobani's core ownership story — founder-controlled, mission-driven, privately held — remains largely intact. But a $650M equity raise from an undisclosed party at a $20 billion valuation is not a minor transaction. Whoever holds that stake has a meaningful financial interest in the outcome of Chobani's IPO and its ongoing brand decisions. Consumers have no way to know who that is.</p>
+
+        <div class="callout yellow">
+          <div class="callout-label">Why This Is Traced's Purpose</div>
+          <div class="callout-body">This is the exact gap Traced exists to surface. No consumer harm has occurred. The yogurt is still two ingredients. But the brand consumers trust because of its founder-independent identity has a meaningful new stakeholder whose values, incentives, and intentions are unknown. That is information consumers deserve to have — and currently don't.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Chobani's marketing is genuinely aligned with its product. The "Nothing But Good" positioning reflects an actual ingredient commitment — the plain yogurt line is as clean as a commercial dairy product gets. No paid influencer-equity arrangements. No celebrity investors promoting the product on health podcasts while holding equity. No subscription lock-in. The marketing is traditional CPG advertising with a founder-story emphasis, and the founder story is real.</p>
+        <p>Ulukaya's public commitments — employee ownership stakes, refugee hiring, the Tent Partnership for Refugees — are substantiated and documented, not brand-narrative additions. Chobani gave employees a 10% ownership stake in the company ahead of the anticipated 2021 IPO. This is an unusual and meaningful act in a category dominated by extraction-oriented ownership structures.</p>
+        <p>The green score is earned but has a future tense asterisk: as Chobani moves toward IPO and into the La Colombe coffee and Daily Harvest acquisitions, the alignment between the founder's values-driven narrative and the public-market incentive structure will be tested in ways it has not been while remaining private.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Single retail purchase, $1.50–$2.50 per cup. No subscription, no DTC auto-renewal. You buy it at the grocery store, you eat it, you decide next week whether to buy it again. The revenue model imposes no structural pressure toward continued purchase beyond product quality and price. This is as clean as a consumer food brand gets.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Plain Chobani Greek Yogurt ingredients: Pasteurized Nonfat Milk, Live and Active Cultures (S. Thermophilus, L. Bulgaricus, L. Acidophilus, Bifidus, L. Casei). Two effective ingredients. This is what yogurt is. There is no sugar, no thickener, no modified starch, no flavor system. The straining process that removes whey to create Greek yogurt's thickness is mechanical, not chemical.</p>
+        <p>This green score applies specifically and narrowly to the plain yogurt line — the product that built Chobani's reputation. The flavored lines are a different matter:</p>
+
+        <div class="product-line-table">
+          <div class="plt-header">
+            <div class="plt-cell">Product</div>
+            <div class="plt-cell">Added Sugar</div>
+            <div class="plt-cell">Ingredient Note</div>
+          </div>
+          <div class="plt-row">
+            <div class="plt-cell"><strong>Plain Nonfat Greek</strong>Core product</div>
+            <div class="plt-cell ok">0g added sugar</div>
+            <div class="plt-cell ok">Pasteurized nonfat milk + cultures. Genuinely clean.</div>
+          </div>
+          <div class="plt-row">
+            <div class="plt-cell"><strong>Vanilla Blended</strong>Best-seller</div>
+            <div class="plt-cell" style="color:var(--yellow)">9g added sugar</div>
+            <div class="plt-cell">Cane sugar + natural flavors. Carries same health halo as plain.</div>
+          </div>
+          <div class="plt-row">
+            <div class="plt-cell"><strong>Strawberry Fruit on Bottom</strong></div>
+            <div class="plt-cell flag">11g added sugar</div>
+            <div class="plt-cell">Strawberries + sugar + pectin. High added sugar relative to protein benefit.</div>
+          </div>
+          <div class="plt-row">
+            <div class="plt-cell"><strong>Flip Almond Coco Loco</strong></div>
+            <div class="plt-cell flag">17g added sugar</div>
+            <div class="plt-cell">Dessert-caliber sugar load marketed under the same Greek yogurt health brand.</div>
+          </div>
+        </div>
+
+        <p>The green score for ingredient integrity reflects the core product, not the full portfolio. Chobani has expanded aggressively into flavored, sweetened, and novelty lines that carry the plain yogurt's health associations without its ingredient standards. This is a yellow flag on the portfolio level, even though the flagship is clean.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Chobani markets its yogurt with "live and active cultures" claims and implies digestive and immune health benefits. "Live and active cultures" is a factual statement — the National Yogurt Association certifies this claim, and it requires a minimum threshold of live bacteria per gram at the time of manufacture.</p>
+        <p>The yellow score reflects the gap between what "live and active cultures" means scientifically and what most consumers understand it to mean. The clinical evidence for probiotic benefits from yogurt specifically — as distinct from concentrated probiotic supplements — is mixed. Study quality is variable, and the survivability of cultures through digestion varies significantly by strain and by individual gut environment. The FDA does not permit yogurt to make specific disease prevention claims based on probiotic content. Chobani's marketing stays carefully within structure-function claim territory while allowing consumers to draw conclusions the evidence doesn't fully support.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>No FDA enforcement actions. No FTC complaints. No major class action litigation against Chobani's labeling specifically. The yellow score is prospective and portfolio-level rather than a current regulatory finding.</p>
+        <p>The concern is the uniform "Nothing But Good" brand positioning applied across a portfolio that ranges from genuinely clean (plain Greek) to dessert-adjacent (Flip line at 17g added sugar). A consumer who trusts Chobani because they've read the plain yogurt label and found it clean may purchase a Flip cup with a different assumption than the label supports. The brand halo from the plain line extends across the entire portfolio — which is valuable marketing and potentially misleading nutrition communication simultaneously.</p>
+        <p>Chobani's "natural" claims on flavored products have been challenged in litigation. A 2013 class action alleged that Chobani's use of "natural" to describe products containing non-organic milk was misleading. The suit settled. Chobani's "natural" labeling has since been more carefully managed, but the underlying tension between the brand's clean-food identity and its portfolio's actual ingredient range remains.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Chobani's safety record is strong. A 2013 mold contamination recall affected approximately 35 varieties and resulted in consumer complaints of bloating and illness. Chobani identified the mold strain (Mucor circinelloides), issued a voluntary recall, and implemented manufacturing process changes. The response was considered timely and transparent by industry and regulatory standards. No subsequent major safety incidents have occurred.</p>
+        <p>Chobani publishes a formal food safety and quality program, operates under continuous FDA oversight as a dairy manufacturer, and has not had recurrence of the 2013 issue. The green score reflects a genuine safety record — this is not a charity score. The company has earned it.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value">$20B</div><div class="aside-stat-label">Reported valuation at October 2025 equity raise</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">$650M</div><div class="aside-stat-label">Equity raised from unnamed investor, October 2025</div></div>
+      <div class="aside-stat"><div class="aside-stat-value green">2</div><div class="aside-stat-label">Ingredients in plain Greek yogurt: pasteurized nonfat milk + live cultures</div></div>
+      <div class="aside-stat"><div class="aside-stat-value yellow">~78%</div><div class="aside-stat-label">Ulukaya's estimated remaining stake after 2025 raise</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">The Acquisition Pattern</div>
+      <ul class="aside-list">
+        <li><strong>2023:</strong> Acquired La Colombe Coffee for ~$900M. Premium cold brew and canned coffee brand.</li>
+        <li><strong>2025:</strong> Acquired Daily Harvest (frozen smoothies/meals) for undisclosed amount.</li>
+        <li>Both acquisitions are being funded in part by the equity raise. Chobani is actively becoming a multi-category food company while maintaining a single-brand identity.</li>
+        <li>La Colombe and Daily Harvest carry their own ingredient and ownership stories that are not yet part of Traced's database.</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Timeline Flags</div>
+      <ul class="aside-list">
+        <li>2021: IPO filed at $10B+ valuation. Withdrawn September 2022 amid market conditions.</li>
+        <li>Oct 2025: $650M equity raise from unnamed investor at $20B valuation. Goldman Sachs + BofA retained as bookrunners.</li>
+        <li>2026: IPO widely anticipated. Identity of $650M investor likely to be disclosed in S-1 filing.</li>
+        <li>Watch: Will the S-1 reveal the unnamed investor? Will it change how consumers perceive the brand?</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">What This Profile Is Not Saying</div>
+      <ul class="aside-list">
+        <li>Plain Chobani Greek yogurt is a genuinely good product. The ingredient integrity is real.</li>
+        <li>Ulukaya's employee ownership and refugee employment commitments are documented and substantiated — not marketing narrative.</li>
+        <li>The concern here is forward-looking: the ownership structure that will exist post-IPO is not yet visible, and the unnamed $650M investor represents the first meaningful opacity in the Chobani ownership story.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Chobani S-1 / IPO Filing, 2021</strong>Filed October 2021. Disclosed HOOPP stake (~7.6%). Withdrawn September 2022. Available via SEC EDGAR.</div>
+    <div class="source-item"><strong>WSJ / Bloomberg reporting, October 2025</strong>$650M equity raise at $20B valuation confirmed. Investor identity not disclosed in reports reviewed.</div>
+    <div class="source-item"><strong>La Colombe acquisition announcement, 2023</strong>Chobani acquires La Colombe for ~$900M. Press release and subsequent press coverage.</div>
+    <div class="source-item"><strong>Daily Harvest acquisition, 2025</strong>Acquisition terms undisclosed. Reported via trade press (Food Dive, Grocery Dive).</div>
+    <div class="source-item"><strong>FDA Recall Database, 2013</strong>Chobani voluntary recall — Mucor circinelloides mold contamination. ~35 varieties recalled.</div>
+    <div class="source-item"><strong>National Yogurt Association</strong>Live and Active Cultures seal requirements: minimum 100 million cultures per gram at time of manufacture.</div>
+    <div class="source-item"><strong>USDA FoodData Central</strong>Chobani plain nonfat Greek yogurt: full ingredient list and nutrition facts. Flavored line sugar content data.</div>
+    <div class="source-item"><strong>Tent Partnership for Refugees</strong>Chobani's documented refugee hiring commitments and employee ownership program details.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#01646568756e7368606d417573606264652f626e6c21276c6865656e753a213d6021697364673c" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="197c7d706d766b707875596d6b787a7c7d377a7674">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{co

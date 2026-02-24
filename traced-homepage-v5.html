@@ -284,12 +284,31 @@ img{display:block;max-width:100%}
   box-shadow:var(--shadow-s);
   transition:border-color .2s,transform .2s,box-shadow .2s;
   display:block;cursor:pointer;
+  position:relative;
 }
 .own-card:hover{
   border-color:var(--accent);
   transform:translateY(-3px);
   box-shadow:var(--shadow);
 }
+.own-card:hover .own-cta{
+  opacity:1;
+}
+.own-cta{
+  display:flex;align-items:center;gap:6px;
+  margin-top:16px;padding-top:14px;
+  border-top:1px solid var(--border);
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--accent);font-weight:500;
+  opacity:.6;
+  transition:opacity .2s;
+}
+.own-cta-arrow{
+  font-size:13px;transition:transform .2s;
+}
+.own-card:hover .own-cta-arrow{transform:translateX(3px);}
 .own-name{
   font-family:'Playfair Display',Georgia,serif;
   font-size:19px;font-weight:700;
@@ -1058,9 +1077,8 @@ img{display:block;max-width:100%}
       <div>
         <div class="kicker">Ownership Intelligence</div>
         <h2 class="sec-title">The portfolios behind familiar brands</h2>
-        <p class="sec-sub">Four companies control more grocery shelf space than most people realize. Every card below links to the full ownership web.</p>
+        <p class="sec-sub">Four companies control more grocery shelf space than most people realize. Click any card to explore the full ownership web — every brand they own, what changed after acquisition, and how they obscure it.</p>
       </div>
-      <a href="#stories" class="sec-link">See full investigations →</a>
     </div>
 
     <div class="own-grid">
@@ -1074,6 +1092,7 @@ img{display:block;max-width:100%}
           <div class="own-brand">Haagen-Dazs · Yoplait</div>
           <div class="own-brand">Cascadian Farm (organic)</div>
         </div>
+        <div class="own-cta">View full ownership web <span class="own-cta-arrow">→</span></div>
       </a>
       <a class="own-card" href="owner-kelloggs.html">
         <div class="kicker">Owner</div>
@@ -1085,6 +1104,7 @@ img{display:block;max-width:100%}
           <div class="own-brand">Pringles · Pop-Tarts</div>
           <div class="own-brand">MorningStar Farms</div>
         </div>
+        <div class="own-cta">View full ownership web <span class="own-cta-arrow">→</span></div>
       </a>
       <a class="own-card" href="owner-nestle.html">
         <div class="kicker">Owner</div>
@@ -1096,6 +1116,7 @@ img{display:block;max-width:100%}
           <div class="own-brand">Gerber · Purina</div>
           <div class="own-brand">Nespresso · Nescafé</div>
         </div>
+        <div class="own-cta">View full ownership web <span class="own-cta-arrow">→</span></div>
       </a>
       <a class="own-card" href="owner-jab.html">
         <div class="kicker">Owner</div>
@@ -1107,6 +1128,7 @@ img{display:block;max-width:100%}
           <div class="own-brand">Einstein Bros. Bagels</div>
           <div class="own-brand">Panera Bread</div>
         </div>
+        <div class="own-cta">View full ownership web <span class="own-cta-arrow">→</span></div>
       </a>
     </div>
 
@@ -1124,6 +1146,9 @@ img{display:block;max-width:100%}
         <div class="own-stat-l">brands traced so far across Traced's investigation database</div>
       </div>
     </div>
+  </div>
+  <div style="text-align:center;margin-top:24px;padding-bottom:8px;">
+    <a href="#stories" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500;">See full brand investigations →</a>
   </div>
 </section>
 

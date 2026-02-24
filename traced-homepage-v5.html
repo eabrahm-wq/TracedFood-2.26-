@@ -820,6 +820,129 @@ img{display:block;max-width:100%}
 .hero-search-wrap{animation:up .65s ease .22s both}
 .hero-pills   {animation:up .65s ease .30s both}
 .hero-web     {animation:up .70s ease .16s both}
+
+/* ═══════════════════════════════════════════
+   PRIVATE EQUITY SECTION
+═══════════════════════════════════════════ */
+.pe-explainer{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:32px;
+  margin-bottom:28px;
+}
+.pe-explainer-inner{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+}
+.pe-exp-block{}
+.pe-exp-num{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.16em;
+  color:var(--dim);margin-bottom:6px;
+}
+.pe-exp-label{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:15px;font-weight:700;
+  margin-bottom:8px;
+}
+.pe-exp-text{
+  font-size:13px;color:var(--muted);line-height:1.65;
+}
+.pe-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:20px;
+}
+.pe-card{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:var(--shadow-s);
+  transition:box-shadow .2s,transform .2s;
+}
+.pe-card:hover{
+  box-shadow:var(--shadow);
+  transform:translateY(-2px);
+}
+.pe-card-header{
+  background:var(--ink);
+  padding:20px 22px;
+}
+.pe-firm-type{
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+  margin-bottom:6px;
+}
+.pe-firm-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:22px;font-weight:700;
+  color:#fff;line-height:1;
+  margin-bottom:6px;
+}
+.pe-firm-aum{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:rgba(255,255,255,.5);
+}
+.pe-card-body{padding:20px 22px;}
+.pe-brands-label{
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);
+  margin-bottom:14px;
+}
+.pe-brands-list{
+  display:flex;flex-direction:column;
+  gap:8px;margin-bottom:18px;
+}
+.pe-brand-row{
+  display:flex;align-items:flex-start;
+  gap:8px;font-size:13px;color:var(--ink);
+  font-weight:600;line-height:1.4;
+}
+.pe-dot{
+  width:7px;height:7px;border-radius:50%;
+  flex-shrink:0;margin-top:4px;
+}
+.pe-dot.green{background:#2d7a5c}
+.pe-dot.amber{background:#b5872a}
+.pe-dot.red{background:#8b2020}
+.pe-note{
+  font-weight:400;color:var(--muted);
+  font-size:12px;display:block;
+}
+.pe-card-insight{
+  background:var(--bg2);
+  border-left:3px solid var(--border-md);
+  border-radius:0 10px 10px 0;
+  padding:12px 14px;
+  font-size:12.5px;color:var(--muted);
+  line-height:1.65;
+}
+.pe-insight-label{
+  display:block;
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--dim);margin-bottom:5px;
+}
+.pe-footer-note{
+  text-align:center;
+  font-size:12px;color:var(--dim);
+  font-style:italic;line-height:1.6;
+  max-width:64ch;margin:0 auto;
+  padding:16px 0 0;
+}
+@media(max-width:900px){
+  .pe-explainer-inner{grid-template-columns:1fr;}
+  .pe-grid{grid-template-columns:1fr;}
+}
+
 </style>
 </head>
 <body>
@@ -1004,6 +1127,126 @@ img{display:block;max-width:100%}
   </div>
 </section>
 
+
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  PRIVATE EQUITY SECTION                  ║
+       ╚══════════════════════════════════════════╝ -->
+  <div class="W" style="padding:0 0 72px">
+
+    <div class="sec-head" style="margin-bottom:24px">
+      <div>
+        <div class="kicker">Ownership Intelligence</div>
+        <h2 class="sec-title">Private Equity in Your Grocery Aisle</h2>
+        <p class="sec-sub" style="margin-top:8px">
+          Unlike Kellogg's or Nestlé, these firms don't make food — they invest in brands, 
+          scale them, and exit. The brand stays. The ownership changes. Most consumers 
+          never know it happened.
+        </p>
+      </div>
+    </div>
+
+    <!-- PE explainer callout -->
+    <div class="pe-explainer">
+      <div class="pe-explainer-inner">
+        <div class="pe-exp-block">
+          <div class="pe-exp-num">01</div>
+          <div class="pe-exp-label">The Playbook</div>
+          <p class="pe-exp-text">A founder builds a brand with genuine values. PE firm invests at growth stage — providing capital for distribution and marketing. The brand scales rapidly. Then either: (a) the PE firm sells to a conglomerate, or (b) holds and quietly optimizes margins.</p>
+        </div>
+        <div class="pe-exp-block">
+          <div class="pe-exp-num">02</div>
+          <div class="pe-exp-label">The Warning Signs</div>
+          <p class="pe-exp-text">PE investment is not inherently bad — but it's a leading indicator. Watch for: rapid SKU expansion, reduced ingredient quality, "family of brands" language appearing on packaging, sudden distribution into mass-market chains.</p>
+        </div>
+        <div class="pe-exp-block">
+          <div class="pe-exp-num">03</div>
+          <div class="pe-exp-label">What You Won't See</div>
+          <p class="pe-exp-text">PE ownership is rarely disclosed on packaging. The brand's website still features the founder's story. The Instagram still posts farmer photos. The ingredient list may not change — yet. The financial relationship already has.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PE firm cards -->
+    <div class="pe-grid">
+
+      <!-- Butterfly Equity -->
+      <div class="pe-card">
+        <div class="pe-card-header">
+          <div class="pe-firm-type">Food-Specialist PE · Los Angeles</div>
+          <div class="pe-firm-name">Butterfly Equity</div>
+          <div class="pe-firm-aum">$4B+ AUM · Founded 2016</div>
+        </div>
+        <div class="pe-card-body">
+          <div class="pe-brands-label">Brands you've seen at Whole Foods, Target, Sprouts</div>
+          <div class="pe-brands-list">
+            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Chosen Foods <span class="pe-note">avocado oil, mayo, dressings</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Orgain <span class="pe-note">organic protein shakes — sold majority to Nestlé Health Science</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Pete & Gerry's Organics <span class="pe-note">pasture-raised eggs</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Health-Ade Kombucha <span class="pe-note">refrigerated section staple</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Evolution Fresh <span class="pe-note">cold-pressed juices — acquired from Starbucks</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot green"></span><span>Bolthouse Farms <span class="pe-note">carrots, protein drinks, dressings</span></span></div>
+          </div>
+          <div class="pe-card-insight">
+            <span class="pe-insight-label">The pattern to watch</span>
+            Butterfly specializes in food exclusively — they know the sector deeply. But their model is acquire → scale → exit. Orgain, one of their most "authentic" organic nutrition brands, already had its majority stake sold to Nestlé Health Science. Bolthouse was split into two companies to maximize separate exit value.
+          </div>
+        </div>
+      </div>
+
+      <!-- L Catterton -->
+      <div class="pe-card">
+        <div class="pe-card-header">
+          <div class="pe-firm-type">Consumer PE · Backed by LVMH / Bernard Arnault</div>
+          <div class="pe-firm-name">L Catterton</div>
+          <div class="pe-firm-aum">$37B AUM · Founded 1989</div>
+        </div>
+        <div class="pe-card-body">
+          <div class="pe-brands-label">Brands positioned as independent or "better-for-you"</div>
+          <div class="pe-brands-list">
+            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Kodiak Cakes <span class="pe-note">protein pancake mix, whole grain — Shark Tank origin story</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Good Culture <span class="pe-note">clean-label cottage cheese — $500M+ deal Jan 2026</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Kettle Brand Chips <span class="pe-note">"natural" kettle chips — previously also owned by Campbell's</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Cholula Hot Sauce <span class="pe-note">later sold to McCormick & Co. for $800M</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Thorne Research <span class="pe-note">premium supplements</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot amber"></span><span>Kettle Cuisine <span class="pe-note">refrigerated soups, foodservice</span></span></div>
+          </div>
+          <div class="pe-card-insight">
+            <span class="pe-insight-label">The detail most people miss</span>
+            L Catterton is backed by LVMH and Bernard Arnault — the world's largest luxury goods conglomerate. The same capital structure behind Louis Vuitton, Moët Hennessy, and Sephora is backing Kodiak Cakes and Good Culture's "clean label" positioning. The firms operate separately, but the financial lineage is the same.
+          </div>
+        </div>
+      </div>
+
+      <!-- KKR / Upfield -->
+      <div class="pe-card">
+        <div class="pe-card-header">
+          <div class="pe-firm-type">Global PE / Alternative Assets · New York</div>
+          <div class="pe-firm-name">KKR (via Upfield)</div>
+          <div class="pe-firm-aum">$553B AUM · Founded 1976</div>
+        </div>
+        <div class="pe-card-body">
+          <div class="pe-brands-label">Brands you might not realize are PE-owned</div>
+          <div class="pe-brands-list">
+            <div class="pe-brand-row"><span class="pe-dot red"></span><span>Country Crock <span class="pe-note">plant-based butters and spreads</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot red"></span><span>I Can't Believe It's Not Butter <span class="pe-note">formerly Unilever — $8B buyout in 2017</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot red"></span><span>Flora <span class="pe-note">plant-based spreads, marketed as "heart healthy"</span></span></div>
+            <div class="pe-brand-row"><span class="pe-dot red"></span><span>Becel / Pro-Activ <span class="pe-note">cholesterol-reducing spreads, sold in 60+ countries</span></span></div>
+          </div>
+          <div class="pe-card-insight">
+            <span class="pe-insight-label">The Upfield story</span>
+            KKR bought Unilever's entire spreads division for $8 billion in 2017, rebranded it as Upfield, and positioned it as a "plant-based" company. Country Crock Plant Butter launched under this structure — marketed with sustainability and health language while owned by one of the largest leveraged buyout firms in history. KKR's food portfolio also includes Nature's Bounty vitamins and historically RJR Nabisco.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pe-grid -->
+
+    <div class="pe-footer-note">
+      PE ownership is legal, disclosed in SEC filings, and sometimes genuinely beneficial to brands. This section exists not to indict these firms, but because the information is almost never visible at point of purchase — and it should be.
+    </div>
+
+  </div><!-- /PE section wrapper -->
 
 <!-- ╔══════════════════════════════════════════╗
      ║  BRIDGE — the pivot moment               ║

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond Meat — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .stock-chart{margin:20px 0 20px 36px;background:var(--surface-2);border:1px solid var(--border-light);border-radius:3px;padding:20px 20px 14px;}
+  .chart-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;}
+  .chart-bars{display:flex;align-items:flex-end;gap:6px;height:100px;}
+  .chart-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;gap:6px;}
+  .chart-bar{width:100%;border-radius:2px 2px 0 0;background:var(--red);opacity:0.7;}
+  .chart-bar.peak{background:var(--green);opacity:0.85;}
+  .chart-bar.mid{background:var(--yellow);opacity:0.7;}
+  .chart-year{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:0.06em;text-align:center;}
+  .chart-val{font-family:var(--font-mono);font-size:8px;color:var(--text-muted);text-align:center;}
+  .ingredient-table{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .it-header{background:var(--surface-2);display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+  .it-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.it-row:last-child{border-bottom:none;}.it-row:hover{background:var(--surface-2);}
+  .it-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.it-cell:last-child{border-right:none;}
+  .it-header .it-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .it-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}.it-cell.flag{color:var(--red);}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}.it-header,.it-row{display:block;}.it-cell{border-right:none;border-bottom:1px solid var(--border);}.it-cell:last-child{border-bottom:none;}}
+</style>
+</head>
+<body data-share-fact="Beyond Meat's IPO-era marketing emphasized clean-label sustainable protein. The current ingredient list is 22+ items. The brand's current label does not carry the clean-label certifications implied in early marketing." data-share-owner="Public (Nasdaq: BYND)" data-share-year="IPO 2019" data-share-url="https://traced.com/traced-beyondmeat.html">
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="site-nav"><a href="#">Database</a><a href="#">Methodology</a><a href="traced-deep-dives.html">Deep Dives</a><a href="#">About</a></nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Live Story</span>
+  <span class="alert-text"><strong>BYND stock</strong> is down ~97% from its July 2019 peak of $234. Revenue has declined four consecutive years. The company has never reported annual net income. A going-concern notice was issued in 2024.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Hype Cycle / IPO Collapse</span></div>
+    <h1 class="product-name">Beyond<br>Meat</h1>
+    <p class="product-sub">Plant-Based Burger,<br>"Eat What You Love"</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Beyond Meat's IPO in May 2019 was the most successful US food company IPO in nearly two decades. The stock opened at $46, peaked at $234 within two months, and briefly gave the company a market cap exceeding $13 billion — for a company selling plant-based burgers at a steep premium to beef. The celebrity investor roster read like a sustainability wishlist: Leonardo DiCaprio, Snoop Dogg, Bill Gates. McDonald's and KFC signed partnership agreements. The narrative was total: Beyond Meat was going to replace industrial animal agriculture, save the planet, and be delicious doing it. <strong>None of the financial projections materialized.</strong> The product never achieved price parity with conventional beef. McDonald's ended the McPlant pilot. Consumer interest peaked in 2020 and declined. Revenue has fallen four consecutive years. A going-concern notice — the accounting designation for a company whose ability to continue operating is uncertain — was issued in 2024. The product itself is genuinely interesting technology: pea protein textured to approximate ground beef. But the marketing positioned it as nutritionally equivalent or superior to beef while the ingredient list — which includes methylcellulose, modified food starch, and more sodium than a comparable beef patty — tells a more complicated story. This is the complete hype cycle: real innovation, overclaimed benefits, celebrity-fueled IPO at irrational valuation, and a slow collapse back to product fundamentals.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header"><span class="scorecard-title">Transparency Score</span><div class="score-summary"><span class="score-count red">3 ●</span><span class="score-count yellow">3 ●</span><span class="score-count green">1 ●</span></div></div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      </div>
+      <div class="scorecard-footer"><div class="scorecard-footer-label">Last reviewed</div><div class="scorecard-footer-value">February 2026 · Sources below</div></div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Beyond Meat (Nasdaq: BYND) is a publicly traded company. Founder Ethan Brown remains CEO. Pre-IPO investors included Kleiner Perkins, Obvious Ventures, Tyson Foods (which later divested), and a roster of celebrity investors whose involvement was central to the brand's marketing narrative.</p>
+        <p>The celebrity investor structure is worth examining because it mirrors the AG1 and David patterns — high-trust figures with large audiences holding equity in the products they implicitly endorse. Unlike AG1 and David, the Beyond Meat celebrity investors were not primarily health and wellness authorities; they were cultural figures lending climate and sustainability credibility. Leonardo DiCaprio's investment was publicly disclosed and featured prominently in press coverage. The implicit message: this product is what environmentally serious people choose.</p>
+
+        <div class="stock-chart">
+          <div class="chart-label">BYND Share Price — IPO to Present</div>
+          <div class="chart-bars">
+            <div class="chart-bar-wrap">
+              <div class="chart-val">$46</div>
+              <div class="chart-bar mid" style="height:20px;"></div>
+              <div class="chart-year">IPO<br>May '19</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-val">$234</div>
+              <div class="chart-bar peak" style="height:100px;"></div>
+              <div class="chart-year">Peak<br>Jul '19</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-val">$197</div>
+              <div class="chart-bar mid" style="height:84px;"></div>
+              <div class="chart-year">Jan '20</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-val">$127</div>
+              <div class="chart-bar mid" style="height:54px;"></div>
+              <div class="chart-year">Jan '21</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-val">$33</div>
+              <div class="chart-bar" style="height:14px;"></div>
+              <div class="chart-year">Jan '23</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-val">$7</div>
+              <div class="chart-bar" style="height:4px;"></div>
+              <div class="chart-year">Jan '25</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-val">~$4</div>
+              <div class="chart-bar" style="height:2px;"></div>
+              <div class="chart-year">Feb '26</div>
+            </div>
+          </div>
+        </div>
+
+        <p>As a publicly traded company, Beyond Meat is beholden to quarterly earnings pressure — which has driven repeated rounds of layoffs, cost-cutting, and product line rationalization as the business has contracted. The going-concern notice issued in 2024 means auditors have substantial doubt about the company's ability to continue operating. The ownership story here is not a quiet PE extraction — it is a very public collapse played out in earnings calls and stock filings.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Beyond Meat's marketing made three simultaneous claims that collectively drove the IPO narrative: the product is <strong>better for the planet</strong>, <strong>better for your health</strong>, and <strong>just as delicious</strong> as conventional beef. All three claims have meaningful caveats the marketing did not prominently surface.</p>
+        <p><strong>Environmental:</strong> The lifecycle analysis supporting Beyond Meat's sustainability claims was internally commissioned and has been contested by independent researchers. The 2023 study by Heller and Keoleian at the University of Michigan, which Beyond Meat cited, found significant emissions reductions versus US beef. However, a 2023 meta-analysis in Future Foods found that the environmental advantage narrows significantly when comparing Beyond Meat to chicken or pork (not just beef), and disappears entirely when accounting for land use changes required for large-scale pea protein cultivation. The marketing compared against beef specifically and consistently — the most favorable comparison available.</p>
+        <p><strong>Nutritional:</strong> Beyond Meat was positioned as a health-forward choice. The sodium content — approximately 390mg per patty for Beyond Burger — is meaningfully higher than an equivalent 80/20 beef patty (~75mg). The ingredient list includes methylcellulose (a laxative in pharmaceutical applications, used as a binder here) and multiple modified food additives. The product is nutritionally complex in ways the simple "made from plants" framing does not communicate.</p>
+
+        <div class="callout red">
+          <div class="callout-label">The Halo Transfer Problem</div>
+          <div class="callout-body">Beyond Meat's entire marketing architecture transferred the health and sustainability halo of "plants" onto an ultra-processed product that shares almost nothing with whole plant foods. Pea protein isolate, methylcellulose, modified food starch, and synthetic vitamins are not what consumers think of when they hear "plant-based." The word "plant" did enormous marketing work that the ingredient list does not support.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Single retail purchase. No subscription, no DTC auto-renewal. You buy a pack of burgers, eat them, decide whether to buy again. The revenue model is clean. The company's financial distress is a function of failing to generate sufficient repeat purchase at premium prices — which is a product-market fit failure, not a consumer extraction problem.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Beyond Burger ingredients: Water, Pea Protein, Expeller-Pressed Canola Oil, Refined Coconut Oil, Rice Protein, Natural Flavors, Cocoa Butter, Mung Bean Protein, Methylcellulose, Potato Starch, Apple Extract, Salt, Potassium Chloride, Vinegar, Lemon Juice Concentrate, Sunflower Lecithin, Pomegranate Fruit Powder, Beet Juice Extract.</p>
+
+        <div class="ingredient-table">
+          <div class="it-header">
+            <div class="it-cell">Beyond Burger (4oz patty)</div>
+            <div class="it-cell">80/20 Ground Beef (4oz patty)</div>
+          </div>
+          <div class="it-row">
+            <div class="it-cell"><strong>Protein</strong>20g (pea + rice + mung bean)</div>
+            <div class="it-cell"><strong>Protein</strong>19g (complete animal protein)</div>
+          </div>
+          <div class="it-row">
+            <div class="it-cell"><strong>Sodium</strong><span class="flag">~390mg</span></div>
+            <div class="it-cell"><strong>Sodium</strong>~75mg</div>
+          </div>
+          <div class="it-row">
+            <div class="it-cell"><strong>Saturated fat</strong>5g (coconut oil)</div>
+            <div class="it-cell"><strong>Saturated fat</strong>8g (beef fat)</div>
+          </div>
+          <div class="it-row">
+            <div class="it-cell"><strong>Processing level</strong><span class="flag">NOVA 4 — ultra-processed. 18+ ingredients.</span></div>
+            <div class="it-cell"><strong>Processing level</strong>NOVA 1–2. Single ingredient.</div>
+          </div>
+          <div class="it-row">
+            <div class="it-cell"><strong>Additives</strong>Methylcellulose, modified starch, multiple isolates</div>
+            <div class="it-cell"><strong>Additives</strong>None</div>
+          </div>
+        </div>
+
+        <p>The yellow score — not red — reflects that Beyond Meat's product has genuine nutritional attributes: comparable protein content, lower saturated fat than beef, no cholesterol, and real environmental advantages over specifically US beef production. The concern is the gap between "made from plants" positioning and ultra-processed NOVA 4 reality — not that the product is fraudulent, but that the framing obscures complexity consumers deserve to navigate.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Beyond Meat has funded and cited a number of clinical and lifecycle studies. A 2020 Stanford study found that replacing red and processed meat with Beyond Meat products improved certain cardiovascular risk markers. The study was funded in part by Beyond Meat. A 2022 study in <em>American Journal of Clinical Nutrition</em> found no significant difference in cardiovascular risk markers between Beyond Meat and lean beef consumption.</p>
+        <p>The scientific picture is genuinely mixed rather than clearly fraudulent — which is what the yellow score reflects. The environmental lifecycle analysis advantage over US beef is supported by independent research. The nutritional advantage claims are contested. The ultra-processed nature of the product raises long-term health questions that industry-funded studies are structurally unlikely to surface.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>No FDA enforcement actions against Beyond Meat's labeling. No FTC complaints upheld. The ingredient list is complete and accurate. The yellow score reflects the contextual gap between "plant-based" positioning and ultra-processed reality.</p>
+        <p>In 2022, the National Cattlemen's Beef Association petitioned the FDA to restrict use of the term "meat" for plant-based products. The FDA has not acted on this petition. Whether "Beyond Meat" constitutes a mislabeled product name under FDA guidance is an active regulatory and legal question without resolution. Separately, several class action suits alleged that "Better for You" and similar health claims were deceptive in light of the sodium content and processing level. Most were dismissed or settled without substantive label changes.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>In August 2022, Beyond Meat's then-COO Doug Ramsey was arrested after biting a man's nose at a college football game in Arkansas. The incident received significant media coverage and resulted in Ramsey's termination. The red score does not rest on this incident specifically — it is colorful but not a food safety concern.</p>
+        <p>The red score reflects two substantive issues. First, Beyond Meat does not publish independent third-party safety testing results or batch-level COAs. For a product marketed on the basis of what it doesn't contain (no cholesterol, no hormones, no antibiotics — all true for any plant-based product), the absence of proactive transparency about what it does contain at lot level is a gap. Second, the going-concern designation raises supply chain and quality control questions: a company under severe financial pressure has structural incentives to cut costs in ways that may affect ingredient sourcing and quality assurance. This is not a current finding of safety failures — it is a risk that the financial disclosure itself creates.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">The Collapse in Numbers</div>
+      <div class="aside-stat"><div class="aside-stat-value red">−98%</div><div class="aside-stat-label">Decline from July 2019 peak ($234/share) to February 2026 (~$4/share)</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">4</div><div class="aside-stat-label">Consecutive years of revenue decline (2022–2025)</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">$0</div><div class="aside-stat-label">Annual net income ever reported. Going-concern notice issued 2024.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">390mg</div><div class="aside-stat-label">Sodium per Beyond Burger patty vs. ~75mg in 80/20 ground beef</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">The Celebrity Investor Roster</div>
+      <ul class="aside-list">
+        <li><strong>Leonardo DiCaprio</strong> — environmental activist, disclosed equity. Used to generate sustainability credibility.</li>
+        <li><strong>Snoop Dogg</strong> — cultural validator</li>
+        <li><strong>Bill Gates</strong> — technology and climate credibility</li>
+        <li><strong>Tyson Foods</strong> — strategic investor, later divested before IPO</li>
+        <li>Pattern: celebrity investors used as proof-of-concept validation, not independent endorsement. Disclosed but not contextualised for typical consumer.</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">What Actually Reduces Meat Consumption</div>
+      <ul class="aside-list">
+        <li><strong>Whole legumes (lentils, black beans):</strong> NOVA 1, fraction of the cost, higher fiber, no methylcellulose</li>
+        <li><strong>Tempeh:</strong> Fermented whole soy. Minimal processing. Complete protein. $3–4/package.</li>
+        <li><strong>Mushroom-based options:</strong> Whole portobello, king oyster mushrooms. Genuinely minimally processed.</li>
+        <li>If environmental impact is the driver: reducing beef frequency matters more than substituting ultra-processed plant-based products at premium prices</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Timeline</div>
+      <ul class="aside-list">
+        <li>2009: Founded by Ethan Brown in Los Angeles</li>
+        <li>2019: IPO at $46/share. Peaks at $234 within 2 months.</li>
+        <li>2020: Revenue peaks at ~$406M. Consumer interest begins declining post-pandemic.</li>
+        <li>2022: COO arrest incident. Multiple rounds of layoffs begin.</li>
+        <li>2022–2025: Revenue declines each year. McDonald's McPlant pilot ended.</li>
+        <li>2024: Going-concern notice issued by auditors.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Beyond Meat SEC filings (10-K, 10-Q)</strong>Annual and quarterly reports via SEC EDGAR. Revenue data, going-concern notice, investor disclosures.</div>
+    <div class="source-item"><strong>Nasdaq: BYND historical pricing</strong>IPO $46 (May 2019), peak $234 (July 2019), current ~$4 (February 2026).</div>
+    <div class="source-item"><strong>Heller & Keoleian, Science of the Total Environment, 2021</strong>University of Michigan lifecycle analysis. Environmental comparison vs. US beef. Commissioned by Beyond Meat.</div>
+    <div class="source-item"><strong>Future Foods meta-analysis, 2023</strong>Environmental advantage of plant-based meat narrows vs. chicken/pork; land use questions for pea protein scaling.</div>
+    <div class="source-item"><strong>Chiu et al., American Journal of Clinical Nutrition, 2022</strong>No significant cardiovascular risk marker difference between Beyond Meat and lean beef consumption in controlled trial.</div>
+    <div class="source-item"><strong>USDA FoodData Central</strong>Beyond Burger full nutrition facts. Sodium, protein, fat comparison to 80/20 ground beef patty.</div>
+    <div class="source-item"><strong>NOVA Food Classification System</strong>Monteiro et al. Ultra-processed food (NOVA 4) classification for Beyond Burger based on ingredient list.</div>
+    <div class="source-item"><strong>Beyond Meat Q3 2024 Earnings / Going-Concern Notice</strong>Auditor substantial doubt designation regarding ability to continue as going concern.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#d3b6b7baa7bca1bab2bf93a7a1b2b0b6b7fdb0bcbef3f5bebab7b7bca7e8f3efb2f3bba1b6b5ee" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="492c2d203d263b202825093d3b282a2c2d672a2624">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{color:#C9A84C;text-decoration:none}
+.traced-lega

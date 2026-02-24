@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheerios — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--accent-dim:rgba(201,168,76,0.12);--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(212,168,75,0.08);border-bottom:1px solid rgba(212,168,75,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;font-weight:400;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .dose-table{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .dose-table-header{background:var(--surface-2);display:grid;grid-template-columns:2fr 1.2fr 1.8fr;border-bottom:1px solid var(--border);}
+  .dose-row{display:grid;grid-template-columns:2fr 1.2fr 1.8fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.dose-row:last-child{border-bottom:none;}.dose-row:hover{background:var(--surface-2);}
+  .dose-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.dose-cell:last-child{border-right:none;}
+  .dose-table-header .dose-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .dose-cell.highlight{color:var(--red);}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}
+  .aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}
+  .aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}.dose-table,.dose-table-header,.dose-row{display:block;}.dose-cell{border-right:none;border-bottom:1px solid var(--border);}dose-cell:last-child{border-bottom:none;}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="site-nav"><a href="#">Database</a><a href="#">Methodology</a><a href="traced-deep-dives.html">Deep Dives</a><a href="#">About</a></nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">Note</span>
+  <span class="alert-text"><strong>Parent connection:</strong> General Mills also owns Annie's Homegrown. Consumers who buy Annie's specifically to avoid companies like General Mills are purchasing a General Mills product.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Health Claim Gap</span></div>
+    <h1 class="product-name">Cheerios</h1>
+    <p class="product-sub">General Mills,<br>"May Help Lower Cholesterol"</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      The red heart on a Cheerios box is one of the most effective pieces of health marketing in American food history. The underlying science is real: oat beta-glucan at <strong>3 grams per day has been shown to modestly reduce LDL cholesterol</strong>. What the box doesn't tell you is the math. Achieving that 3g dose requires eating <strong>1.5 cups of Cheerios twice a day, every day</strong> — breakfast and dinner, consistently. Almost no consumer does this. For Honey Nut Cheerios — the #1 selling cereal in America by revenue — the dose math becomes actively contradictory: <strong>four bowls a day would be required</strong> to approach the therapeutic beta-glucan threshold, delivering 48 grams of added sugar in the process. The FDA issued a formal Warning Letter to General Mills in 2009 stating that Cheerios' cholesterol marketing effectively classified the product as an unapproved drug. General Mills modified its language and continued. The brand's parent company, General Mills, also owns Annie's Homegrown — the organic brand many consumers choose specifically as an ethical alternative.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header"><span class="scorecard-title">Transparency Score</span><div class="score-summary"><span class="score-count red">2 ●</span><span class="score-count yellow">4 ●</span><span class="score-count green">1 ●</span></div></div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+      </div>
+      <div class="scorecard-footer"><div class="scorecard-footer-label">Last reviewed</div><div class="scorecard-footer-value">February 2026 · Sources below</div></div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Cheerios is owned by General Mills (NYSE: GIS), a publicly traded food conglomerate with a ~$34 billion market cap. The General Mills portfolio includes Cheerios, Honey Nut Cheerios, Lucky Charms, Cocoa Puffs, Pillsbury, Betty Crocker, Haagen-Dazs, Yoplait, Nature Valley — and, acquired in 2014 for $820 million, <strong>Annie's Homegrown</strong>.</p>
+        <p>The Annie's acquisition is the defining ownership story for Traced's purposes. Annie's was founded on an explicit mission to provide organic, natural alternatives to conventional CPG. General Mills acquired it specifically to capture the premium, values-conscious consumer who was actively avoiding companies like General Mills. A consumer who buys Annie's mac and cheese to avoid supporting General Mills' conventional business is, in fact, contributing revenue to General Mills. This is disclosed on Annie's packaging — in small print, not prominently — and is not the framing most consumers encounter at point of purchase.</p>
+        <p>General Mills is a public company beholden to quarterly earnings. Its institutional incentive is shelf velocity and margin optimization, not longitudinal nutritional improvement.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Cheerios does not employ influencer equity schemes or celebrity endorsements. The marketing is traditional broadcast CPG: television, grocery placement, and decades of visual identity built around the red heart symbol. There is no investor-endorser conflict in the AG1 mold.</p>
+        <p>The yellow score reflects that the marketing narrative — heart health, family, wholesome breakfast — is built on science that is real but applied at a dose the marketing obscures. The consumer belief that eating Cheerios regularly is meaningfully cardioprotective is a product of this sustained messaging, and it is not well-supported at typical consumption patterns.</p>
+        <p>Honey Nut Cheerios carries the same red heart and health halo as original Cheerios, yet provides 0.75g beta-glucan per serving (one-quarter the therapeutic dose) and 12 grams of added sugar. The identical health positioning applied to a product with fundamentally different nutritional properties is the marketing failure — not a paid conflict of interest, but a willingness to extend health claims across the portfolio beyond what the evidence supports.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Cheerios is a single retail purchase at $4–6 per box. No subscription, no DTC funnel, no auto-renewal. You buy it, eat it, decide whether to buy it again. The revenue model imposes no lock-in and creates no structural pressure on the consumer toward continued purchase beyond ordinary brand preference. This is as clean as a mass-market food product gets.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Original Cheerios: Whole Grain Oats, Modified Corn Starch, Sugar, Oat Bran, Salt, Tripotassium Phosphate, Wheat Starch, Vitamin E (mixed tocopherols). A relatively clean formulation by mass-market cereal standards — no artificial dyes, no artificial flavors, no high-fructose corn syrup. NOVA Class 4 due to modified corn starch and the vitamin spray, but not dramatically adulterated.</p>
+        <p>Honey Nut Cheerios: Whole Grain Oats, Sugar, Oat Bran, Modified Corn Starch, Honey, Brown Sugar Syrup, Salt, Tripotassium Phosphate, Canola and/or Rice Bran Oil, Natural Almond Flavor, Vitamin E. The 12g added sugar per serving, combined with the drastically reduced beta-glucan content, creates a product that directly contradicts its heart health positioning.</p>
+        <p>The ingredient concern is not severe adulteration. It is that the two products are treated as nutritional equivalents in the marketing when their functional ingredient profiles are meaningfully different.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>The beta-glucan science is real. In 1997, the FDA authorized a health claim for diets that include at least 3 grams of soluble fiber daily from whole oat foods, based on robust peer-reviewed literature showing modest LDL reduction. This is legitimate nutrition science, not fabricated credibility.</p>
+        <p>The yellow score reflects that the science exists but is applied selectively. Clinical studies used controlled 3g/day doses. A single serving of Cheerios provides 1.5g — half the studied threshold. The marketing does not communicate that the cardioprotective effect requires twice the typical consumption pattern, every day, without exception.</p>
+        <div class="callout yellow">
+          <div class="callout-label">Pattern: The Dose Gap</div>
+          <div class="callout-body">Cheerios and Halo Top represent the same structural pattern in different categories: real underlying science used to authorize marketing claims that only hold at doses the product's serving design doesn't deliver. The science isn't fabricated. The implied equivalence between eating the product and receiving the studied benefit is.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>In May 2009, the FDA issued a formal Warning Letter to General Mills regarding Cheerios' cholesterol claims. The FDA found that the product's label — which stated "you can lower your cholesterol 4% in 6 weeks" — constituted a specific disease treatment claim that classified Cheerios as an unapproved drug under federal law. The 4% claim was based on a clinical study requiring a daily intake that consumers were not clearly informed of.</p>
+        <p>General Mills modified its labeling. The current packaging uses hedged FDA-compliant language. The red heart symbol, the "heart healthy" brand identity, and the general consumer belief that Cheerios is meaningfully cardioprotective remained intact throughout.</p>
+
+        <div class="dose-table">
+          <div class="dose-table-header">
+            <div class="dose-cell">Product</div>
+            <div class="dose-cell">Beta-Glucan / Serving</div>
+            <div class="dose-cell">Bowls/Day for Therapeutic Dose</div>
+          </div>
+          <div class="dose-row">
+            <div class="dose-cell"><strong>Original Cheerios</strong>1.5 cups = 1 serving</div>
+            <div class="dose-cell">1.5g</div>
+            <div class="dose-cell">2 bowls (breakfast + dinner)</div>
+          </div>
+          <div class="dose-row">
+            <div class="dose-cell"><strong>Honey Nut Cheerios</strong>#1 US cereal by revenue</div>
+            <div class="dose-cell">0.75g</div>
+            <div class="dose-cell highlight">4 bowls → 48g added sugar</div>
+          </div>
+          <div class="dose-row">
+            <div class="dose-cell"><strong>Clinical threshold</strong>FDA-authorized level</div>
+            <div class="dose-cell">3g/day</div>
+            <div class="dose-cell" style="color:var(--green)">Peer-reviewed threshold for effect</div>
+          </div>
+        </div>
+
+        <p>The National Consumers League filed a formal FTC complaint in 2009. Multiple class action suits followed, some settled, some dismissed. None resulted in substantive label changes that accurately communicate the dose requirement for the marketed benefit.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>No active food safety controversy. The yellow score reflects a 2018 Environmental Working Group finding of glyphosate residues in tested Cheerios samples. General Mills stated residue levels were below federal safety limits. The FDA did not take enforcement action. General Mills does not proactively publish batch-level pesticide testing results, meaning consumers — particularly parents feeding Cheerios to young children daily — cannot verify lot-specific glyphosate levels independently.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value">$34B</div><div class="aside-stat-label">General Mills market cap (NYSE: GIS)</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">1.5g</div><div class="aside-stat-label">Beta-glucan per serving of original Cheerios. Clinical dose is 3g/day.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">12g</div><div class="aside-stat-label">Added sugar per serving of Honey Nut Cheerios — the #1 US cereal by revenue</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">2009</div><div class="aside-stat-label">Year FDA issued formal Warning Letter over Cheerios cholesterol drug claims</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">The Annie's Connection</div>
+      <ul class="aside-list">
+        <li>General Mills acquired Annie's Homegrown in 2014 for $820M</li>
+        <li>Annie's markets organic alternatives to conventional CPG — including products that compete with General Mills' own lines</li>
+        <li>Annie's packaging discloses the General Mills connection in fine print. The shelf presentation does not.</li>
+        <li>See the Annie's profile for the full recipe reformulation story under General Mills ownership</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">What to Eat Instead</div>
+      <ul class="aside-list">
+        <li><strong>Bob's Red Mill rolled oats:</strong> 2g beta-glucan per half-cup. One bowl = more than a bowl of Cheerios at a fraction of the cost</li>
+        <li><strong>Steel-cut oats:</strong> Higher beta-glucan density, lower glycemic response, no modified corn starch</li>
+        <li>If seeking the LDL benefit specifically, eating actual oatmeal — not oat-based cereal — is the evidence-consistent approach</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Timeline</div>
+      <ul class="aside-list">
+        <li>1941: Invented by Lester Borchardt at General Mills</li>
+        <li>1997: FDA authorizes oat soluble fiber / heart disease health claim</li>
+        <li>2009: FDA Warning Letter; National Consumers League FTC complaint; class actions filed</li>
+        <li>2014: General Mills acquires Annie's Homegrown for $820M</li>
+        <li>2018: EWG publishes glyphosate residue findings in Cheerios samples</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>FDA Warning Letter to General Mills, May 2009</strong>Cheerios cholesterol claims classified as unapproved drug claims under 21 U.S.C. 321(g).</div>
+    <div class="source-item"><strong>FDA 21 CFR 101.81, 1997</strong>Authorized health claim: oat soluble fiber and coronary heart disease risk reduction.</div>
+    <div class="source-item"><strong>National Consumers League FTC Complaint, 2009</strong>Alleged Cheerios cholesterol marketing violated FTC Act Section 5.</div>
+    <div class="source-item"><strong>General Mills Annual Report 2023</strong>Portfolio overview, Annie's acquisition history, GIS market capitalization data.</div>
+    <div class="source-item"><strong>Environmental Working Group, 2018</strong>"Breakfast With a Dose of Roundup?" — glyphosate findings in oat-based products including Cheerios.</div>
+    <div class="source-item"><strong>USDA FoodData Central</strong>Honey Nut Cheerios sugar content; beta-glucan per serving data.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#f693929f8299849f979ab6828497959392d895999bd6d09b9f92929982cdd6ca97d69e849390cb" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b1d4d5d8c5dec3d8d0ddf1c5c3d0d2d4d59fd2dedc">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{co

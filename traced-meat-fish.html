@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Meat & Fish Counter — What the Label Doesn't Say · Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1612;
+      --muted: #5c5349;
+      --dim: #9c9088;
+      --bg: #f5f1ea;
+      --bg2: #ede8df;
+      --card: #faf7f2;
+      --border: rgba(26,22,18,.09);
+      --border-md: rgba(26,22,18,.15);
+      --shadow-s: 0 2px 10px rgba(26,22,18,.06);
+      --shadow: 0 8px 28px rgba(26,22,18,.10);
+      --accent: #1f7a6a;
+      --accent-dk: #0f5c4e;
+      --red: #8b1a1a;
+      --amber: #a06b10;
+      --serif: 'Playfair Display', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+      --body: 'Source Serif 4', Georgia, serif;
+    }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      font-size: 17px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(245,241,234,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 max(24px, 5vw);
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto;
+      height: 54px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      letter-spacing: .15em; text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted);
+      transition: color .15s;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      padding: 80px max(24px, 5vw) 64px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(139,26,26,.15) 0%, transparent 50%),
+        repeating-linear-gradient(
+          -55deg,
+          transparent, transparent 28px,
+          rgba(255,255,255,.018) 28px, rgba(255,255,255,.018) 29px
+        );
+    }
+    .hero-inner {
+      max-width: 1080px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .hero-kicker {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .22em;
+      text-transform: uppercase; color: rgba(255,255,255,.4);
+      margin-bottom: 18px;
+    }
+    .hero-title {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(40px, 5.5vw, 72px);
+      font-weight: 700; color: #fff;
+      line-height: 1.05; letter-spacing: -.02em;
+      margin-bottom: 20px; max-width: 18ch;
+    }
+    .hero-title em { font-style: normal; color: rgba(255,255,255,.45); }
+    .hero-deck {
+      font-size: clamp(14px, 1.5vw, 17px);
+      color: rgba(255,255,255,.65);
+      max-width: 64ch; line-height: 1.65;
+      margin-bottom: 40px; font-style: italic;
+    }
+    .hero-facts {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .hero-fact {
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .hf-num {
+      font-family: var(--serif); font-size: 34px; font-weight: 700;
+      color: #fff; line-height: 1;
+    }
+    .hf-num.red { color: #e06060; }
+    .hf-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(255,255,255,.4);
+      max-width: 22ch; line-height: 1.4;
+    }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 max(24px, 5vw); }
+    .chapter { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    .chapter:last-of-type { border-bottom: none; }
+
+    /* ── CHAPTER HEADER ── */
+    .ch-num {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 8px;
+    }
+    .ch-title {
+      font-family: var(--serif); font-size: clamp(28px, 3.2vw, 44px);
+      font-weight: 700; line-height: 1.1; letter-spacing: -.015em;
+      margin-bottom: 10px;
+    }
+    .ch-sub {
+      font-size: 16px; color: var(--muted); max-width: 64ch;
+      line-height: 1.65; margin-bottom: 44px;
+      font-style: italic;
+    }
+
+    /* ── FINDING CARDS ── */
+    .findings { display: grid; gap: 0; }
+    .finding {
+      display: grid; grid-template-columns: 80px 1fr;
+      gap: 0; padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .finding:last-child { border-bottom: none; }
+    .finding-marker {
+      display: flex; flex-direction: column;
+      align-items: flex-start; padding-top: 4px;
+    }
+    .finding-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      flex-shrink: 0; margin-bottom: 8px; margin-top: 2px;
+    }
+    .finding-severity {
+      font-family: var(--mono); font-size: 8px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--dim);
+      writing-mode: vertical-rl; transform: rotate(180deg);
+    }
+    .finding-body {}
+    .finding-label {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 6px;
+    }
+    .finding-hed {
+      font-family: var(--serif); font-size: 20px; font-weight: 700;
+      line-height: 1.2; margin-bottom: 10px; letter-spacing: -.01em;
+    }
+    .finding-text {
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+      max-width: 72ch;
+    }
+    .finding-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── CALLOUT BOX ── */
+    .callout {
+      background: var(--bg2);
+      border: 1px solid var(--border-md);
+      border-left: 4px solid var(--red);
+      border-radius: 0 14px 14px 0;
+      padding: 22px 26px; margin: 32px 0;
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+    .callout strong { color: var(--ink); }
+
+    /* ── LABEL DECODER ── */
+    .decoder-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      margin-top: 8px;
+    }
+    .decoder-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px;
+      box-shadow: var(--shadow-s);
+    }
+    .decoder-label-name {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: 10px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .decoder-label-name.green { color: var(--accent); }
+    .decoder-label-name.amber { color: var(--amber); }
+    .decoder-label-name.red { color: var(--red); }
+    .decoder-label-name.neutral { color: var(--muted); }
+    .decoder-what-it-says {
+      font-size: 12px; color: var(--dim); margin-bottom: 6px;
+      font-family: var(--mono); letter-spacing: .06em;
+    }
+    .decoder-what-it-means {
+      font-size: 14px; color: var(--ink); line-height: 1.6;
+    }
+    .decoder-verdict {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 12px; font-style: italic; color: var(--muted);
+    }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+      margin: 36px 0;
+    }
+    .stat-tile {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px 20px; text-align: center;
+      box-shadow: var(--shadow-s);
+    }
+    .stat-n {
+      font-family: var(--serif); font-size: 44px; font-weight: 800;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .stat-n.red { color: var(--red); }
+    .stat-n.amber { color: var(--amber); }
+    .stat-n.green { color: var(--accent); }
+    .stat-l { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+    /* ── SUPPLY CHAIN VISUAL ── */
+    .chain {
+      display: flex; align-items: stretch; gap: 0;
+      margin: 32px 0; overflow-x: auto;
+    }
+    .chain-step {
+      flex: 1; min-width: 120px;
+      background: var(--card); border: 1px solid var(--border);
+      padding: 18px 14px; position: relative;
+      border-right: none;
+    }
+    .chain-step:first-child { border-radius: 14px 0 0 14px; }
+    .chain-step:last-child { border-radius: 0 14px 14px 0; border-right: 1px solid var(--border); }
+    .chain-step.flag { background: rgba(139,26,26,.06); border-color: rgba(139,26,26,.2); }
+    .chain-arrow {
+      position: absolute; right: -14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px; color: var(--dim); z-index: 2;
+      background: var(--bg); padding: 0 2px;
+    }
+    .chain-step:last-child .chain-arrow { display: none; }
+    .chain-num {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 6px;
+    }
+    .chain-name {
+      font-size: 13px; font-weight: 600; color: var(--ink);
+      margin-bottom: 4px; font-family: var(--body);
+    }
+    .chain-note { font-size: 11px; color: var(--muted); line-height: 1.4; }
+    .chain-flag { font-size: 10px; color: var(--red); font-style: italic; margin-top: 4px; }
+
+    /* ── FISH SECTION ── */
+    .species-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+      margin: 28px 0;
+    }
+    .species-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-s);
+    }
+    .species-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+    }
+    .species-name {
+      font-family: var(--serif); font-size: 17px; font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .species-tag {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    .species-body { padding: 16px 18px; }
+    .species-claim {
+      font-size: 12px; color: var(--dim); margin-bottom: 5px;
+      font-family: var(--mono); letter-spacing: .06em;
+    }
+    .species-reality {
+      font-size: 13px; color: var(--ink); line-height: 1.55; margin-bottom: 10px;
+    }
+    .species-tell {
+      font-size: 12px; color: var(--accent); font-style: italic;
+    }
+
+    /* ── ALTERNATIVES SECTION ── */
+    .alt-cta {
+      background: linear-gradient(135deg, rgba(31,122,106,.1), rgba(181,135,42,.07));
+      border: 1.5px solid rgba(31,122,106,.2);
+      border-radius: 22px; padding: 44px 48px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 32px; flex-wrap: wrap; margin: 56px 0;
+    }
+    .alt-cta-left {}
+    .alt-eyebrow {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 10px;
+    }
+    .alt-hed {
+      font-family: var(--serif); font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 700; letter-spacing: -.01em; margin-bottom: 12px;
+      line-height: 1.15;
+    }
+    .alt-sub {
+      font-size: 15px; color: var(--muted); max-width: 52ch; line-height: 1.6;
+    }
+    .alt-cta-right {
+      display: flex; flex-direction: column; gap: 12px;
+      min-width: 200px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px; border-radius: 12px;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
+      transition: all .15s; text-align: center; justify-content: center;
+    }
+    .btn-p { background: var(--accent-dk); color: #fff; box-shadow: 0 8px 22px rgba(15,92,78,.25); }
+    .btn-p:hover { background: var(--accent); }
+    .btn-s { background: var(--card); color: var(--ink); border: 1px solid var(--border); box-shadow: var(--shadow-s); }
+    .btn-s:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── QUESTIONS TO ASK ── */
+    .questions { display: grid; gap: 12px; margin-top: 8px; }
+    .q-row {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 12px;
+    }
+    .q-icon { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+    .q-text { font-size: 14px; color: var(--ink); line-height: 1.55; }
+    .q-text strong { color: var(--accent); font-weight: 600; }
+
+    /* ── FOOTER ── */
+    .page-cta {
+      background: var(--ink); padding: 48px max(24px, 5vw);
+      text-align: center;
+    }
+    .page-cta-inner { max-width: 600px; margin: 0 auto; }
+    .page-cta h2 {
+      font-family: var(--serif); font-size: 28px; color: #fff;
+      font-weight: 700; margin-bottom: 10px;
+    }
+    .page-cta p { font-size: 15px; color: rgba(255,255,255,.55); margin-bottom: 28px; }
+    .page-footer {
+      text-align: center; padding: 24px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--dim);
+    }
+
+    @media (max-width: 760px) {
+      .finding { grid-template-columns: 40px 1fr; }
+      .decoder-grid { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+      .species-grid { grid-template-columns: 1fr; }
+      .alt-cta { flex-direction: column; }
+      .chain { flex-direction: column; }
+      .chain-step { border-right: 1px solid var(--border); border-bottom: none; }
+      .chain-step:first-child { border-radius: 14px 14px 0 0; }
+      .chain-step:last-child { border-radius: 0 0 14px 14px; }
+      .chain-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="traced-homepage-v5.html" class="nav-logo">Traced<span>●</span></a>
+    <a href="traced-homepage-v5.html#stories" class="nav-back">← Investigations</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">Investigation · Meat & Seafood</div>
+    <h1 class="hero-title">The Counter <em>Doesn't</em> Know Where It Came From</h1>
+    <p class="hero-deck">
+      Grocery store meat and fish labeling has three overlapping problems: origin claims that mean less than they sound, quality terms with no legal definition, and a global supply chain so fragmented that even the retailer often can't trace it.
+    </p>
+    <div class="hero-facts">
+      <div class="hero-fact">
+        <span class="hf-num red">43%</span>
+        <span class="hf-label">of salmon samples mislabeled in Oceana study — most sold as "wild" were farmed Atlantic</span>
+      </div>
+      <div class="hero-fact">
+        <span class="hf-num red">2016</span>
+        <span class="hf-label">year Congress repealed mandatory country-of-origin labeling for beef and pork</span>
+      </div>
+      <div class="hero-fact">
+        <span class="hf-num red">2016</span>
+        <span class="hf-label">year USDA withdrew its official "grass-fed" marketing standard, leaving a gap</span>
+      </div>
+      <div class="hero-fact">
+        <span class="hf-num">Jan 2026</span>
+        <span class="hf-label">"Product of USA" rule tightened — but still voluntary. No label required without the claim.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAPTER 1: ORIGIN -->
+<div class="wrap">
+<section class="chapter">
+  <div class="ch-num">Chapter 01 · Origin</div>
+  <h2 class="ch-title">Where the Meat Actually Came From</h2>
+  <p class="ch-sub">The "Product of USA" label was the most exploited loophole in American food labeling for nearly a decade. Here's exactly what it meant — and what it still doesn't tell you.</p>
+
+  <div class="findings">
+    <div class="finding">
+      <div class="finding-marker">
+        <div class="finding-dot" style="background:var(--red)"></div>
+        <span class="finding-severity">Critical</span>
+      </div>
+      <div class="finding-body">
+        <div class="finding-label">The Loophole · 2016–2025</div>
+        <h3 class="finding-hed">Brazilian beef could legally say "Product of USA"</h3>
+        <p class="finding-text">
+          In 2015, Congress repealed mandatory country-of-origin labeling (COOL) for beef and pork after Canada and Mexico won a WTO dispute. What followed was a decade-long loophole: <strong>meat from animals born, raised, and slaughtered entirely abroad could be labeled "Product of USA" as long as it passed through a USDA-inspected plant for repackaging</strong>. Unwrapping and rewrapping a box of Brazilian beef was legally sufficient. Major meatpacking corporations — many foreign-owned — used this extensively to market imported product at domestic price premiums.
+        </p>
+        <div class="callout">
+          <strong>The specific example:</strong> In 2017, the USDA temporarily banned imports of Brazilian processed beef after 11% of tested shipments were rejected for "public health concerns and sanitary conditions" — the normal rejection rate is under 1%. The ban was lifted in 2020. Imports surged 500% in the two years following the lift. During this entire period, imported Brazilian beef could legally be labeled "Product of USA."
+        </div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-marker">
+        <div class="finding-dot" style="background:var(--amber)"></div>
+        <span class="finding-severity">Current</span>
+      </div>
+      <div class="finding-body">
+        <div class="finding-label">The Fix · Effective January 1, 2026</div>
+        <h3 class="finding-hed">The rule tightened — but it's still voluntary</h3>
+        <p class="finding-text">
+          In March 2024, the USDA finalized a new rule: "Product of USA" now requires animals to be born, raised, slaughtered, <em>and</em> processed in the United States. This took effect January 1, 2026. It closes the repackaging loophole. <strong>But the label remains voluntary.</strong> Producers aren't required to tell you where their meat came from at all — they only need to meet the standard if they choose to use the claim. Most grocery store beef and pork carries no country-of-origin information whatsoever, and is not legally required to.
+        </p>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-marker">
+        <div class="finding-dot" style="background:var(--amber)"></div>
+        <span class="finding-severity">Structural</span>
+      </div>
+      <div class="finding-body">
+        <div class="finding-label">The Concentration Problem</div>
+        <h3 class="finding-hed">Four companies process most of America's beef</h3>
+        <p class="finding-text">
+          JBS (Brazilian), Tyson Foods, Cargill, and National Beef process approximately <strong>85% of all U.S. beef</strong>. JBS — the largest — is headquartered in São Paulo and has faced federal bribery investigations, food safety violations, and antitrust scrutiny. When your steak came from a large grocery chain with no origin label, the odds are high it passed through one of these four facilities. The butcher counter aesthetic at the store does not reflect the actual supply chain upstream.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin:44px 0 20px;letter-spacing:-.01em;">How the supply chain actually works</h3>
+  <div class="chain">
+    <div class="chain-step">
+      <div class="chain-num">Step 1</div>
+      <div class="chain-name">Ranch / Farm</div>
+      <div class="chain-note">Cattle raised — may be in US, Canada, Mexico, Brazil, Australia</div>
+      <div class="chain-arrow">→</div>
+    </div>
+    <div class="chain-step flag">
+      <div class="chain-num">Step 2</div>
+      <div class="chain-name">Feedlot</div>
+      <div class="chain-note">Grain-finished for 90–120 days</div>
+      <div class="chain-flag">⚑ No label required</div>
+      <div class="chain-arrow">→</div>
+    </div>
+    <div class="chain-step flag">
+      <div class="chain-num">Step 3</div>
+      <div class="chain-name">Slaughter / Processing</div>
+      <div class="chain-note">Often one of four major processors</div>
+      <div class="chain-flag">⚑ Country of origin lost here</div>
+      <div class="chain-arrow">→</div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-num">Step 4</div>
+      <div class="chain-name">Distribution</div>
+      <div class="chain-note">Cold chain to regional DCs</div>
+      <div class="chain-arrow">→</div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-num">Step 5</div>
+      <div class="chain-name">Grocery Case</div>
+      <div class="chain-note">"Fresh" label applied at store; may have been vacuum-packed weeks prior</div>
+      <div class="chain-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 2: LABELS -->
+<section class="chapter">
+  <div class="ch-num">Chapter 02 · Labels</div>
+  <h2 class="ch-title">What the Label Claims vs. What It Means</h2>
+  <p class="ch-sub">Several widely-used terms on meat packaging have no federal legal definition, are self-certified by producers, or have definitions that diverge significantly from consumer expectations.</p>
+
+  <div class="stat-strip">
+    <div class="stat-tile">
+      <div class="stat-n red">0</div>
+      <div class="stat-l">federal inspectors verify most "grass-fed" claims — producer self-certifies</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-n amber">2016</div>
+      <div class="stat-l">USDA withdrew its official grass-fed marketing standard, leaving no single national benchmark</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-n green">100%</div>
+      <div class="stat-l">of fresh meat qualifies as "natural" under USDA rules — the label means almost nothing</div>
+    </div>
+  </div>
+
+  <div class="decoder-grid">
+    <div class="decoder-card">
+      <div class="decoder-label-name red">"Natural"</div>
+      <div class="decoder-what-it-says">Implies: minimally processed, wholesome</div>
+      <div class="decoder-what-it-means">USDA definition: no artificial flavors, colors, or chemical preservatives, and minimally processed (ground, for example). Under this definition, virtually all fresh meat qualifies. A conventionally raised feedlot steer given growth hormones and antibiotics can produce beef labeled "natural."</div>
+      <div class="decoder-verdict">Tells you nothing about how the animal was raised, what it was fed, or whether it received antibiotics or hormones.</div>
+    </div>
+    <div class="decoder-card">
+      <div class="decoder-label-name amber">"Grass-Fed"</div>
+      <div class="decoder-what-it-says">Implies: pasture-raised on grass for life</div>
+      <div class="decoder-what-it-means">USDA (FSIS) guidance: animal consumed solely forage after weaning. But in 2016, USDA's AMS withdrew its official grass-fed marketing standard entirely. Claims are now self-certified by producers with documentation on file — there is no mandatory third-party audit. More critically: "grass-fed" does not mean "grass-finished." An animal can be grass-fed but grain-finished in a feedlot for its last 4–6 months.</div>
+      <div class="decoder-verdict">Only meaningful with third-party certification (American Grassfed, Animal Welfare Approved). "Grass-fed" alone is not audited at farm level.</div>
+    </div>
+    <div class="decoder-card">
+      <div class="decoder-label-name amber">"Grass-Finished"</div>
+      <div class="decoder-what-it-says">Implies: ate only grass for entire life</div>
+      <div class="decoder-what-it-means">More rigorous than "grass-fed" — means the animal ate only grass and forage for its entire life after weaning, and was never put into a feedlot. However, this term also lacks a USDA-enforced standard. A producer can use it with supporting documentation but without mandatory on-farm verification.</div>
+      <div class="decoder-verdict">More meaningful than "grass-fed" but still best verified via third-party certification from American Grassfed Association or similar.</div>
+    </div>
+    <div class="decoder-card">
+      <div class="decoder-label-name red">"Angus" / "Black Angus"</div>
+      <div class="decoder-what-it-says">Implies: premium breed, superior quality</div>
+      <div class="decoder-what-it-means">USDA requires beef to have at least 51% black pigmentation to carry most "Angus" program labels. Breed identity is not independently verified at the level most consumers assume. The Certified Angus Beef® program (a nonprofit) has stricter specifications including marbling, maturity, and size requirements — but generic "Angus" claims at grocery stores are not the same as CAB certification and carry no audited standard.</div>
+      <div class="decoder-verdict">The word "Angus" on a grocery package is primarily a marketing signal. Only "Certified Angus Beef®" with the logo reflects a verified program standard.</div>
+    </div>
+    <div class="decoder-card">
+      <div class="decoder-label-name green">"USDA Prime"</div>
+      <div class="decoder-what-it-says">Implies: highest quality, heavily marbled</div>
+      <div class="decoder-what-it-means">This is a real, graded standard. USDA Prime reflects abundant marbling and comes from younger cattle. Only about 2–4% of all beef qualifies. However, grading is voluntary — most commodity beef is ungraded. And high marbling reflects a feedlot, grain-finished diet, not pasture-raised quality. Prime and grass-finished are typically mutually exclusive: the leaner profile of grass-finished beef rarely achieves Prime grades.</div>
+      <div class="decoder-verdict">Meaningful for marbling/tenderness. Does not indicate origin, diet quality, or welfare standards — and is typically associated with grain-finishing.</div>
+    </div>
+    <div class="decoder-card">
+      <div class="decoder-label-name red">"Fresh" (at the fish counter)</div>
+      <div class="decoder-what-it-says">Implies: never frozen, caught recently</div>
+      <div class="decoder-what-it-means">FDA does not define "fresh" in a way that prevents previously-frozen fish from being thawed and displayed as fresh. Fish can be frozen on a vessel at sea, shipped frozen to a US port, thawed at a processor, and placed in a grocery display case labeled "fresh." "Fresh, never frozen" means something specific — "fresh" alone often does not. Additionally, "previously frozen" disclosure in small print is legally required, but placement and sizing are not strictly regulated.</div>
+      <div class="decoder-verdict">Ask at the counter: "Has this been previously frozen?" Staff are required to know. "Fresh, never frozen" on the package is the only reliable label claim.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3: SEAFOOD -->
+<section class="chapter">
+  <div class="ch-num">Chapter 03 · Seafood</div>
+  <h2 class="ch-title">The Fish Counter Is Worse</h2>
+  <p class="ch-sub">Seafood has the most opaque supply chain of any protein category — governed by two different federal agencies under two different sets of rules, with documented mislabeling rates up to 43% for certain species.</p>
+
+  <div class="stat-strip">
+    <div class="stat-tile">
+      <div class="stat-n red">43%</div>
+      <div class="stat-l">salmon samples mislabeled in Oceana study — most "wild" was farmed Atlantic salmon</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-n red">30%</div>
+      <div class="stat-l">"sockeye salmon" samples in NY AG investigation were actually farmed Atlantic salmon</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-n amber">$10/kg</div>
+      <div class="stat-l">price premium for "wild-caught" Pacific salmon over farmed Atlantic — the financial incentive for fraud</div>
+    </div>
+  </div>
+
+  <div class="findings">
+    <div class="finding">
+      <div class="finding-marker">
+        <div class="finding-dot" style="background:var(--red)"></div>
+        <span class="finding-severity">Documented</span>
+      </div>
+      <div class="finding-body">
+        <div class="finding-label">Farmed vs. Wild · The Core Fraud</div>
+        <h3 class="finding-hed">Farmed Atlantic salmon is routinely sold as wild-caught Pacific salmon</h3>
+        <p class="finding-text">
+          In the US, wild Atlantic salmon is commercially extinct — all Atlantic salmon at your grocery store is farmed. All wild-caught salmon is Pacific (sockeye, king/chinook, coho, pink, chum). This makes substitution easy to execute: a fish counter employee labels farmed Atlantic salmon as "wild" or "Pacific" and charges the premium price. <strong>Oceana's 2015 study found 43% of salmon samples mislabeled; 69% of those mislabeled samples were farmed Atlantic sold as wild-caught.</strong> A 2018 New York AG investigation found 30% of "sockeye salmon" samples were farmed Atlantic. Even a 2024 Seattle study, a decade after Washington State passed legislation specifically against salmon fraud, still found 13.5% mislabeling at grocery stores.
+        </p>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-marker">
+        <div class="finding-dot" style="background:var(--amber)"></div>
+        <span class="finding-severity">Structural</span>
+      </div>
+      <div class="finding-body">
+        <div class="finding-label">The Supply Chain Problem</div>
+        <h3 class="finding-hed">Wild Alaska salmon is exported to China, processed, and sent back — sometimes mislabeled</h3>
+        <p class="finding-text">
+          The US exports vast quantities of wild Alaskan salmon to China for processing (filleting, portioning, packaging) because labor costs are dramatically lower. In 2013, the US exported approximately 85,000 metric tons of wild salmon to China — but only about 37,000 metric tons returned. <strong>What happened to the rest is, in the words of Oceana, "anyone's guess."</strong> Once your fish enters the global seafood supply chain, its species identity and origin documentation can be altered at multiple processing points before it returns to a US retail display labeled "wild Pacific salmon."
+        </p>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-marker">
+        <div class="finding-dot" style="background:var(--amber)"></div>
+        <span class="finding-severity">Governance</span>
+      </div>
+      <div class="finding-body">
+        <div class="finding-label">The Regulatory Gap</div>
+        <h3 class="finding-hed">Two agencies, two different definitions of "processed" — neither closes the gap</h3>
+        <p class="finding-text">
+          Seafood origin labeling is split between USDA and US Customs and Border Protection, under different rules. Both require country-of-origin disclosure — but neither requires disclosure of <em>where it was caught</em> or <em>whether it is farmed or wild</em>, unless the product has been "transformed" (Customs) or "processed" (USDA) — and those two agencies define those terms differently. The result: a fish can change hands, cross multiple borders, and arrive at your counter with a country-of-origin label that reflects where it was last processed, not where it was caught.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:20px;font-weight:700;margin:44px 0 20px;letter-spacing:-.01em;">Species most commonly mislabeled at US grocery stores</h3>
+  <div class="species-grid">
+    <div class="species-card">
+      <div class="species-header" style="border-left:4px solid var(--red)">
+        <div class="species-name">Salmon</div>
+        <div class="species-tag">Highest documented fraud rate</div>
+      </div>
+      <div class="species-body">
+        <div class="species-claim">Label: "Wild," "Pacific," "Alaskan"</div>
+        <div class="species-reality">Most commonly substituted with farmed Atlantic salmon. Oceana found 43% mislabeling rate in winter sampling when wild Pacific supply is low. Wild and farmed look nearly identical to the untrained eye after filleting.</div>
+        <div class="species-tell">Ask for: species name (sockeye, king, coho) + "wild-caught" + season. Off-season "fresh wild salmon" is a red flag.</div>
+      </div>
+    </div>
+    <div class="species-card">
+      <div class="species-header" style="border-left:4px solid var(--amber)">
+        <div class="species-name">Red Snapper</div>
+        <div class="species-tag">Frequently substituted</div>
+      </div>
+      <div class="species-body">
+        <div class="species-claim">Label: "Red Snapper" or "Snapper"</div>
+        <div class="species-reality">Oceana's national seafood fraud study found red snapper was one of the most frequently substituted fish — over 87% of samples nationally were not genuine red snapper. Often replaced with other, cheaper snapper species or unrelated fish.</div>
+        <div class="species-tell">Ask for: FDA-approved market name. "Snapper" alone is not sufficient — there are 185 species that can be sold as "snapper" under FDA rules.</div>
+      </div>
+    </div>
+    <div class="species-card">
+      <div class="species-header" style="border-left:4px solid var(--amber)">
+        <div class="species-name">Shrimp</div>
+        <div class="species-tag">Origin most commonly misrepresented</div>
+      </div>
+      <div class="species-body">
+        <div class="species-claim">Label: "Wild," "Gulf," "Local"</div>
+        <div class="species-reality">Oceana found over 40% of grocery stores selling misrepresented shrimp. Farmed imported shrimp is frequently labeled "wild" or "Gulf." A 2020 study in North Carolina found 34% of shrimp sold as "local" was actually whiteleg shrimp not even found in NC waters.</div>
+        <div class="species-tell">Ask for: country of origin + wild vs. farmed. "Gulf shrimp" in a grocery context should specify wild-caught and US waters.</div>
+      </div>
+    </div>
+    <div class="species-card">
+      <div class="species-header" style="border-left:4px solid var(--amber)">
+        <div class="species-name">Halibut</div>
+        <div class="species-tag">Species substitution common</div>
+      </div>
+      <div class="species-body">
+        <div class="species-claim">Label: "Pacific Halibut" or "Halibut"</div>
+        <div class="species-reality">Pacific halibut is a premium fish commanding high prices. It is commonly substituted with less expensive flounder, other flatfish, or farmed turbot — all of which have similar white flesh and flaky texture but different nutritional profiles and sustainability ratings.</div>
+        <div class="species-tell">Ask for: Alaska or Pacific origin certification. Pacific halibut season runs March–November; year-round "fresh" halibut is suspicious.</div>
+      </div>
+    </div>
+    <div class="species-card">
+      <div class="species-header" style="border-left:4px solid var(--dim)">
+        <div class="species-name">Tuna</div>
+        <div class="species-tag">Less fraud than commonly believed</div>
+      </div>
+      <div class="species-body">
+        <div class="species-claim">Label: "Ahi," "Yellowfin," "Bluefin"</div>
+        <div class="species-reality">Oceana's research found tuna mislabeling relatively rare at retail (compared to sushi restaurants, where escolar is commonly sold as "white tuna"). In grocery stores, pre-packaged tuna tends to be accurately labeled. Fresh-cut "sashimi-grade" tuna at counters carries more risk.</div>
+        <div class="species-tell">At restaurants: "white tuna" as sushi is almost always escolar, not albacore. At grocery counter: pre-packaged is more reliable than fresh-cut.</div>
+      </div>
+    </div>
+    <div class="species-card">
+      <div class="species-header" style="border-left:4px solid var(--accent)">
+        <div class="species-name">Farmed Salmon</div>
+        <div class="species-tag">Correctly labeled — but still worth knowing</div>
+      </div>
+      <div class="species-body">
+        <div class="species-claim">Label: "Atlantic Salmon" or "Farmed"</div>
+        <div class="species-reality">When correctly labeled, farmed Atlantic salmon is what it says it is. The considerations: farmed salmon's color comes from synthetic astaxanthin (a carotenoid additive) rather than natural diet; omega-3 content varies significantly by farm; and antibiotic use and environmental impact vary by country of origin (Norway has stricter standards than Chile).</div>
+        <div class="species-tell">Look for: Norwegian, Faroe Islands, or Scottish origin for generally higher farming standards. Chilean farmed salmon has historically had higher antibiotic use rates.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 4: WHAT TO DO -->
+<section class="chapter">
+  <div class="ch-num">Chapter 04 · What to Do</div>
+  <h2 class="ch-title">Questions That Get Real Answers</h2>
+  <p class="ch-sub">A butcher or fishmonger who can't answer these questions doesn't have the supply chain visibility to back up their claims. A good one will know immediately.</p>
+
+  <div class="questions">
+    <div class="q-row">
+      <div class="q-icon">🥩</div>
+      <div class="q-text"><strong>"Where was this animal raised?"</strong> — Not "where was it processed." Where did it live. A good butcher sources from named farms or ranches and can tell you state, often county. A grocery counter often can't answer this.</div>
+    </div>
+    <div class="q-row">
+      <div class="q-icon">🌿</div>
+      <div class="q-text"><strong>"Is this grass-finished, or just grass-fed?"</strong> — The distinction matters. Grass-fed can include grain-finishing in a feedlot. Grass-finished means no grain at any point. If they don't know the difference, the label isn't being verified.</div>
+    </div>
+    <div class="q-row">
+      <div class="q-icon">🐟</div>
+      <div class="q-text"><strong>"Has this fish been previously frozen?"</strong> — Staff are required to know. "Fresh" does not mean never-frozen. The only reliable claim is "fresh, never frozen." If they aren't sure, assume it was frozen at some point.</div>
+    </div>
+    <div class="q-row">
+      <div class="q-icon">🎣</div>
+      <div class="q-text"><strong>"What species is this, specifically — and is it wild or farmed?"</strong> — "Salmon" is not a sufficient answer. Ask for the species: sockeye, king, coho. Ask: wild-caught or farmed Atlantic. Vague answers correlate with higher mislabeling rates.</div>
+    </div>
+    <div class="q-row">
+      <div class="q-icon">📍</div>
+      <div class="q-text"><strong>"Where was this caught or raised?"</strong> — For fish: Alaska, Pacific Coast, Atlantic, imported? For beef: which ranch, which state? The more specific, the better the supply chain visibility. If the answer is "I'm not sure" — the chain is long and opaque.</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ALTERNATIVES CTA -->
+<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0 max(24px,5vw)">
+  <div class="wrap">
+    <div class="alt-cta">
+      <div class="alt-cta-left">
+        <div class="alt-eyebrow">The Alternative</div>
+        <h2 class="alt-hed">A butcher who can answer all of these questions already exists.</h2>
+        <p class="alt-sub">
+          Independent butchers and fishmongers typically source from a small number of farms and vessels they know by name. The supply chain is short enough that traceability is built in — not marketed onto a label. San Francisco has several.
+        </p>
+      </div>
+      <div class="alt-cta-right">
+        <a href="traced-homepage-v5.html#local" class="btn btn-p">Find Local Butchers & Fishmongers →</a>
+        <a href="traced-homepage-v5.html#stories" class="btn btn-s">← Back to Investigations</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPECIFIC VENDORS -->
+<div class="wrap">
+  <div style="padding:56px 0 72px;">
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;">San Francisco · Verified vendors</div>
+    <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;">Three places where the counter knows the answer</h2>
+    <p style="font-size:15px;color:var(--muted);max-width:60ch;margin-bottom:32px;line-height:1.6;">These vendors were verified for sourcing transparency — not just for being independent, but for having the supply chain knowledge to answer the questions above.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow-s);">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Butcher · Outer Sunset</div>
+        <div style="font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:8px;">Guerra Quality Meats</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;">490 Taraval St. Family-owned since 1954. Full-service butcher with house-made deli. No chain ownership — Robert and John Guerra, second generation.</div>
+        <a href="https://www.guerrameats.com" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">guerrameats.com →</a>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow-s);">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Butcher · Noe Valley</div>
+        <div style="font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:8px;">Baron's Quality Meats</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;">1706 Church St. Founded 2016 by Niman Ranch alum David Samiljan. No hormones, no antibiotics, humanely raised — sourcing posted and verifiable online.</div>
+        <a href="https://www.baronsmeats.com" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">baronsmeats.com →</a>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow-s);">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Seafood · Noe Valley</div>
+        <div style="font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:8px;">Billingsgate</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;">3859 24th St. Founded 2020 by chefs with Four Star Seafood background. Direct relationships with California fishermen. Traceable by design — they know the boat.</div>
+        <a href="https://www.billingsgatesf.com" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">billingsgatesf.com →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-cta">
+  <div class="page-cta-inner">
+    <h2>Keep tracing.</h2>
+    <p>This is one investigation. There are twenty more — covering supplements, protein bars, chocolate, and the conglomerates behind brands you think are independent.</p>
+    <a href="traced-homepage-v5.html#stories" class="btn btn-p" style="margin:0 auto;display:inline-flex;">← Back to all investigations</a>
+  </div>
+</div>
+
+<div class="page-footer">
+  Traced — An independent food transparency project · Sources: USDA FSIS, Oceana seafood fraud reports, Farm Action, FDA guidance, NY AG investigation, PNAS seafood fraud study (2023), FAO seafood fraud report (2026)
+</div>
+
+</body>
+</html>

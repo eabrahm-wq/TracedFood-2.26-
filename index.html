@@ -1481,8 +1481,9 @@ img{display:block;max-width:100%}
    SCRIPTS
 ═══════════════════════════════════════════ -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+document.addEventListener("DOMContentLoaded", function(){
+
 /* ── Search dropdown ─────────────────────────── */
-document.addEventListener('DOMContentLoaded', function(){
   const input = document.getElementById('heroSearch');
   const dd    = document.getElementById('heroDD');
   if(!input || !dd) return;
@@ -1567,10 +1568,8 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!input.contains(e.target)&&!dd.contains(e.target))
       dd.classList.remove('open');
   });
-});
 
 /* ── NAV search ──────────────────────────────── */
-(function(){
   // If a nav search input exists, share the same routing logic
   const navInput = document.querySelector('.nav-search');
   if(!navInput) return;
@@ -1587,10 +1586,8 @@ document.addEventListener('DOMContentLoaded', function(){
       if(q.includes(k)){window.location.href=href;return;}
     }
   });
-})();
 
 /* ── Local discovery: city + filter ─────────── */
-(function(){
   const cityPills = document.querySelectorAll('.city-pill');
   const fChips    = document.querySelectorAll('.f-chip');
   const cards     = document.querySelectorAll('.v-card');
@@ -1626,6 +1623,9 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   applyFilter();
+
+
+
 
 });
 </script>

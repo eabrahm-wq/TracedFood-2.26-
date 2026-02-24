@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muscle Milk — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .ownership-chain{margin:20px 0 0 36px;position:relative;}
+  .chain-item{display:flex;align-items:flex-start;gap:14px;position:relative;}
+  .chain-item:not(:last-child)::after{content:'';position:absolute;left:10px;top:28px;bottom:-24px;width:1px;background:var(--border-light);}
+  .chain-dot{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .chain-dot.current{background:var(--red-dim);border-color:rgba(217,79,61,0.3);}
+  .chain-dot-inner{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+  .chain-dot.current .chain-dot-inner{background:var(--red);}
+  .chain-content{padding-bottom:28px;flex:1;}
+  .chain-year{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:2px;}
+  .chain-owner{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .chain-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .ingredient-compare{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .ic-header{background:var(--surface-2);display:grid;grid-template-columns:1.4fr 1fr 1fr;border-bottom:1px solid var(--border);}
+  .ic-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.ic-row:last-child{border-bottom:none;}.ic-row:hover{background:var(--surface-2);}
+  .ic-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.ic-cell:last-child{border-right:none;}
+  .ic-header .ic-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .ic-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}.ic-cell.flag{color:var(--red);}.ic-cell.ok{color:var(--green);}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}.ic-header,.ic-row{display:block;}.ic-cell{border-right:none;border-bottom:1px solid var(--border);}.ic-cell:last-child{border-bottom:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="traced-index.html">TRACED <span>/ Food Transparency</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Regulatory History</span>
+  <span class="alert-text"><strong>FDA Warning Letter (2011):</strong> "Muscle Milk" name flagged as misleading — product contains no milk. <strong>FTC (2010):</strong> advertising claims referred for review. <strong>Consumer Reports (2010):</strong> lead, cadmium, and arsenic levels at or above USP limits in tested powder products.</span>
+</div>
+
+<section class="hero">
+  <div>
+    <div class="hero-breadcrumb">
+      <span>Traced</span><span class="sep">/</span>
+      <span class="hero-category">Supplements · Protein Shake</span>
+    </div>
+    <h1 class="product-name">Muscle Milk</h1>
+    <p class="product-sub">RTD Protein Shake & Powder — PepsiCo / Gatorade</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Muscle Milk invented the mainstream protein RTD category in the early 2000s and paid for that invention with years of regulatory friction. The name is misleading — the FDA formally said so in a 2011 warning letter. The protein blend uses <strong>calcium and sodium caseinate alongside milk protein concentrate and whey</strong> — cheaper, slower-digesting sources than the isolates and egg whites that performance-oriented competitors use. In 2010, Consumer Reports found lead, cadmium, arsenic, and mercury in Muscle Milk powder at levels at or above United States Pharmacopeia limits. The FTC and National Advertising Division both reviewed advertising claims in 2009–2010. The brand was acquired by Hormel Foods in 2014 for $450 million, then sold to <strong>PepsiCo in 2019 for $465 million</strong>, where it now operates as a Gatorade subsidiary. PepsiCo reformulated Muscle Milk in 2025 to use ultra-filtered milk, removing artificial flavors and sweeteners. The reformulation is real. The question is whether the brand's regulatory track record and protein source decisions still warrant the premium it charges — particularly next to NSF-certified alternatives on the same shelf.
+    </p>
+  </div>
+  <div class="scorecard">
+    <div class="scorecard-header">
+      <span class="scorecard-title">Transparency Score</span>
+      <div class="score-summary">
+        <span class="score-count red">4🔴</span>
+        <span class="score-count yellow">3🟡</span>
+      </div>
+    </div>
+    <div class="scorecard-rows">
+      <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+    </div>
+    <div class="scorecard-footer">
+      <div class="scorecard-footer-label">Current Owner</div>
+      <div class="scorecard-footer-value">PepsiCo Inc. — acquired from Hormel Foods, April 2019 ($465M). Operates as CytoSport under the Gatorade division.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">01</span>
+        <span class="dim-title">Ownership Structure</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>Muscle Milk has passed through four distinct ownership structures since its founding — each representing a different strategic rationale that had little to do with sports nutrition quality and everything to do with portfolio value extraction.</p>
+        <div class="ownership-chain">
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">1998</div>
+              <div class="chain-owner">CytoSport — Pickett Family</div>
+              <div class="chain-note">Greg and Mike Pickett found CytoSport in Benicia, California. Family-run operation, early distribution partnership with PepsiCo.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2014</div>
+              <div class="chain-owner">Hormel Foods — $450 million</div>
+              <div class="chain-note">Hormel — primarily a meat company — acquires CytoSport to diversify into protein. Strategic mismatch: a pork products company running a sports nutrition brand.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">April 2019</div>
+              <div class="chain-owner">PepsiCo — $465 million (Gatorade division)</div>
+              <div class="chain-note">PepsiCo had been Muscle Milk's distributor for years before acquiring it from Hormel. Now operates as CytoSport under the Gatorade organizational umbrella — alongside Propel and Muscle Milk RTDs.</div>
+            </div>
+          </div>
+        </div>
+        <p>The Gatorade placement is the structural tell. PepsiCo's sports nutrition strategy is to own the "hydration to recovery" shelf sequence: Gatorade (during), Muscle Milk (after). The protein product is a slot in a beverage portfolio strategy, not a standalone nutrition mission. This is the same pattern as Tropicana-as-orange-juice-slot and Fairlife-as-dairy-slot — the brand's nutritional positioning is instrumentalized to serve a corporate distribution and margin objective.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">02</span>
+        <span class="dim-title">Marketing Alignment</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>The "Muscle Milk" name is the original and most persistent marketing problem. The FDA issued a formal warning letter in 2011 stating that calling the product "Muscle Milk" was misleading because it <strong>does not contain milk</strong>. The FTC had previously addressed this in 2010, requiring the label to carry "contains no milk" — but then the FDA noted that simultaneously listing milk-derived ingredients (caseinate, whey, milk protein concentrate) while saying "contains no milk" created a new contradiction, because the product does contain milk-derived ingredients. The brand got caught between two regulators with incompatible remedies.</p>
+        <div class="callout red">
+          <div class="callout-label">The Name Problem</div>
+          <div class="callout-body">A product called "Muscle Milk" that the FDA says is misleading because it contains no milk, but that also carries an allergen warning that it contains milk-derived ingredients. The FTC said add "contains no milk." The FDA said that creates a new contradiction with the allergen statement. The brand has continued under the same name regardless. In Canada, regulators required it be sold as "Muscle Mlk" to avoid consumer confusion with dairy.</div>
+        </div>
+        <p>Beyond the name issue: advertising claims referred to the FTC and National Advertising Division in 2009 alleged that Muscle Milk overstated performance benefits, misrepresented nutrient quantities, and described products as "lean" that contained high levels of added fats and oils. Class action lawsuits alleged that L-glutamine was listed among ingredients but found only in trace amounts. These claims span a decade of marketing misalignment between what was said and what was in the product.</p>
+        <p>PepsiCo's 2025 reformulation — ultra-filtered milk, no artificial flavors or sweeteners — is the most significant product improvement in the brand's history. Whether it represents a genuine realignment or a trend-chasing refresh inside a legacy brand with a documented misrepresentation pattern is a legitimate question.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">03</span>
+        <span class="dim-title">Revenue Model</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>Muscle Milk RTDs retail at approximately $2.50–$3.50 per bottle depending on retailer, comparable to Fairlife Core Power and below the premium tier of David and Momentous. The pricing is not predatory and the product is widely accessible at mass market retailers, convenience stores, and gym vending. PepsiCo's distribution is as wide as any brand in the database.</p>
+        <p>The yellow reflects the disconnect between price point and protein source quality. Consumers paying $3 for a "performance protein" product may not know they are getting a caseinate-and-MPC blend rather than isolate-based protein. The protein is real; the source hierarchy matters for digestion rate and amino acid absorption. That information is not front-of-pack.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">04</span>
+        <span class="dim-title">Ingredient Integrity</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>The protein blend in Muscle Milk's core RTD product has historically centered on <strong>calcium caseinate, sodium caseinate, and milk protein concentrate</strong> — slower-digesting, lower-cost proteins compared to whey protein isolate or egg white. This is not false advertising in the strict sense; caseinates and MPC are legitimate protein sources. But for a brand positioned as a performance recovery product, the protein source hierarchy matters.</p>
+        <div class="ingredient-compare">
+          <div class="ic-header">
+            <div class="ic-cell">Protein Source</div>
+            <div class="ic-cell">Digestion Rate</div>
+            <div class="ic-cell">Relative Cost</div>
+          </div>
+          <div class="ic-row">
+            <div class="ic-cell"><strong>Whey Protein Isolate</strong>Gold standard</div>
+            <div class="ic-cell ok">Fast (MPS peak 1–2hr)</div>
+            <div class="ic-cell">High</div>
+          </div>
+          <div class="ic-row">
+            <div class="ic-cell"><strong>Egg White Protein</strong>RXBAR, Momentous</div>
+            <div class="ic-cell ok">Medium-fast</div>
+            <div class="ic-cell">High</div>
+          </div>
+          <div class="ic-row">
+            <div class="ic-cell"><strong>Milk Protein Concentrate</strong>Muscle Milk (legacy)</div>
+            <div class="ic-cell">Mixed (whey + casein blend)</div>
+            <div class="ic-cell flag">Low–Medium</div>
+          </div>
+          <div class="ic-row">
+            <div class="ic-cell"><strong>Calcium / Sodium Caseinate</strong>Muscle Milk (legacy)</div>
+            <div class="ic-cell">Slow (MPS peak 3–4hr)</div>
+            <div class="ic-cell flag">Low</div>
+          </div>
+        </div>
+        <p>PepsiCo's 2025 reformulation shifts Muscle Milk to use ultra-filtered milk as its protein base — moving toward a Fairlife-style system that concentrates whey and casein more naturally through filtration rather than caseinate addition. This is a genuine improvement. The reformulated product also removes artificial flavors, sweeteners, and added colors, and delivers 26g (Base) and 42g (Pro) protein. If the current formulation reflects the 2025 reformulation, the yellow score is the appropriate current rating — an improvement from legacy, not yet at green benchmark level.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">05</span>
+        <span class="dim-title">Scientific Backing</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>Caseinates and milk protein concentrate are scientifically legitimate protein sources with decades of research. The slower digestion rate of caseinate is not a problem per se — it is a different application (nighttime recovery, sustained release) than fast-digesting whey. The issue is that Muscle Milk's marketing frames the product primarily as post-workout recovery, where fast-digesting protein has the strongest evidence base. The protein science supports the ingredient; it is less well-matched to the specific use case the marketing emphasizes.</p>
+        <p>No independent scientific advisory board, no disclosed research partnerships. Endorsement by athletes (historically Adrian Peterson and others) is paid promotion, not scientific validation. The brand makes no specific clinical outcome claims, which avoids the endorser-as-scientific-validator conflict documented in the AG1 and David profiles.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">06</span>
+        <span class="dim-title">Label Claim Accuracy</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>The documented regulatory history is the clearest record of label claim issues in the supplement category within this database. The red score is grounded in primary source enforcement actions, not inference:</p>
+        <p><strong>FTC, 2009–2010:</strong> National Advertising Division forwarded complaints about advertising claims for possible illegal misrepresentation to the FTC and FDA. FTC closed the case in 2010 after CytoSport agreed to include "contains no milk" on labels and accept advertising concessions.</p>
+        <p><strong>FDA Warning Letter, 2011:</strong> FDA told CytoSport the "Muscle Milk" name was misleading because the product contains no milk, while simultaneously the "contains no milk" statement contradicted the allergen disclosure that the product contains milk-derived ingredients.</p>
+        <p><strong>Class Action — Nutrient Misrepresentation:</strong> Lawsuits alleged that L-glutamine was listed among ingredients but present only in trace amounts, and that products described as "lean" contained high levels of added fats and oils. These claims targeted label-to-product accuracy, not just advertising framing.</p>
+        <p>No equivalent enforcement action exists in the current PepsiCo era. The red score reflects the documented pattern; this dimension will be re-evaluated if the 2025 reformulation establishes a sustained clean regulatory record under new ownership.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">07</span>
+        <span class="dim-title">Safety Transparency</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>In June 2010, Consumer Reports tested 15 protein drinks and found that two Muscle Milk powder products contained heavy metals — lead, cadmium, arsenic, and mercury — at levels at or near the United States Pharmacopeia proposed limits. The Chocolate flavor had all four heavy metals. Average cadmium levels (5.6 μg per three daily servings) exceeded the USP limit of 5 μg/day. Average lead levels (13.5 μg) exceeded the USP limit of 10 μg/day.</p>
+        <div class="callout red">
+          <div class="callout-label">Heavy Metal Findings — Consumer Reports 2010</div>
+          <div class="callout-body"><strong>Muscle Milk Chocolate powder</strong> (three daily servings): Cadmium 5.6 μg (USP limit: 5 μg), Lead 13.5 μg (USP limit: 10 μg), Arsenic 12.2 μg (USP limit: 15 μg), Mercury detected. CytoSport disputed the methodology and cited NSF's own test results as conflicting. The Consumer Reports findings were never resolved by a definitive regulatory determination.</div>
+        </div>
+        <p>CytoSport disputed the findings and pointed to NSF International testing it claimed showed different results. The FDA did not issue a formal action on the heavy metal findings. The episode was not resolved by a definitive third-party determination — it remains a conflicting claims situation. Heavy metals in protein powders are an industry-wide issue related to ingredient sourcing (particularly rice protein and some dairy sources), not unique to Muscle Milk. But the Consumer Reports findings at the specific quantities reported are a documented safety transparency concern.</p>
+        <p>No NSF Certified for Sport status. No published batch COAs. For a product sold in gym settings to athletes, the absence of independent contamination testing is the same gap present in Muscle Milk as in AG1 and others — but made more significant here by the documented historical heavy metal episode.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value red">2×</div><div class="aside-stat-label">Ownership transfers in 5 years. Pickett family → Hormel ($450M, 2014) → PepsiCo ($465M, 2019). Now Gatorade subsidiary.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">4</div><div class="aside-stat-label">Heavy metals found in Muscle Milk Chocolate powder by Consumer Reports (2010): lead, cadmium, arsenic, mercury. Lead and cadmium above USP limits at recommended serving size.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">2025</div><div class="aside-stat-label">PepsiCo reformulation: ultra-filtered milk base, no artificial flavors/sweeteners, 26–42g protein. Most significant product change in brand history.</div></div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">The Shelf Comparison</div>
+      <ul class="aside-list">
+        <li><strong>Momentous (Green):</strong> Whey isolate, NSF Certified for Sport, batch COAs published, athlete-advisor relationships fully disclosed</li>
+        <li><strong>David (Red):</strong> Undisclosed collagen proportion in 1.0 PDCAAS blend, Huberman/Attia equity + promotion, no NSF cert</li>
+        <li><strong>Muscle Milk (Red):</strong> Legacy caseinate blend (now reformulating), FDA/FTC enforcement history, heavy metal episode, no NSF cert</li>
+        <li>All three reach the same consumer in the same gym environment at comparable price points. The information gap between them is the reason Traced exists.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Regulatory Timeline</div>
+      <ul class="aside-list">
+        <li>2009: National Advertising Division forwards advertising claims to FTC/FDA for possible misrepresentation review</li>
+        <li>2010: FTC closes case; CytoSport agrees to "contains no milk" labeling and advertising concessions</li>
+        <li>2010: Consumer Reports heavy metal findings published — lead and cadmium at/above USP limits in Chocolate powder</li>
+        <li>2011: FDA warning letter — "Muscle Milk" name misleading; "contains no milk" label contradicts allergen statement for milk-derived ingredients</li>
+        <li>2014: Hormel acquires CytoSport for $450M</li>
+        <li>2019: PepsiCo acquires from Hormel for $465M; operates as Gatorade subsidiary</li>
+        <li>2025: PepsiCo reformulation — ultra-filtered milk, no artificial flavors/sweeteners/colors</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>BevNET — FDA Warning Letter, 2011</strong>FDA told CytoSport that "Muscle Milk" name misleading (no milk in product), and that "contains no milk" label conflicts with allergen statement listing milk-derived ingredients.</div>
+    <div class="source-item"><strong>Consumer Reports Protein Drink Investigation, 2010</strong>Testing of 15 protein drinks. Muscle Milk Chocolate powder: cadmium 5.6 μg/day (USP limit 5 μg), lead 13.5 μg/day (USP limit 10 μg). All four heavy metals detected.</div>
+    <div class="source-item"><strong>Wikipedia — CytoSport</strong>Full regulatory history, ownership chain, FTC/FDA actions, heavy metal dispute, class action history. Verified against primary sources.</div>
+    <div class="source-item"><strong>PepsiCo Acquisition Press Release, Feb 2019</strong>"PepsiCo has agreed to acquire manufacturer CytoSport from Hormel Foods Corp." $465M acquisition price. Closes April 2019.</div>
+    <div class="source-item"><strong>Dairy Processing / PepsiCo Q3 2025</strong>2025 reformulation: ultra-filtered milk base, Muscle Milk Base (26g protein) and Pro (42g protein), no artificial flavors/sweeteners/colors.</div>
+    <div class="source-item"><strong>Sommers Schwartz — Class Action Documentation</strong>Nutrient misrepresentation lawsuits: L-glutamine listed as ingredient, found only in trace amounts; "lean" products contained high added fats. Class action allegations against CytoSport.</div>
+    <div class="source-item"><strong>Dairy Processing — PepsiCo Protein Strategy, Oct 2025</strong>Reformulated Muscle Milk integrates ultra-filtered milk "for enhanced taste and a smoother, shake-like experience." Confirms no artificial flavors, sweeteners, or added colors in new formulation.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced does not accept advertising or affiliate revenue. The 2025 PepsiCo reformulation is a genuine product improvement; scores reflect the full documented history of the brand, not the reformulation in isolation.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#187d7c716c776a717974586c6a797b7d7c367b7775383e75717c7c776c2338247938706a7d7e25" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e0858489948f9289818ca0949281838584ce838f8d">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{col

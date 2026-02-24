@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momentous — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .green-banner{margin-top:56px;background:rgba(78,155,111,0.08);border-bottom:1px solid rgba(78,155,111,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .green-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .green-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.green-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--green);}
+  .product-name{font-family:var(--font-display);font-size:clamp(48px,6.5vw,82px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,26px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(78,155,111,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--green);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .compare-grid{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .cg-header{background:var(--surface-2);display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);}
+  .cg-row{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.cg-row:last-child{border-bottom:none;}.cg-row:hover{background:var(--surface-2);}
+  .cg-row.highlight{background:rgba(78,155,111,0.06);border-left:2px solid var(--green);}
+  .cg-cell{padding:10px 14px;font-size:12px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.cg-cell:last-child{border-right:none;}
+  .cg-header .cg-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .cg-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}
+  .cg-cell.good{color:var(--green);}.cg-cell.bad{color:var(--red);}.cg-cell.mid{color:var(--yellow);}
+  .cert-block{margin:20px 0 20px 36px;background:rgba(78,155,111,0.06);border:1px solid rgba(78,155,111,0.2);border-radius:3px;padding:20px 22px;}
+  .cert-header{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(78,155,111,0.7);margin-bottom:14px;}
+  .cert-items{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .cert-item{background:var(--surface);border:1px solid var(--border-light);border-radius:3px;padding:14px 16px;}
+  .cert-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;}
+  .cert-desc{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .cert-status{font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-top:6px;}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-block.green-tint{border-color:rgba(78,155,111,0.2);background:rgba(78,155,111,0.04);}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-label.green{color:rgba(78,155,111,0.6);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.green{color:var(--green);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}
+  .aside-list li::before{content:'✓';color:var(--green);flex-shrink:0;margin-top:1px;font-size:11px;}
+  .aside-list li.neutral::before{content:'→';color:var(--text-dim);}
+  .aside-list li.yellow::before{content:'○';color:var(--yellow);}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.green-banner,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:44px;}.site-nav{display:none;}.cert-items{grid-template-columns:1fr;}.cg-header,.cg-row{display:block;}.cg-cell{border-right:none;border-bottom:1px solid var(--border);}.cg-cell:last-child{border-bottom:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<div class="green-banner">
+  <span class="green-pill">High Transparency</span>
+  <span class="green-text">Momentous is the direct counter-example to AG1 and David in the Traced database — same category, same audience, opposite approach to scientific backing, transparency, and endorser relationships.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Green Benchmark / Science-First</span></div>
+    <h1 class="product-name">Momentous</h1>
+    <p class="product-sub">Performance Protein & Supplements,<br>"Live Great. Perform Better."</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Momentous operates in the same market as AG1 and David — premium performance supplements sold to health-optimizing, high-income consumers through the same podcast ecosystem and the same influencer channels. The difference is in every structural choice that market allows but does not require. Where AG1 uses proprietary blends to hide individual doses, Momentous publishes every ingredient at its exact amount. Where David relies on collagen protein to inflate its headline number, Momentous uses <strong>whey protein isolate and pea protein</strong> — complete proteins with peer-reviewed backing. Where AG1 and David have equity-holding endorsers whose financial interest and promotional role are inseparable, Momentous has worked with Andrew Huberman as a paid collaborator — but <strong>with disclosed relationships, no undisclosed equity, and a product formulated with the input of independent sports scientists</strong>. Where David carries no third-party safety certification, Momentous holds <strong>NSF Certified for Sport</strong> status and publishes batch-level certificates of analysis. The two yellow scores in this profile are honest ones: Momentous uses a DTC subscription model and has raised VC funding whose full investor table is not public. These are real, if minor, transparency gaps. They do not change the fundamental picture: in a category defined by manufactured credibility and obscured ingredients, Momentous has chosen a different model — and the model works on its own terms.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header">
+        <span class="scorecard-title">Transparency Score</span>
+        <div class="score-summary"><span class="score-count yellow">2 ●</span><span class="score-count green">5 ●</span></div>
+      </div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill green">Green</span></div>
+      </div>
+      <div class="scorecard-footer">
+        <div class="scorecard-footer-label">Last reviewed</div>
+        <div class="scorecard-footer-value">February 2026 · Sources below</div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Momentous was founded in 2018 by Jeff Byers and Mark Oliveira. The company has raised venture capital — an estimated $50M+ across multiple rounds from investors including Founders Fund and a16z's consumer arm. The company is privately held. The full investor roster and capitalization table are not publicly disclosed.</p>
+        <p>The yellow score is honest: Traced cannot fully evaluate what we cannot see. The partial investor table, while consistent with standard startup practice, creates the same opacity that makes the Chobani $650M raise a yellow flag. The specific investors matter because their incentives shape the pressure the company faces at the moment of exit — IPO, acquisition, or secondary sale. Founders Fund (Peter Thiel's firm) and a16z are sophisticated investors who will seek significant returns. The question of whether those return expectations will eventually pressure Momentous toward the sourcing, formulation, or subscription extraction patterns visible elsewhere in this database is not answerable yet. The score reflects the uncertainty, not a finding.</p>
+
+        <div class="callout yellow">
+          <div class="callout-label">What Yellow Here Means</div>
+          <div class="callout-body">This yellow is different in character from the yellows in most Traced profiles. It is not a finding of current compromise — it is an acknowledgment that the ownership structure is not fully visible, and that the same investor pressure that has compromised other brands in this database is structurally present. Momentous has not yet faced the inflection point where those pressures typically manifest. The score will be updated as the ownership picture becomes clearer.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>This is the dimension where Momentous most directly contrasts with AG1 and David — and where the contrast is sharpest. Momentous has relationships with Andrew Huberman and other high-profile health communicators. What makes those relationships structurally different is the disclosure and equity question.</p>
+        <p>Huberman's relationship with Momentous has been disclosed as a paid partnership and collaborative formulation arrangement — not undisclosed equity. Momentous credits named sports scientists and researchers in their formulation process and publishes the scientific rationale for each product's ingredient choices. The distinction between "paid to develop and promote" versus "equity holder who promotes" is material under FTC guidelines, and Momentous appears to be on the right side of that line.</p>
+
+        <div class="compare-grid">
+          <div class="cg-header">
+            <div class="cg-cell">Dimension</div>
+            <div class="cg-cell">AG1</div>
+            <div class="cg-cell">David</div>
+            <div class="cg-cell">Momentous</div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell"><strong>Endorser relationship</strong></div>
+            <div class="cg-cell bad">Equity + paid sponsor. Undisclosed equity.</div>
+            <div class="cg-cell bad">Equity + paid sponsor. Equity not prominently disclosed.</div>
+            <div class="cg-cell good">Paid collaboration. No reported equity. Disclosed relationship.</div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell"><strong>Ingredient doses</strong></div>
+            <div class="cg-cell bad">75 ingredients, majority undisclosed doses. Proprietary blend.</div>
+            <div class="cg-cell bad">Collagen/whey ratio not disclosed. Total protein only.</div>
+            <div class="cg-cell good">All ingredients disclosed at exact doses.</div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell"><strong>Third-party testing</strong></div>
+            <div class="cg-cell bad">NSF sport certified. No public batch COAs.</div>
+            <div class="cg-cell bad">Not NSF certified. No batch COAs.</div>
+            <div class="cg-cell good">NSF Certified for Sport. Batch COAs published.</div>
+          </div>
+          <div class="cg-row highlight">
+            <div class="cg-cell"><strong>Protein source</strong></div>
+            <div class="cg-cell mid">AG1 contains protein but not marketed as a protein supplement</div>
+            <div class="cg-cell bad">Collagen primary. PDCAAS ~0. Undisclosed blend ratio.</div>
+            <div class="cg-cell good">Whey isolate + pea protein. PDCAAS 1.0. Complete amino profile.</div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell"><strong>Price per serving</strong></div>
+            <div class="cg-cell bad">$2.63/day (subscription). Comparable stack ~$0.80.</div>
+            <div class="cg-cell bad">$3.50–4.00/bar.</div>
+            <div class="cg-cell mid">~$2.50/serving. Premium but aligned with ingredient quality.</div>
+          </div>
+        </div>
+
+        <p>The green score for marketing alignment reflects that Momentous has made the harder structural choice available to any brand in this space: treating the endorser relationship as a paid professional collaboration rather than an equity vehicle for conflating financial interest with independent recommendation.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Momentous sells primarily through its DTC website with a subscription option offering 15–20% discount on recurring orders, and through retail partners including REI, Whole Foods, and various specialty sports retailers. The subscription model is more aggressive than Salt & Straw's optional pint club — auto-renewal, email campaigns to reduce churn, and subscription-specific pricing that creates friction around cancellation.</p>
+        <p>The yellow score reflects that the subscription mechanic is real and creates lock-in pressure, even if it is less extractive than AG1's model. At $2.50/serving for protein powder on subscription, the pricing is also premium relative to comparable products (Transparent Labs, Thorne, NOW Sports all offer comparable quality at lower price points). The premium is partially justified by the NSF certification costs and the ingredient sourcing — but the DTC subscription pricing also reflects brand premium and marketing costs that the consumer is absorbing.</p>
+        <p>This is a genuine yellow, not a courtesy yellow. Momentous could offer the same product on a purely transactional basis at lower prices. It has chosen the DTC subscription model because it improves LTV metrics and supports VC return expectations. That incentive is real even when the product is good.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Momentous Whey Protein Isolate ingredients: Whey Protein Isolate, Sunflower Lecithin, Natural Flavors, Monk Fruit Extract. Four ingredients. Every one serves an identifiable function. The protein source is whey isolate — PDCAAS 1.0, complete essential amino acid profile, high leucine content for muscle protein synthesis. No collagen dilution, no proprietary blend obscuring the protein quality question.</p>
+        <p>Momentous also manufactures a plant-based option using pea protein isolate — PDCAAS 0.89, complete enough for the purpose, appropriate for non-dairy consumers. The plant protein is not marketed with the same muscle-building emphasis as the whey; the brand is accurate about the relative performance of each.</p>
+        <p>The broader supplement line — creatine, magnesium threonate, omega-3s, vitamin D3+K2 — follows the same pattern: single or few ingredients at disclosed doses, no proprietary blends, no pixie dusting.</p>
+
+        <div class="callout">
+          <div class="callout-label">What "Disclosed Doses" Actually Means</div>
+          <div class="callout-body">Momentous creatine monohydrate: 5g per serving — the exact dose used in the clinical studies establishing creatine's efficacy for strength and muscle mass. Momentous magnesium L-threonate: 144mg elemental magnesium per serving, sourced from Magtein (the patented form with blood-brain-barrier crossing research). These are not round numbers chosen for label aesthetics — they are clinical doses chosen because the evidence supports them. This is what evidence-based formulation looks like in practice, and it is directly contrasted with the pixie dusting visible in AG1's 75-ingredient proprietary blend.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Momentous publishes ingredient-level scientific rationale for every product in its line. Each product page links to the peer-reviewed studies supporting the ingredient choice and dose selection. This is not marketing decoration — the citations are real papers, the doses match the studied doses, and the claims stay within what the evidence supports.</p>
+        <p>The company has formal scientific advisory relationships with researchers including Dr. Andy Galpin (performance physiologist, Cal State Fullerton) and has collaborated with sports scientists at the NFL, NBA, and US Special Operations Command on product development. These are credentialed domain experts with published research records — a meaningful distinction from equity-holding podcasters whose scientific authority derives from audience trust rather than peer-reviewed output.</p>
+        <p>No clinical trials have been conducted on Momentous products as complete formulations — this is standard for the supplement industry and is not a specific failure. The green score reflects the scientific integrity of the ingredient selection and dose rationale, not the existence of product-level clinical trials.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Every ingredient is disclosed by name and dose. No proprietary blends. No hidden dose ranges. No claim that exceeds what the disclosed ingredient at its disclosed dose can support in the peer-reviewed literature. No FDA enforcement actions. No FTC complaints. No class action litigation around labeling.</p>
+        <p>Momentous's NSF Certified for Sport certification adds an additional layer of label accuracy verification: the certification requires that what is on the label is what is in the product, and that nothing is in the product that isn't on the label — specifically including substances banned in competitive sport. The certification is not a claim that the product works as marketed; it is a claim that the product contains what it says it contains. That narrower but verifiable claim is more valuable than broader efficacy marketing that cannot be independently verified.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>NSF Certified for Sport is the most rigorous third-party certification available for sports nutrition supplements in the United States. It requires annual facility audits, lot-by-lot testing for label accuracy and banned substance contamination, and a master list of certified products updated in real time. Momentous publishes lot-specific certificates of analysis for its products — meaning a consumer can verify the actual test results for the specific lot of protein powder they purchased.</p>
+
+        <div class="cert-block">
+          <div class="cert-header">Third-Party Certifications — Momentous</div>
+          <div class="cert-items">
+            <div class="cert-item">
+              <div class="cert-name">NSF Certified for Sport</div>
+              <div class="cert-desc">Annual facility audit + lot-by-lot testing. Screens for 270+ substances banned in competitive sport. Label accuracy verified independently.</div>
+              <div class="cert-status">✓ Active — verified on NSF database</div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-name">Batch COAs (Certificates of Analysis)</div>
+              <div class="cert-desc">Third-party lab results published per lot. Consumers can verify their specific product's actual test results. Not standard practice in the supplement industry.</div>
+              <div class="cert-status">✓ Published publicly at momentouslabs.com</div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-name">Informed Sport (select products)</div>
+              <div class="cert-desc">UK-based certification. Additional manufacturing standard verification for products sold in international markets.</div>
+              <div class="cert-status">✓ Select products</div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-name">cGMP Manufacturing</div>
+              <div class="cert-desc">FDA Current Good Manufacturing Practice compliance. Standard requirement, but compliance is not universal in the supplement industry.</div>
+              <div class="cert-status">✓ Confirmed</div>
+            </div>
+          </div>
+        </div>
+
+        <p>The contrast with David is instructive and intentional. David markets to the same performance-oriented, athlete-adjacent consumer. David has no NSF certification, no published batch COAs, and uses erythritol as its primary sweetener without communicating the emerging cardiovascular risk literature to its audience. Momentous and David are not equivalent products presented as equivalent — they are structurally different responses to the same market opportunity.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+
+    <div class="aside-block green-tint">
+      <div class="aside-label green">The Green Case</div>
+      <ul class="aside-list">
+        <li>All ingredients disclosed at exact clinical doses — no proprietary blends</li>
+        <li>Whey protein isolate (PDCAAS 1.0) — not collagen</li>
+        <li>NSF Certified for Sport — annual facility audit + lot testing</li>
+        <li>Batch COAs published publicly — consumer-verifiable</li>
+        <li>Endorser relationships disclosed as paid collaborations, not equity</li>
+        <li>Scientific advisory board includes published domain researchers</li>
+        <li>No FDA enforcement, no FTC complaints, no class action history</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value green">1.0</div><div class="aside-stat-label">PDCAAS score of Momentous Whey Isolate — maximum possible. Compare to David's collagen (~0).</div></div>
+      <div class="aside-stat"><div class="aside-stat-value green">270+</div><div class="aside-stat-label">Banned substances screened per lot by NSF Certified for Sport program</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">~$2.50</div><div class="aside-stat-label">Per serving on subscription. Premium but ingredient-justified. Lower than David's $3.50+/bar.</div></div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">The Yellow Flags (Honest)</div>
+      <ul class="aside-list">
+        <li class="yellow">VC investor roster not fully public. Founders Fund + a16z confirmed. Full cap table undisclosed.</li>
+        <li class="yellow">DTC subscription model with auto-renewal and churn-reduction tactics. More aggressive than necessary for a product this good.</li>
+        <li class="neutral">Premium pricing reflects real costs but also brand premium and marketing spend the consumer absorbs</li>
+        <li class="neutral">No product-level clinical trials — standard for industry, but worth noting for a brand that emphasizes evidence-based formulation</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">The Structural Lesson</div>
+      <ul class="aside-list">
+        <li>Dose disclosure is a choice, not a regulatory requirement. Momentous chooses it. AG1 does not.</li>
+        <li>NSF certification costs money and requires operational discipline — it is a real commitment, not a sticker</li>
+        <li>Paid collaboration with a domain expert is structurally different from equity-plus-paid-promotion — the distinction matters for every consumer who treats podcast recommendations as independent analysis</li>
+        <li>The same influencer ecosystem that distributes AG1 and David also distributes Momentous — the market does not require the conflicts. Some brands choose them; others don't.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Timeline</div>
+      <ul class="aside-list">
+        <li class="neutral">2018: Founded by Jeff Byers and Mark Oliveira</li>
+        <li class="neutral">2019–2021: Early growth through sports team partnerships (NFL, NBA, US military)</li>
+        <li class="neutral">2022: NSF Certified for Sport status achieved across core product line</li>
+        <li class="neutral">2022–2024: Huberman Lab collaboration formalized and disclosed. Significant consumer growth.</li>
+        <li class="neutral">2024–2026: Retail expansion into REI, Whole Foods. Supplement line extended.</li>
+      </ul>
+    </div>
+
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>NSF International — Certified for Sport Database</strong>Momentous confirmed on NSF Certified for Sport registry. nsf.org/certified-sports. Lot-by-lot testing protocol documentation.</div>
+    <div class="source-item"><strong>Momentous product pages / COA portal</strong>Ingredient lists, doses, scientific citations, and batch certificates of analysis. momentouslabs.com</div>
+    <div class="source-item"><strong>Witard et al., Journal of Nutrition, 2014</strong>Leucine threshold for muscle protein synthesis. Basis for whey vs. collagen comparison in ingredient integrity dimension.</div>
+    <div class="source-item"><strong>FAO/WHO PDCAAS methodology</strong>Protein Digestibility Corrected Amino Acid Score. Whey isolate 1.0, collagen ~0. Tryptophan-based scoring.</div>
+    <div class="source-item"><strong>Dr. Andy Galpin — published research record</strong>Performance physiology, exercise science. Cal State Fullerton. Momentous scientific advisor. Google Scholar profile verifiable.</div>
+    <div class="source-item"><strong>Magtein (MgT-7) clinical data</strong>Liu et al. published studies on magnesium L-threonate and cognitive function. Basis for Momentous Mag-3 formulation dose selection.</div>
+    <div class="source-item"><strong>FTC Endorsement Guidelines, 2023</strong>16 CFR Part 255. Paid collaboration disclosure vs. equity disclosure requirements. Momentous relationships evaluated against this standard.</div>
+    <div class="source-item"><strong>Creatine monohydrate meta-analysis</strong>Lanhers et al., European Journal of Sport Science, 2017. 5g/day dose established as effective for strength and MPS outcomes.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#7316171a071c011a121f330701121016175d101c1e53551e1a17171c0748534f12531b0116154e" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dfbabbb6abb0adb6beb39fabadbebcbabbf1bcb0b2">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{co

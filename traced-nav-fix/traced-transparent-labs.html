@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transparent Labs — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(78,155,111,0.06);border-bottom:1px solid rgba(78,155,111,0.2);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(44px,6vw,74px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,26px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.green{border-left-color:var(--green);}.callout.green .callout-label{color:var(--green);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .ownership-chain{margin:20px 0 0 36px;position:relative;}
+  .chain-item{display:flex;align-items:flex-start;gap:14px;position:relative;}
+  .chain-item:not(:last-child)::after{content:'';position:absolute;left:10px;top:28px;bottom:-24px;width:1px;background:var(--border-light);}
+  .chain-dot{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .chain-dot.current{background:var(--green-dim);border-color:rgba(78,155,111,0.3);}
+  .chain-dot-inner{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+  .chain-dot.current .chain-dot-inner{background:var(--green);}
+  .chain-content{padding-bottom:28px;flex:1;}
+  .chain-year{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:2px;}
+  .chain-owner{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .chain-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.green{color:var(--green);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:860px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid{padding:0 24px;}.site-header{padding:0 24px;}.timeline-alert{padding:12px 24px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="traced-index.html" class="site-logo">Traced <span>/ by origin</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">Green Benchmark</span>
+  <span class="alert-text">Transparent Labs publishes <strong>batch-level certificates of analysis</strong> for every product — the current best practice in supplement transparency. Founded 2015–16, acquired by Nutra Holdings (early 2020). Independently operating within a small private multi-brand company.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb">
+      <a href="traced-index.html" style="color:var(--text-dim);text-decoration:none;">Traced</a>
+      <span class="sep">/</span>
+      <span class="hero-category">Protein Supplements</span>
+      <span class="sep">/</span>
+      <span>Profile 17</span>
+    </div>
+    <h1 class="product-name">Transparent<br>Labs</h1>
+    <p class="product-sub">100% Grass-Fed Whey Protein Isolate</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Transparent Labs is doing what the name says — to a degree that sets a visible standard in a category defined by opacity. <strong>Full ingredient disclosure with no proprietary blends, published COAs for every batch, Informed Choice certified, no artificial sweeteners or colors, sourced from grass-fed whey.</strong> The ownership story is the one place where the picture gets more complicated: the brand was acquired by Nutra Holdings in early 2020 and now operates alongside Jacked Factory, a budget supplement brand with a different ingredient philosophy. So far, the acquisition hasn't changed the product. Whether that holds is the active question.
+    </p>
+  </div>
+  <div class="scorecard">
+    <div class="scorecard-header">
+      <span class="scorecard-title">Transparency Score</span>
+      <div class="score-summary">
+        <span class="score-count red">0R</span>
+        <span class="score-count yellow">2Y</span>
+        <span class="score-count green">5G</span>
+      </div>
+    </div>
+    <div class="scorecard-rows">
+      <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill yellow">Watch</span></div>
+      <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Clean</span></div>
+      <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill green">Accurate</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Verified</span></div>
+      <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill green">Verified</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Partial</span></div>
+      <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill green">Leader</span></div>
+    </div>
+    <div class="scorecard-footer">
+      <div class="scorecard-footer-label">Last Verified</div>
+      <div class="scorecard-footer-value">February 2026 — COA page active, Informed Choice certification confirmed, Consumer Reports Oct 2025 response reviewed</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">01</span>
+        <span class="dim-title">Ownership Structure</span>
+        <span class="score-pill yellow">Watch</span>
+      </div>
+      <div class="dim-body">
+        <p>Transparent Labs was founded in 2015–16 in American Fork, Utah. The founding premise was explicit: build a supplement brand with no proprietary blends, no artificial additives, and full label disclosure — a direct reaction to an industry where "proprietary formula" is often a euphemism for underdosed or substituted ingredients. The brand grew organically through direct-to-consumer online sales without outside investment.</p>
+        <p>In early 2020, <strong>Nutra Holdings acquired Transparent Labs</strong>. Nutra Holdings is a small private company that also owns Jacked Factory — a budget performance supplement brand known for aggressive Amazon positioning and lower price-point products. The acquisition was described by Nutra Holdings as being driven by alignment with TL's ingredient values, but Jacked Factory's product philosophy (lower cost, broader retail distribution) sits at a different point on the ingredient-quality spectrum.</p>
+
+        <div class="ownership-chain">
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2015–16</div>
+              <div class="chain-owner">Independent founders</div>
+              <div class="chain-note">Founded in American Fork, Utah. Direct-to-consumer model. Built on full-disclosure labeling as core brand identity.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">Early 2020 — Present</div>
+              <div class="chain-owner">Nutra Holdings (private)</div>
+              <div class="chain-note">Also owns Jacked Factory (#1 creatine brand on Amazon Canada). Small multi-brand operator — not a large conglomerate. Stated mission: premium quality + clean formulations across portfolio. Acquisition terms undisclosed.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout yellow">
+          <div class="callout-label">Why This Is Yellow, Not Green</div>
+          <div class="callout-body">Nutra Holdings is not Kellogg or Mars — it's a small private company whose stated values align with TL's identity. But <strong>the founders no longer control formulation decisions.</strong> Jacked Factory's ingredient-quality choices show that Nutra Holdings can operate brands with different standards simultaneously. The five-year post-acquisition track record is clean. The watch condition is whether cost pressure eventually touches ingredient sourcing or testing standards. Watch for: changes to COA publication cadence, introduction of artificial sweeteners, or sourcing shift away from grass-fed whey.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">02</span>
+        <span class="dim-title">Revenue Model</span>
+        <span class="score-pill green">Clean</span>
+      </div>
+      <div class="dim-body">
+        <p>Transparent Labs is primarily direct-to-consumer through transparentlabs.com, with no significant retail distribution. This model creates a cleaner margin structure — no retail markups to absorb, no slotting fees, no retailer co-promotion agreements that could influence product positioning. It also means no third-party retailer is selecting or merchandising TL product independently.</p>
+        <p>Pricing reflects the premium ingredient sourcing: <strong>approximately $1.75 per serving</strong> for the Grass-Fed Whey Isolate, compared to ~$0.85 for Gold Standard Whey. The premium is partially explained by grass-fed sourcing (more expensive raw material) and pure isolate formulation (more processing). No subscription lock-in, no upsell dark patterns documented. The brand does run ambassador and affiliate programs, which are disclosed.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">03</span>
+        <span class="dim-title">Marketing Alignment</span>
+        <span class="score-pill green">Accurate</span>
+      </div>
+      <div class="dim-body">
+        <p>The brand name is the marketing claim: Transparent Labs. It earns that name more directly than almost any competitor in the category. Key verifiable marketing claims: <strong>no proprietary blends</strong> (confirmed — every ingredient is listed with its quantity), <strong>no artificial sweeteners</strong> (confirmed — stevia only), <strong>no artificial flavors or colors</strong> (confirmed), <strong>grass-fed whey isolate</strong> (the primary protein is whey protein isolate from grass-fed cows, not a blend with concentrate).</p>
+        <p>The "clinically dosed" language used across the product line warrants examination but holds up for the core protein product — 28g of whey protein isolate per serving is well within ranges studied in the literature. Unlike brands that use "clinically dosed" to mean "doses that appeared in some study somewhere," TL's protein dosing is straightforwardly honest.</p>
+
+        <div class="callout green">
+          <div class="callout-label">The No-Proprietary-Blend Standard</div>
+          <div class="callout-body">Most supplement brands list a "proprietary blend" with a total weight but no per-ingredient quantities, hiding whether key ingredients are present at effective doses. Transparent Labs lists every ingredient by weight. <strong>This is the transparency floor that the entire industry should meet and most don't.</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">04</span>
+        <span class="dim-title">Ingredient Integrity</span>
+        <span class="score-pill green">Verified</span>
+      </div>
+      <div class="dim-body">
+        <p>The protein source is 100% whey protein isolate — not a blend. Isolate is the most filtered form of whey protein, with the highest protein concentration per gram (typically 90%+), lowest lactose, and lowest fat. The grass-fed sourcing claim is consistent with the published COA documentation and third-party testing.</p>
+        <p>Each serving delivers <strong>28g of protein</strong> — among the highest per-serving protein count in the whey isolate category. The full ingredient list: Whey Protein Isolate (grass-fed), Cocoa Powder (chocolate flavor), Natural Flavors, Salt, Sunflower Lecithin, Stevia Leaf Extract. No acesulfame potassium, no sucralose, no artificial colors. For consumers who prioritize clean formulations, this is the ingredient list.</p>
+        <p>In the October 2025 Consumer Reports heavy metals investigation, Transparent Labs confirmed it tests both raw ingredients and finished products for heavy metals — a more proactive stance than most competitors. The brand also confirmed post-publication that it tests to California Prop 65 standards, among the strictest available thresholds.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">05</span>
+        <span class="dim-title">Label Claim Accuracy</span>
+        <span class="score-pill green">Verified</span>
+      </div>
+      <div class="dim-body">
+        <p>No FDA warning letters. No FTC enforcement actions. No class action settlements. Transparent Labs' regulatory record is clean.</p>
+        <p>The Informed Choice certification (LGC Group) is active and covers the Whey Protein Isolate product line. Batch-level COAs are publicly accessible on the TL website — consumers can verify the specific batch they purchased against tested results. This is the transparency practice that separates TL from most of the category, including Optimum Nutrition.</p>
+        <p>Consumer Reports' heavy metals testing included Transparent Labs and found no results requiring consumer concern. TL was among the brands that <strong>responded proactively after publication</strong> with a public statement detailing its testing methodology — a transparency posture that stands in direct contrast to Optimum Nutrition's decision to decline comment on the same study.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">06</span>
+        <span class="dim-title">Scientific Backing</span>
+        <span class="score-pill yellow">Partial</span>
+      </div>
+      <div class="dim-body">
+        <p>The science supporting whey protein isolate supplementation is strong and well-established. Whey isolate in particular — the fast-digesting, high-bioavailability form — aligns closely with the research literature on post-workout protein synthesis and leucine threshold triggering for muscle protein synthesis. This is a genuine science-product alignment advantage over brands using concentrate blends or slower-digesting proteins.</p>
+        <p>The partial score reflects that Transparent Labs does not fund product-specific clinical research, and the broader "clinically dosed" framing across their product line (including pre-workouts and greens powders beyond the protein) is applied more loosely in some products than the protein line. Evaluated on the whey isolate alone, the science backing is among the cleaner in the category. <strong>The yellow score is a category limitation, not a TL-specific failure.</strong></p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">07</span>
+        <span class="dim-title">Safety Transparency</span>
+        <span class="score-pill green">Leader</span>
+      </div>
+      <div class="dim-body">
+        <p>Transparent Labs is one of the few supplement brands to earn a green safety transparency score. The combination that gets there: <strong>Informed Choice certification</strong> (active, covers banned substances), <strong>published batch COAs</strong> (consumers can verify their specific lot), <strong>ingredient and finished-product heavy metal testing</strong> (confirmed publicly), <strong>Prop 65 compliance threshold</strong> (tests to strictest available standard), and <strong>proactive disclosure</strong> when tested externally by Consumer Reports.</p>
+        <p>The one meaningful gap: TL does not hold NSF Certified for Sport, which is the most comprehensive third-party certification and the one Momentous holds. Informed Choice and NSF Certified for Sport both cover banned substances but NSF's contaminant testing protocols are broader. For most consumers who aren't competitive athletes subject to WADA testing, this distinction is marginal — TL's own contaminant testing and COA publication may exceed what NSF certification would add. For elite athletes with zero-tolerance testing requirements, Momentous remains the more conservative choice.</p>
+
+        <div class="callout green">
+          <div class="callout-label">What Batch COAs Actually Mean</div>
+          <div class="callout-body">Every tub of Transparent Labs Whey has a lot number. That number links to a specific certificate of analysis — an actual lab report showing what that batch tested for and what was found. <strong>This is the difference between a brand that claims to test and a brand that shows you the test.</strong> Most supplement brands, including Optimum Nutrition and Muscle Milk, do not publish batch COAs.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">By the Numbers</div>
+      <div class="aside-stat">
+        <div class="aside-stat-value green">28g</div>
+        <div class="aside-stat-label">Protein per serving — 100% whey isolate, among highest in category</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value">$1.75</div>
+        <div class="aside-stat-label">Approximate cost per serving — 2× Gold Standard Whey, similar to Momentous</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value">2020</div>
+        <div class="aside-stat-label">Nutra Holdings acquisition. 5 years post-acquisition — product integrity maintained to date.</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value green">COA</div>
+        <div class="aside-stat-label">Batch certificates of analysis published publicly. Consumers can verify their lot number.</div>
+      </div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">The Supplement Shelf Ranked</div>
+      <ul class="aside-list">
+        <li><strong style="color:var(--green)">Momentous:</strong> NSF Certified for Sport + COAs. $2.00+/serving. Gold benchmark.</li>
+        <li><strong style="color:var(--green)">Transparent Labs:</strong> Informed Choice + COAs. $1.75/serving. Green — this profile.</li>
+        <li><strong style="color:var(--yellow)">Optimum Nutrition:</strong> Informed Choice, no COAs. $0.85/serving. Yellow-adjacent.</li>
+        <li><strong style="color:var(--red)">Muscle Milk:</strong> No NSF, FTC/FDA history. ~$1.10/serving. Red.</li>
+        <li><strong style="color:var(--red)">David Protein:</strong> No third-party cert, collagen proportion undisclosed. Red.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">What "Transparent" Actually Means Here</div>
+      <ul class="aside-list">
+        <li>No proprietary blends — every ingredient listed with quantity</li>
+        <li>No artificial sweeteners, flavors, or colors</li>
+        <li>Batch COAs publicly accessible by lot number</li>
+        <li>Informed Choice certified (active)</li>
+        <li>Tests ingredients + finished products for heavy metals</li>
+        <li>Responds publicly to external testing (Consumer Reports 2025)</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Nutra Holdings Portfolio</div>
+      <ul class="aside-list">
+        <li><strong>Transparent Labs</strong> — premium DTC, clean formulations, full disclosure</li>
+        <li><strong>Jacked Factory</strong> — budget performance, Amazon-first, broader ingredient list</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<div class="section-divider"></div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Verification</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Nutra Holdings "About" page — nutraholdings.com</strong>Confirmed Transparent Labs acquisition "early 2020." Portfolio description. CEO attribution.</div>
+    <div class="source-item"><strong>Consumer Reports, Oct 2025</strong>Heavy metals testing of 23 protein powders. TL confirmed testing both ingredients and finished products. Responded after publication.</div>
+    <div class="source-item"><strong>Informed Choice (LGC Group)</strong>Transparent Labs certification active. Multiple products listed. 250+ banned substances tested.</div>
+    <div class="source-item"><strong>Transparent Labs product page</strong>Ingredient list verified: WPI (grass-fed), natural flavors, stevia, sunflower lecithin. No artificial additives. 28g protein confirmed.</div>
+    <div class="source-item"><strong>Healthline Review, 2024</strong>Independent editorial review confirming third-party testing, COA access, and no regulatory history.</div>
+    <div class="source-item"><strong>NBC News Select, Oct 2025</strong>Post-Consumer-Reports brand response coverage. TL confirmed Prop 65 compliance testing threshold.</div>
+    <div class="source-item"><strong>PitchBook / Crunchbase</strong>Private company. American Fork, UT. Founded 2016. No public funding rounds documented.</div>
+    <div class="source-item"><strong>Transparent Labs Third-Party Tests page</strong>Batch COA publication confirmed accessible. Methodology: per-lot testing with downloadable reports.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">Traced</span>
+  <span class="footer-note">Scored across 7 dimensions. Sources verified at time of publication. Claims subject to change — last review February 2026.</span>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#5d38393429322f343c311d292f3c3e3839733e32307d7b303439393229667d613c7d352f383b60" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c79787568736e757d705c686e7d7f7978327f7371">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{col

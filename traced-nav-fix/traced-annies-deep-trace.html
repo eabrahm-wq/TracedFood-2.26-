@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annie's Homegrown — Deep Trace | Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0908;
+      --bg-card: #111009;
+      --bg-hover: #161410;
+      --border: #232018;
+      --border-light: #2d2a20;
+      --text: #ede9e0;
+      --text-muted: #9a9284;
+      --text-dim: #625c50;
+      --amber: #c8943a;
+      --amber-dim: rgba(200,148,58,0.08);
+      --green: #4e9b6f;
+      --green-dim: rgba(78,155,111,0.08);
+      --yellow: #d4a84b;
+      --yellow-dim: rgba(212,168,75,0.08);
+      --red: #c94d3c;
+      --red-dim: rgba(201,77,60,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 300; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* ── NAV ── */
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,9,8,0.95); backdrop-filter: blur(12px); z-index: 100; }
+    .nav-logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--amber); letter-spacing: -0.01em; text-decoration: none; }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 12px; font-weight: 400; color: var(--text-dim); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text-muted); }
+
+    /* ── ALERT BANNER ── */
+    .alert-bar { background: rgba(201,77,60,0.07); border-bottom: 1px solid rgba(201,77,60,0.2); padding: 10px 40px; display: flex; align-items: center; gap: 12px; }
+    .alert-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: pulse 2.5s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.75);} }
+    .alert-text { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: rgba(237,233,224,0.6); }
+    .alert-text strong { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero { max-width: 1100px; margin: 0 auto; padding: 72px 40px 0; display: grid; grid-template-columns: 1fr 320px; gap: 64px; align-items: start; }
+    .hero-breadcrumb { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 24px; display: flex; gap: 8px; align-items: center; }
+    .bc-sep { color: var(--border-light); }
+    .bc-current { color: var(--amber); }
+    .hero-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .hero-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--red); }
+    .hero-title { font-family: var(--font-display); font-size: clamp(56px, 8vw, 96px); font-weight: 900; line-height: 0.88; letter-spacing: -0.03em; color: var(--text); margin-bottom: 12px; }
+    .hero-title em { font-style: italic; color: var(--amber); }
+    .hero-subtitle { font-family: var(--font-display); font-style: italic; font-size: 22px; font-weight: 700; color: var(--text-muted); margin-bottom: 36px; line-height: 1.3; }
+    .hero-verdict { font-size: 15.5px; font-weight: 300; color: rgba(237,233,224,0.8); line-height: 1.78; padding-top: 20px; border-top: 1px solid var(--border); }
+    .hero-verdict strong { color: var(--text); font-weight: 500; }
+
+    /* ── SCORECARD ── */
+    .scorecard { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; position: sticky; top: 80px; }
+    .scorecard-head { padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--red-dim); }
+    .scorecard-head-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .overall-verdict { font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--red); letter-spacing: -0.02em; }
+    .overall-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 4px; }
+    .score-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid var(--border); }
+    .score-row:last-of-type { border-bottom: none; }
+    .score-dim { font-size: 12px; font-weight: 300; color: var(--text-muted); }
+    .score-pill { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+    .score-pill.red { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .score-pill.yellow { color: var(--yellow); background: var(--yellow-dim); border: 1px solid rgba(212,168,75,0.2); }
+    .score-pill.green { color: var(--green); background: var(--green-dim); border: 1px solid rgba(78,155,111,0.2); }
+    .scorecard-meta { border-top: 1px solid var(--border); padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+    .meta-row { display: flex; justify-content: space-between; gap: 12px; }
+    .meta-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+    .meta-val { font-size: 12px; font-weight: 400; color: var(--text-muted); text-align: right; }
+    .meta-val.red { color: var(--red); }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 64px 40px 80px; }
+    .section-divider { display: flex; align-items: center; gap: 16px; margin: 64px 0 36px; }
+    .section-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); flex-shrink: 0; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .section-title { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; color: var(--text); margin-bottom: 24px; }
+    .section-title em { font-style: italic; color: var(--amber); }
+    .prose { font-size: 15px; font-weight: 300; color: rgba(237,233,224,0.8); line-height: 1.8; max-width: 720px; }
+    .prose p { margin-bottom: 18px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+
+    /* ── CALLOUT ── */
+    .callout { background: var(--bg-card); border: 1px solid var(--border-light); border-left: 3px solid var(--amber); border-radius: 0 3px 3px 0; padding: 18px 22px; margin: 28px 0; }
+    .callout.red { border-left-color: var(--red); }
+    .callout.yellow { border-left-color: var(--yellow); }
+    .callout.green { border-left-color: var(--green); }
+    .callout-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+    .callout.red .callout-label { color: var(--red); }
+    .callout.yellow .callout-label { color: var(--yellow); }
+    .callout.green .callout-label { color: var(--green); }
+    .callout-body { font-size: 13.5px; font-weight: 300; line-height: 1.65; color: rgba(237,233,224,0.75); }
+    .callout-body strong { color: var(--text); font-weight: 500; }
+
+    /* ── OWNERSHIP CHAIN ── */
+    .chain { margin: 28px 0; position: relative; }
+    .chain-item { display: flex; align-items: flex-start; gap: 16px; position: relative; }
+    .chain-item:not(:last-child)::after { content: ''; position: absolute; left: 9px; top: 24px; bottom: -8px; width: 1px; background: var(--border-light); }
+    .chain-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 3px; }
+    .chain-dot.found { background: var(--green-dim); border-color: rgba(78,155,111,0.3); }
+    .chain-dot.pub { background: var(--amber-dim); border-color: rgba(200,148,58,0.3); }
+    .chain-dot.acq { background: var(--red-dim); border-color: rgba(201,77,60,0.3); }
+    .chain-dot.dep { background: var(--yellow-dim); border-color: rgba(212,168,75,0.3); }
+    .chain-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: var(--text-dim); }
+    .chain-dot.found .chain-dot-inner { background: var(--green); }
+    .chain-dot.pub .chain-dot-inner { background: var(--amber); }
+    .chain-dot.acq .chain-dot-inner { background: var(--red); }
+    .chain-dot.dep .chain-dot-inner { background: var(--yellow); }
+    .chain-content { padding-bottom: 28px; flex: 1; }
+    .chain-year { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; margin-bottom: 3px; }
+    .chain-owner { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .chain-note { font-size: 12.5px; font-weight: 300; color: var(--text-muted); line-height: 1.5; }
+    .chain-note.warn { color: var(--red); opacity: 0.85; }
+    .chain-note.flag { color: var(--yellow); opacity: 0.85; }
+
+    /* ── BEFORE / AFTER INGREDIENT COMPARISON ── */
+    .ba-container { margin: 32px 0; }
+    .ba-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .ba-product-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 10px; border-radius: 2px; border: 1px solid var(--border-light); color: var(--text-muted); background: var(--bg-card); }
+    .ba-date-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); }
+    .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ba-panel { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+    .ba-panel-head { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .ba-panel-head.before { background: var(--green-dim); border-bottom-color: rgba(78,155,111,0.2); }
+    .ba-panel-head.after { background: var(--red-dim); border-bottom-color: rgba(201,77,60,0.2); }
+    .ba-panel-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; }
+    .ba-panel-head.before .ba-panel-label { color: var(--green); }
+    .ba-panel-head.after .ba-panel-label { color: var(--red); }
+    .ba-panel-date { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); letter-spacing: 0.06em; }
+    .ba-ingredients { padding: 14px 18px; }
+    .ba-ing { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; font-weight: 300; color: var(--text-muted); line-height: 1.4; }
+    .ba-ing:last-child { border-bottom: none; }
+    .ba-ing-num { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); flex-shrink: 0; width: 18px; }
+    .ba-ing.removed { color: var(--red); opacity: 0.75; text-decoration: line-through; }
+    .ba-ing.added { color: var(--amber); }
+    .ba-ing.same { color: var(--text-muted); }
+    .ba-ing.changed { color: var(--yellow); }
+    .ba-change-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 1px 5px; border-radius: 2px; margin-left: 4px; flex-shrink: 0; }
+    .ba-change-tag.removed { background: var(--red-dim); color: var(--red); border: 1px solid rgba(201,77,60,0.2); text-decoration: none; }
+    .ba-change-tag.added { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(200,148,58,0.2); }
+    .ba-change-tag.changed { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(212,168,75,0.2); }
+
+    .ba-delta-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+    .ba-delta { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; padding: 14px 18px; }
+    .ba-delta-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+    .ba-delta-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+    .ba-delta-row:last-child { margin-bottom: 0; }
+    .ba-delta-key { font-size: 12px; font-weight: 300; color: var(--text-muted); }
+    .ba-delta-val { font-family: var(--font-mono); font-size: 12px; font-weight: 400; }
+    .ba-delta-val.worse { color: var(--red); }
+    .ba-delta-val.same { color: var(--text-dim); }
+
+    .ba-caption { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--text-dim); margin-top: 10px; line-height: 1.5; }
+    .ba-caption strong { color: var(--text-muted); font-weight: 400; }
+
+    /* ── PHTHALATES BLOCK ── */
+    .phthalates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 28px 0; }
+    .phth-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; padding: 16px 18px; }
+    .phth-card-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+    .phth-card-value { font-family: var(--font-display); font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 5px; }
+    .phth-card-value.red { color: var(--red); }
+    .phth-card-value.amber { color: var(--amber); }
+    .phth-card-note { font-size: 12px; font-weight: 300; color: var(--text-muted); line-height: 1.4; }
+
+    /* ── STAT GRID ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; padding: 16px 18px; }
+    .stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .stat-value { font-family: var(--font-display); font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; color: var(--text); }
+    .stat-value.red { color: var(--red); }
+    .stat-value.amber { color: var(--amber); }
+    .stat-note { font-size: 11.5px; font-weight: 300; color: var(--text-muted); line-height: 1.4; }
+
+    /* ── SOURCES ── */
+    .sources { border-top: 1px solid var(--border); padding: 48px 40px 80px; max-width: 1100px; margin: 0 auto; }
+    .sources-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 20px; }
+    .sources-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+    .source-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 2px; padding: 12px 14px; font-size: 12px; font-weight: 300; color: var(--text-dim); line-height: 1.5; }
+    .source-card strong { display: block; color: var(--text-muted); font-weight: 400; margin-bottom: 3px; }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); }
+    .footer-note { font-size: 11.5px; font-weight: 300; color: var(--text-dim); max-width: 400px; text-align: right; line-height: 1.5; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px) {
+      .hero { grid-template-columns: 1fr; padding: 48px 24px 0; }
+      .scorecard { position: static; }
+      .content, .sources { padding-left: 24px; padding-right: 24px; }
+      .ba-grid, .ba-delta-bar { grid-template-columns: 1fr; }
+      .phthalates-grid { grid-template-columns: 1fr 1fr; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .nav { padding-left: 24px; padding-right: 24px; }
+      .nav-links { display: none; }
+      .alert-bar { padding-left: 24px; padding-right: 24px; }
+      .footer { padding: 24px; flex-direction: column; gap: 12px; }
+      .footer-note { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+
+<div class="alert-bar">
+  <div class="alert-dot"></div>
+  <span class="alert-text">
+    <strong>Active issue:</strong> September 2024 recipe reformulation replaced butter &amp; nonfat milk with corn starch.
+    Class action on phthalates still pending. General Mills ownership since 2014 — not disclosed on packaging.
+  </span>
+</div>
+
+<section class="hero">
+  <div>
+    <div class="hero-breadcrumb">
+      <span>Traced</span><span class="bc-sep">/</span>
+      <span>Packaged Foods</span><span class="bc-sep">/</span>
+      <span class="bc-current">Deep Trace</span>
+    </div>
+    <div class="hero-label">Acquisition Degradation Study</div>
+    <h1 class="hero-title">Annie's<em>.</em></h1>
+    <p class="hero-subtitle">Homegrown Mac &amp; Cheese<br>"Noodles &amp; More Since 1989"</p>
+    <div class="hero-verdict">
+      <p>Annie Withey founded this company in 1989 with her home phone number on the box. Parents who switched from Kraft to Annie's did so because it was a different kind of company: organic ingredients, no artificial dyes, mission-driven. That was true.</p>
+      <p>In September 2014, <strong>General Mills acquired Annie's for $820 million</strong>. General Mills makes Cocoa Puffs, Lucky Charms, and Trix. The company that Annie's customers were trying to avoid is now the company they're buying. The packaging did not change. The bunny did not change. The "Homegrown" wordmark did not change. What changed is documented below — in the ownership records, in the ingredient lists, in the legal filings, and in the nutrition panels.</p>
+      <p><strong>This is a case study in acquisition preservation followed by quiet degradation.</strong> Every change General Mills made was defensible in isolation. Together they document what happens when a mission brand is run by a conglomerate's margin optimization team.</p>
+    </div>
+  </div>
+
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-head">
+        <div class="scorecard-head-label">Traced Assessment</div>
+        <div class="overall-verdict">Red — Ownership Concealment</div>
+        <div class="overall-sub">4 red · 2 yellow · 1 green across 7 dimensions</div>
+      </div>
+      <div class="score-row"><span class="score-dim">Ownership Disclosure</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Green</span></div>
+      <div class="scorecard-meta">
+        <div class="meta-row"><span class="meta-key">Owner</span><span class="meta-val">General Mills (NYSE: GIS)</span></div>
+        <div class="meta-row"><span class="meta-key">Acquired</span><span class="meta-val red">Sept 2014 · $820M</span></div>
+        <div class="meta-row"><span class="meta-key">Active lawsuit</span><span class="meta-val red">Phthalates class action (2021)</span></div>
+        <div class="meta-row"><span class="meta-key">Last reformulation</span><span class="meta-val red">Sept 2024 · recipe downgrade</span></div>
+        <div class="meta-row"><span class="meta-key">Last reviewed</span><span class="meta-val">February 2026</span></div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<div class="content">
+
+  <!-- ── SECTION 1: FOUNDING ─────────────────────────────────────────── -->
+  <div class="section-divider"><span class="section-num">01</span><div class="section-line"></div></div>
+  <h2 class="section-title">The Founding Story Is <em>Real</em></h2>
+
+  <div class="prose">
+    <p>Annie Withey co-founded the company in 1989 in Hampton, Connecticut, with Andrew Martin, who had previously co-founded Smartfood popcorn. The founding premise was concrete: offer an organic macaroni and cheese that didn't use the artificial dyes, processed cheese product, and synthetic additives that defined Kraft — the dominant product in the category.</p>
+    <p>Early customers ordered it by the case. Withey's personal phone number was printed on every box. She answered the calls. This wasn't a marketing stunt — at the time, there was no marketing budget. The phone number was how a small-producer connected with her actual customers. It became the defining artifact of the brand's identity: a real person, a real mission, accountability on the packaging itself.</p>
+    <p>By the late 1990s, Withey had stepped back from daily operations. In 1999, investor John Foraker's company invested $2 million, acquiring Withey and Martin's shares and making Annie's a private company. Withey became "inspirational president" — the face remained, the operational control did not.</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain-item">
+      <div class="chain-dot found"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">1989</div>
+        <div class="chain-owner">Annie Withey — Founder</div>
+        <div class="chain-note">Hampton, Connecticut. Organic mac &amp; cheese as alternative to Kraft. Home phone number on packaging. Sells cases to individual customers.</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot dep"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">1999</div>
+        <div class="chain-owner">Founder stake sold to Homegrown Natural Foods / John Foraker</div>
+        <div class="chain-note">$2M investment. Withey and Martin's shares bought out. Withey becomes "Inspirational President" — brand face, no operational role. Company goes private.</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot dep"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">2002</div>
+        <div class="chain-owner">Solera Capital</div>
+        <div class="chain-note">$23M majority investment. Annie's scales distribution to Costco, Kroger, Safeway. Still operated as independent organic brand. Withey's name and aesthetic maintained.</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot pub"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">March 2012</div>
+        <div class="chain-owner">IPO — Nasdaq: BNNY</div>
+        <div class="chain-note">~$630M initial valuation. Trades publicly for less than three years. By this point Annie Withey had completely cut ties with the company.</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot acq"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">September 2014</div>
+        <div class="chain-owner">General Mills (NYSE: GIS)</div>
+        <div class="chain-note warn">Acquired for $820M — 37% premium to market price. GIS makes Cocoa Puffs, Lucky Charms, Trix, Cheerios, Betty Crocker. Packaging, bunny mascot, and "Homegrown" identity maintained intact. Ownership disclosed only in fine-print legal text.</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-dot dep"><div class="chain-dot-inner"></div></div>
+      <div class="chain-content">
+        <div class="chain-year">August 2017</div>
+        <div class="chain-owner">President John Foraker resigned</div>
+        <div class="chain-note flag">Announced departure on LinkedIn. The last senior executive with direct ties to Annie's pre-acquisition era. Three years after acquisition — once integration was complete. No public explanation for timing.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">What the packaging still says</div>
+    <div class="callout-body">As of February 2026, Annie's packaging features: the "Homegrown" wordmark, the hand-drawn Bernie the bunny, "Since 1989," the Rabbit of Approval seal, "Certified Organic" from third-party auditors, and warm earthy colors. <strong>None of this discloses General Mills ownership.</strong> The legal entity name "General Mills" appears only in the fine-print ingredient label text, not in any consumer-facing brand communication. A parent buying Annie's over Kraft because they want to support a values-driven organic company is, after September 2014, routing their purchase to the same $34 billion conglomerate.</div>
+  </div>
+
+
+  <!-- ── SECTION 2: BEFORE / AFTER ──────────────────────────────────── -->
+  <div class="section-divider"><span class="section-num">02</span><div class="section-line"></div></div>
+  <h2 class="section-title">The Recipe Change: <em>Before &amp; After</em></h2>
+
+  <div class="prose">
+    <p>In September 2024, General Mills reformulated Annie's Shells &amp; White Cheddar, Classic Cheddar, and Shells &amp; Aged Cheddar lines. The relaunch packaging declared the recipe "Now Cheesier." The press release called it a "delightful upgrade."</p>
+    <p>Consumer advocacy site Mouse Print compared the old and new ingredient lists side by side. What it found: the fourth and fifth ingredients in the old recipe — <strong>butter and nonfat milk</strong> — had been removed. They were replaced with <strong>corn starch</strong>, a thickener that contains no protein and no meaningful dairy nutrition. This is what General Mills did not highlight in its press release.</p>
+  </div>
+
+  <!-- CLASSIC CHEDDAR before/after -->
+  <div class="ba-container">
+    <div class="ba-meta">
+      <span class="ba-product-tag">Shells &amp; Aged Cheddar</span>
+      <span class="ba-date-tag">Cheese powder comparison · Pre vs. Post September 2024</span>
+    </div>
+
+    <div class="ba-grid">
+      <!-- BEFORE -->
+      <div class="ba-panel">
+        <div class="ba-panel-head before">
+          <span class="ba-panel-label">Before — Pre-September 2024</span>
+          <span class="ba-panel-date">Original recipe</span>
+        </div>
+        <div class="ba-ingredients">
+          <div class="ba-ing same"><span class="ba-ing-num">1</span>Organic Pasta (organic wheat flour)</div>
+          <div class="ba-ing same"><span class="ba-ing-num">2</span>Organic Dried Cheddar Cheese (organic cultured pasteurized milk, salt, non-animal enzymes)</div>
+          <div class="ba-ing same"><span class="ba-ing-num">3</span>Organic Whey</div>
+          <div class="ba-ing same"><span class="ba-ing-num">4</span>Salt</div>
+          <div class="ba-ing removed"><span class="ba-ing-num">5</span>Organic Butter (organic pasteurized cream, salt)<span class="ba-change-tag removed">removed</span></div>
+          <div class="ba-ing removed"><span class="ba-ing-num">6</span>Organic Nonfat Milk<span class="ba-change-tag removed">removed</span></div>
+          <div class="ba-ing same"><span class="ba-ing-num">7</span>Sodium Phosphate</div>
+          <div class="ba-ing same"><span class="ba-ing-num">8</span>Organic Annatto Extract (for color)</div>
+          <div class="ba-ing same"><span class="ba-ing-num">9</span>Silicon Dioxide (for anticaking)</div>
+        </div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="ba-panel">
+        <div class="ba-panel-head after">
+          <span class="ba-panel-label">After — September 2024 "Now Cheesier"</span>
+          <span class="ba-panel-date">Current recipe</span>
+        </div>
+        <div class="ba-ingredients">
+          <div class="ba-ing same"><span class="ba-ing-num">1</span>Organic Pasta (organic wheat flour)</div>
+          <div class="ba-ing same"><span class="ba-ing-num">2</span>Organic Dried Cheddar Cheese (organic cultured pasteurized milk, salt, non-animal enzymes)</div>
+          <div class="ba-ing same"><span class="ba-ing-num">3</span>Organic Whey</div>
+          <div class="ba-ing same"><span class="ba-ing-num">4</span>Salt</div>
+          <div class="ba-ing added"><span class="ba-ing-num">5</span>Organic Corn Starch<span class="ba-change-tag added">added</span></div>
+          <div class="ba-ing same"><span class="ba-ing-num">6</span>Sodium Phosphate</div>
+          <div class="ba-ing same"><span class="ba-ing-num">7</span>Organic Annatto Extract (for color)</div>
+          <div class="ba-ing same"><span class="ba-ing-num">8</span>Silicon Dioxide (for anticaking)</div>
+          <div class="ba-ing same" style="opacity:0.3; font-style:italic; font-size:11px;"><span class="ba-ing-num"></span>—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUTRITION DELTA -->
+    <div class="ba-delta-bar">
+      <div class="ba-delta">
+        <div class="ba-delta-label">Nutrition impact (per serving)</div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Protein</span><span class="ba-delta-val worse">9g ↓ from 11g (−22%)</span></div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Calcium</span><span class="ba-delta-val worse">90mg ↓ from 110mg (−18%)</span></div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Total fat</span><span class="ba-delta-val worse">Decreased (butter removed)</span></div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Salt</span><span class="ba-delta-val worse">Amount increased</span></div>
+      </div>
+      <div class="ba-delta">
+        <div class="ba-delta-label">What General Mills claimed</div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Claim in press release</span><span class="ba-delta-val same">"Now Cheesier"</span></div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Mentioned butter removal</span><span class="ba-delta-val worse">Not disclosed</span></div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Mentioned protein drop</span><span class="ba-delta-val worse">Not disclosed</span></div>
+        <div class="ba-delta-row"><span class="ba-delta-key">Consumer reviews</span><span class="ba-delta-val worse">Predominantly 1-star</span></div>
+      </div>
+    </div>
+
+    <div class="ba-caption">
+      Source: Mouse Print (mouseprint.org), April 2025, comparing old and new Annie's Shells &amp; Aged Cheddar ingredient statements.
+      <strong>Nutrition data</strong> per Retail Brew analysis (May 2025), citing Renee Leber, Institute of Food Technologists.
+      General Mills did not respond to direct questions about why protein decreased if cheese content increased.
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Food science consultant Renee Leber, when asked by Retail Brew to review both recipes, noted that removing butter and nonfat milk while adding corn starch — while increasing cheese by a smaller percentage — "might have gone to a less expensive formulation." General Mills addressed none of the specific questions posed to them. Their written response: "We're always looking for ways to ensure our products deliver on the taste and quality our consumers want."</p>
+    <p>Sales data from Circana shows Annie's revenue was up 2% in the 52 weeks ending April 2025 — ahead of the overall mac and cheese category. The recipe change has not, so far, hurt revenues. For comparison: after a similar skimpflation backlash against Smart Balance (Conagra's butter spread, water ratio doubled in 2022), Conagra reverted to the original recipe within months. General Mills has made no such commitment for Annie's.</p>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-label">The Tell</div>
+    <div class="callout-body">
+      If the recipe were genuinely improved, General Mills would have disclosed the specific change. Instead, the press release emphasized "more cheese" and said nothing about removing butter or nonfat milk. <strong>The omission of the specific change is itself the evidence.</strong> Brands that upgrade recipes describe what improved. Brands that degrade recipes use marketing language that technically doesn't lie. "Now Cheesier" is true if cheese proportion increased — it says nothing about the protein, the dairy fats, or the ingredients that were removed.
+    </div>
+  </div>
+
+
+  <!-- ── SECTION 3: PHTHALATES ──────────────────────────────────────── -->
+  <div class="section-divider"><span class="section-num">03</span><div class="section-line"></div></div>
+  <h2 class="section-title">The <em>Phthalates</em> Problem</h2>
+
+  <div class="prose">
+    <p>In 2017, a report commissioned by health advocacy groups tested 30 cheese products — 10 of them mac &amp; cheese powder varieties. Twenty-nine of the 30 tested positive for phthalates. Phthalates are chemicals used to make plastics flexible; they enter food supply chains through processing equipment, conveyor belts, and packaging materials. The cheese powders tested — including organic products — had phthalate levels four times higher than natural cheeses.</p>
+    <p>Annie's confirmed on its FAQ page that its products contained phthalates. The company was transparent enough to put this on its website. What it did not do was put it on the packaging — the one place every consumer looks before purchase.</p>
+  </div>
+
+  <div class="phthalates-grid">
+    <div class="phth-card">
+      <div class="phth-card-label">2017 advocacy study</div>
+      <div class="phth-card-value amber">29 of 30</div>
+      <div class="phth-card-note">Mac &amp; cheese powder products tested positive for phthalates — including organic varieties. 4× higher than natural cheese.</div>
+    </div>
+    <div class="phth-card">
+      <div class="phth-card-label">Lawsuit filed</div>
+      <div class="phth-card-value red">April 2021</div>
+      <div class="phth-card-note">Class action against General Mills in EDNY. 20+ Annie's products named. Claims: "Made with Goodness" while containing phthalates not disclosed on packaging.</div>
+    </div>
+    <div class="phth-card">
+      <div class="phth-card-label">General Mills disclosed phthalates</div>
+      <div class="phth-card-value amber">FAQ only</div>
+      <div class="phth-card-note">Company acknowledged phthalate presence on its website FAQ section. No disclosure on product packaging — where purchase decisions are made.</div>
+    </div>
+    <div class="phth-card">
+      <div class="phth-card-label">Current status</div>
+      <div class="phth-card-value red">Active</div>
+      <div class="phth-card-note">Case limited in 2025 to omission-of-facts claims rather than affirmative misrepresentation. No settlement announced. No recall. Products still on shelf.</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>The lawsuit allegation is precise: General Mills knew its products contained phthalates, disclosed this in a FAQ section on its website, and did not disclose it on the packaging where consumers actually make purchase decisions. The plaintiffs allege this constitutes deceptive omission under New York consumer protection law and the Magnuson-Moss Warranty Act.</p>
+    <p>Annie's issued a pledge in 2021 to work with suppliers to eliminate phthalates from "packaging materials and food processing equipment." This is a supply chain commitment — not a timeline, not a verification protocol, not a third-party audit. No date for completion was given. No follow-up testing results have been published. As of February 2026, the FAQ page language from 2021 remains on Annie's website largely unchanged.</p>
+  </div>
+
+  <div class="callout yellow">
+    <div class="callout-label">The Disclosure Pattern</div>
+    <div class="callout-body">
+      Annie's chose to put phthalate information on a website FAQ rather than on packaging. This is the same structural problem as the General Mills ownership disclosure: <strong>the information exists, it's technically findable, and it's positioned exactly where consumers will not encounter it during a purchase decision.</strong> The parent and the child brand use the same playbook. This is not coincidence — it is General Mills' standard operating procedure for uncomfortable disclosures.
+    </div>
+  </div>
+
+
+  <!-- ── SECTION 4: THE NUMBERS ─────────────────────────────────────── -->
+  <div class="section-divider"><span class="section-num">04</span><div class="section-line"></div></div>
+  <h2 class="section-title">The Acquisition in <em>Numbers</em></h2>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Acquisition price</div>
+      <div class="stat-value amber">$820M</div>
+      <div class="stat-note">September 2014. 37% premium to prior market close. Funded by General Mills existing debt facilities.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">General Mills market cap</div>
+      <div class="stat-value">$34B</div>
+      <div class="stat-note">NYSE: GIS. Also owns Cheerios, Lucky Charms, Cocoa Puffs, Haagen-Dazs, Yoplait, Pillsbury, Betty Crocker.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Annie's annual revenue</div>
+      <div class="stat-value">~$250M</div>
+      <div class="stat-note">Estimated (GIS does not break out Annie's individually). Represents less than 1% of General Mills total revenue.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Packaging change post-acq.</div>
+      <div class="stat-value red">None</div>
+      <div class="stat-note">Visual identity, bunny mascot, "Homegrown" wordmark, "Since 1989" — all unchanged since acquisition. GM ownership in fine-print only.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">CEO departure</div>
+      <div class="stat-value">Aug 2017</div>
+      <div class="stat-note">John Foraker, President since 1999, resigned three years post-acquisition once integration was complete. Announced via LinkedIn.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Revenue post-reformulation</div>
+      <div class="stat-value red">+2%</div>
+      <div class="stat-note">52 weeks ending April 2025. Recipe change has not hurt sales yet. Consumer recognition of degradation lags product change by months to years.</div>
+    </div>
+  </div>
+
+
+  <!-- ── SECTION 5: WHAT ACTUALLY IS BETTER ────────────────────────── -->
+  <div class="section-divider"><span class="section-num">05</span><div class="section-line"></div></div>
+  <h2 class="section-title">What Annie's <em>Still Gets Right</em></h2>
+
+  <div class="prose">
+    <p>Clarity about the acquisition and the recipe change does not require pretending the product is equivalent to Kraft. Annie's organic mac &amp; cheese is still meaningfully different from Kraft Original in ways that matter to the consumers buying it.</p>
+    <p>The pasta uses organic wheat flour. The cheese powder uses real cheddar without synthetic dyes. There is no Yellow 5 or Yellow 6 — the artificial colorants that give Kraft its characteristic bright orange. The sodium content, while not low, is comparable to Kraft's. The organic certification is legitimate, third-party audited, and renewed annually. No FDA enforcement actions for false labeling have been taken against Annie's products.</p>
+    <p>The green score on Scientific Backing reflects that Annie's makes no fabricated health claims and no clinical endorsements. It is honest about what it is: an organic convenience food. The green score on Revenue Model reflects that this is a straightforward retail purchase — no subscription, no DTC lock-in, no predatory pricing structure.</p>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-label">What Actually Holds Up</div>
+    <div class="callout-body">
+      If you're buying Annie's instead of Kraft because you want organic pasta and real cheese without synthetic dyes — <strong>you're getting what you paid for at the product level.</strong> The green score on ingredient quality relative to conventional alternatives remains fair. The red scores are about ownership, disclosure, and trajectory — not about the product being outright fraudulent. Know what you're buying, and from whom.
+    </div>
+  </div>
+
+
+  <!-- ── SECTION 6: ALTERNATIVES ────────────────────────────────────── -->
+  <div class="section-divider"><span class="section-num">06</span><div class="section-line"></div></div>
+  <h2 class="section-title">If You Want the <em>Original Mission</em></h2>
+
+  <div class="prose">
+    <p><strong>Banza Mac &amp; Cheese</strong> uses chickpea pasta, delivers higher protein than Annie's current recipe, and was operationally independent as of 2024 (acquired by a consumer fund, maintained independent operations). If protein content matters to you — which it did when you bought Annie's original recipe — Banza is now the stronger nutritional option in the boxed mac category.</p>
+    <p><strong>Homemade</strong> remains the most transparent option: organic pasta plus a real aged cheddar, milk, and butter produces five recognizable ingredients, no powder, and roughly the same cost per serving as a box of Annie's. It's not instant, but it's the version where you control exactly what went in — and nothing was quietly removed.</p>
+    <p><strong>If you're still buying Annie's</strong>: the organic certification is real and the product is genuinely cleaner than Kraft. The information above exists so you can make that choice knowing who you're buying it from and what changed in the formula in September 2024.</p>
+  </div>
+
+</div><!-- /content -->
+
+<div class="sources">
+  <div class="sources-label">Sources &amp; Documentation</div>
+  <div class="sources-grid">
+    <div class="source-card"><strong>Wikipedia — Annie's Homegrown</strong>Founding history, IPO, General Mills acquisition, September 2024 recipe change documentation, revenue data. Cross-referenced with primary sources.</div>
+    <div class="source-card"><strong>General Mills Press Release, September 2014</strong>Acquisition of Annie's Homegrown announced at $46/share (~$820M). 37% premium to prior close. Available via SEC EDGAR and GIS investor relations.</div>
+    <div class="source-card"><strong>Mouse Print (mouseprint.org), April 2025</strong>"Here We Skimp Again — Annie's Shells &amp; Cheddar." Side-by-side ingredient comparison of pre- and post-September 2024 recipes. Documented butter and nonfat milk removal, corn starch addition.</div>
+    <div class="source-card"><strong>Retail Brew, May 2025</strong>"Annie's new mac and cheese recipe has longtime fans fuming." Renee Leber (IFT) quote on cost-cutting motivation. Circana revenue data for 52 weeks ending April 2025. GIS non-response to direct questions.</div>
+    <div class="source-card"><strong>ClassAction.org / EDNY filing, April 2021</strong>Class action against General Mills for phthalates in Annie's products. Alleges "Made with Goodness" marketing while phthalates present and not disclosed on packaging. Plaintiff: Shelby Franklin.</div>
+    <div class="source-card"><strong>Food Packaging Forum, February 2021</strong>Annie's FAQ statement confirming phthalate presence below EFSA threshold. Company pledge to eliminate phthalates from processing equipment and packaging materials.</div>
+    <div class="source-card"><strong>PCC Community Markets Sound Consumer, July 2021</strong>"Annie's takes steps to address phthalates." 2017 advocacy report finding phthalates in 29 of 30 tested cheese products. Context on industry-wide nature of contamination.</div>
+    <div class="source-card"><strong>Annie's product pages (annies.com), February 2026</strong>Current ingredient lists for Classic Cheddar, Organic Shells &amp; Real Aged Cheddar, Shells &amp; White Cheddar. Post-September 2024 formulations confirmed directly from brand website.</div>
+    <div class="source-card"><strong>SEC EDGAR — Annie's S-1 IPO Prospectus, 2012</strong>Filed March 2012. Full founding history, ownership structure, mission statement, financial data at time of public offering.</div>
+    <div class="source-card"><strong>Circana retail panel data, via Retail Brew 2025</strong>52-week revenue comparisons for Annie's, Kraft Heinz, and private label mac &amp; cheese. Category-level growth rates post-reformulation.</div>
+  </div>
+</div>
+
+<footer class="footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial and ingredient structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#d2b7b6bba6bda0bbb3be92a6a0b3b1b7b6fcb1bd" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="5633323f2239243f373a16222437353332783539">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="trace

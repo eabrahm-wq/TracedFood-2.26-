@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tropicana Pure Premium OJ — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --surface-2: #181818;
+    --border: #222222;
+    --border-light: #2a2a2a;
+    --text: #e8e4dc;
+    --text-muted: #7a7570;
+    --text-dim: #4a4642;
+    --accent: #C9A84C;
+    --accent-dim: rgba(201,168,76,0.12);
+    --red: #D94F3D;
+    --red-dim: rgba(217,79,61,0.12);
+    --yellow: #D4A84B;
+    --yellow-dim: rgba(212,168,75,0.12);
+    --green: #4E9B6F;
+    --green-dim: rgba(78,155,111,0.12);
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { 
+    background: var(--bg); 
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SITE HEADER ── */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 56px;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .site-logo {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .site-logo span {
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .site-nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .site-nav a {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .site-nav a:hover { color: var(--text); }
+
+  /* ── TIMELINE ALERT ── */
+  .timeline-alert {
+    margin-top: 56px;
+    background: rgba(217,79,61,0.08);
+    border-bottom: 1px solid rgba(217,79,61,0.25);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .alert-pill {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+    background: var(--red-dim);
+    border: 1px solid rgba(217,79,61,0.3);
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .alert-text {
+    font-size: 12.5px;
+    color: rgba(232,228,220,0.7);
+    font-weight: 300;
+  }
+
+  .alert-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 40px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .hero-breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-breadcrumb .sep { color: var(--border-light); }
+
+  .hero-category {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .product-name {
+    font-family: var(--font-display);
+    font-size: clamp(52px, 7vw, 88px);
+    font-weight: 900;
+    line-height: 0.92;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .product-sub {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(18px, 2.5vw, 28px);
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    line-height: 1.2;
+  }
+
+  .verdict-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .verdict-text {
+    font-size: 16.5px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(232,228,220,0.85);
+    max-width: 580px;
+  }
+
+  .verdict-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── SIDEBAR SCORECARD ── */
+  .scorecard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    position: sticky;
+    top: 76px;
+  }
+
+  .scorecard-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .scorecard-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .score-summary {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .score-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .score-count.red { color: var(--red); }
+  .score-count.yellow { color: var(--yellow); }
+  .score-count.green { color: var(--green); }
+
+  .scorecard-rows {
+    padding: 8px 0;
+  }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .score-row:last-child { border-bottom: none; }
+  .score-row:hover { background: var(--surface-2); }
+
+  .score-dim {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .score-pill {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 2px;
+  }
+
+  .score-pill.red {
+    color: var(--red);
+    background: var(--red-dim);
+    border: 1px solid rgba(217,79,61,0.2);
+  }
+
+  .score-pill.yellow {
+    color: var(--yellow);
+    background: var(--yellow-dim);
+    border: 1px solid rgba(212,168,75,0.2);
+  }
+
+  .score-pill.green {
+    color: var(--green);
+    background: var(--green-dim);
+    border: 1px solid rgba(78,155,111,0.2);
+  }
+
+  .scorecard-footer {
+    padding: 14px 24px;
+    border-top: 1px solid var(--border);
+    background: rgba(201,168,76,0.04);
+  }
+
+  .scorecard-footer-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .scorecard-footer-value {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── CONTENT SECTIONS ── */
+  .content-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .content-main {
+    padding: 60px 0;
+  }
+
+  .content-aside {
+    padding: 60px 0;
+  }
+
+  /* ── DIMENSION BLOCKS ── */
+  .dimension-block {
+    margin-bottom: 52px;
+    padding-bottom: 52px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dimension-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .dim-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .dim-number {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    width: 24px;
+    flex-shrink: 0;
+  }
+
+  .dim-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex: 1;
+  }
+
+  .dim-body {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.78;
+    color: rgba(232,228,220,0.75);
+    padding-left: 36px;
+  }
+
+  .dim-body p { margin-bottom: 14px; }
+  .dim-body p:last-child { margin-bottom: 0; }
+
+  .dim-body strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .dim-body em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  /* ── OWNERSHIP CHAIN ── */
+  .ownership-chain {
+    margin: 20px 0 0 36px;
+    position: relative;
+  }
+
+  .chain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .chain-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 28px;
+    bottom: -24px;
+    width: 1px;
+    background: var(--border-light);
+  }
+
+  .chain-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .chain-dot.current {
+    background: var(--red-dim);
+    border-color: rgba(217,79,61,0.3);
+  }
+
+  .chain-dot-inner {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-dim);
+  }
+
+  .chain-dot.current .chain-dot-inner {
+    background: var(--red);
+  }
+
+  .chain-content {
+    padding-bottom: 28px;
+    flex: 1;
+  }
+
+  .chain-year {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+
+  .chain-owner {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .chain-note {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ── CALLOUT BOX ── */
+  .callout {
+    background: var(--surface-2);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 3px 3px 0;
+    padding: 18px 20px;
+    margin: 24px 0 24px 36px;
+  }
+
+  .callout-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .callout-body {
+    font-size: 13.5px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(232,228,220,0.75);
+  }
+
+  .callout-body strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .callout.red {
+    border-left-color: var(--red);
+  }
+
+  .callout.red .callout-label {
+    color: var(--red);
+  }
+
+  /* ── ASIDE ELEMENTS ── */
+  .aside-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+
+  .aside-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .aside-stat {
+    margin-bottom: 14px;
+  }
+
+  .aside-stat:last-child { margin-bottom: 0; }
+
+  .aside-stat-value {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .aside-stat-value.red { color: var(--red); }
+  .aside-stat-value.yellow { color: var(--yellow); }
+
+  .aside-stat-label {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .aside-list {
+    list-style: none;
+  }
+
+  .aside-list li {
+    font-size: 12.5px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.4;
+  }
+
+  .aside-list li:last-child { border-bottom: none; }
+
+  .aside-list li::before {
+    content: '→';
+    color: var(--text-dim);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── FLAVOR PACK DIAGRAM ── */
+  .process-diagram {
+    margin: 24px 0 24px 36px;
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .process-step:last-child { border-bottom: none; }
+  .process-step:hover { background: var(--surface-2); }
+
+  .process-step.highlight {
+    background: rgba(217,79,61,0.06);
+    border-left: 2px solid var(--red);
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    width: 18px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .step-content {}
+
+  .step-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .process-step.highlight .step-title { color: var(--red); }
+
+  .step-desc {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ── SOURCES ── */
+  .sources-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+    border-top: 1px solid var(--border);
+  }
+
+  .sources-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .source-item {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    line-height: 1.5;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+
+  .source-item strong {
+    display: block;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
+
+  /* ── PAGE FOOTER ── */
+  .page-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .footer-note {
+    font-size: 11.5px;
+    font-weight: 300;
+    color: var(--text-dim);
+    max-width: 400px;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-breadcrumb { animation: fadeInUp 0.4s ease both; }
+  .product-name { animation: fadeInUp 0.5s 0.05s ease both; }
+  .product-sub { animation: fadeInUp 0.5s 0.1s ease both; }
+  .verdict-label { animation: fadeInUp 0.5s 0.15s ease both; }
+  .verdict-text { animation: fadeInUp 0.5s 0.2s ease both; }
+  .scorecard { animation: fadeInUp 0.5s 0.25s ease both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero, .content-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .scorecard { position: static; }
+    .hero { padding: 60px 24px 40px; }
+    .content-grid { padding: 0 24px; }
+    .section-divider { padding: 0 24px; }
+    .sources-section { padding: 40px 24px 60px; }
+    .site-header { padding: 0 24px; }
+    .timeline-alert { padding: 12px 24px; }
+    .page-footer { padding: 24px; flex-direction: column; gap: 12px; }
+    .footer-note { text-align: left; }
+    .product-name { font-size: 48px; }
+    .site-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<!-- TIMELINE ALERT -->
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Live Story</span>
+  <span class="alert-text"><strong>Feb 2025:</strong> Tropicana warned of potential Chapter 11 bankruptcy filing. PE owner PAI Partners has been unable to reverse structural decline since 2021 acquisition. PepsiCo wrote down its 39% stake by $135M in Q4 2024.</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb">
+      <span>Traced Database</span>
+      <span class="sep">/</span>
+      <span class="hero-category">PE-Acquired Legacy Brand</span>
+    </div>
+
+    <h1 class="product-name">Tropicana</h1>
+    <p class="product-sub">Pure Premium Orange Juice,<br>"Not from Concentrate"</p>
+
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      The orange juice in a Tropicana carton is real, in the sense that it started as orange juice.
+      What happens between the grove and your glass is the story the label does not tell.
+      After squeezing, the juice is <strong>de-oxygenated and stored in massive tanks for up to a year</strong> — a process that strips all natural flavor.
+      Flavor engineers, using the same expertise applied to designer perfumes, then add proprietary <strong>"flavor packs"</strong> back in before packaging.
+      These packs are legally derived from orange essence, so they need not appear on the label.
+      <strong>"100% pure squeezed, not from concentrate, no artificial flavors"</strong> remains technically defensible while describing something no consumer would recognize as natural orange juice.
+      The brand is now approaching potential bankruptcy under a French PE firm that acquired it in 2021 precisely because PepsiCo couldn't generate adequate margin from it — the clearest possible signal of an extraction strategy rather than investment.
+    </p>
+  </div>
+
+  <!-- SCORECARD SIDEBAR -->
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header">
+        <span class="scorecard-title">Transparency Score</span>
+        <div class="score-summary">
+          <span class="score-count red">3 ●</span>
+          <span class="score-count yellow">3 ●</span>
+          <span class="score-count green">1 ●</span>
+        </div>
+      </div>
+      <div class="scorecard-rows">
+        <div class="score-row">
+          <span class="score-dim">Ownership Structure</span>
+          <span class="score-pill red">Red</span>
+        </div>
+        <div class="score-row">
+          <span class="score-dim">Marketing Alignment</span>
+          <span class="score-pill yellow">Yellow</span>
+        </div>
+        <div class="score-row">
+          <span class="score-dim">Revenue Model</span>
+          <span class="score-pill yellow">Yellow</span>
+        </div>
+        <div class="score-row">
+          <span class="score-dim">Ingredient Integrity</span>
+          <span class="score-pill red">Red</span>
+        </div>
+        <div class="score-row">
+          <span class="score-dim">Scientific Backing</span>
+          <span class="score-pill green">Green</span>
+        </div>
+        <div class="score-row">
+          <span class="score-dim">Label Claim Accuracy</span>
+          <span class="score-pill red">Red</span>
+        </div>
+        <div class="score-row">
+          <span class="score-dim">Safety Transparency</span>
+          <span class="score-pill yellow">Yellow</span>
+        </div>
+      </div>
+      <div class="scorecard-footer">
+        <div class="scorecard-footer-label">Last reviewed</div>
+        <div class="scorecard-footer-value">February 2026 · Sources below</div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONTENT -->
+<div class="content-grid">
+  <main class="content-main">
+
+    <!-- DIM 1: OWNERSHIP -->
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">01</span>
+        <span class="dim-title">Ownership Structure</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>Tropicana was founded in 1947 by Anthony Rossi, a Sicilian immigrant who built a fruit-shipping business in Florida into the country's dominant orange juice brand. PepsiCo acquired it in 1998 for $3.3 billion and ran it as a subsidiary for 23 years.</p>
+        <p>In August 2021, PepsiCo sold a 61% controlling stake to <strong>PAI Partners</strong> — a French private equity firm based in Paris — for $3.3 billion. PepsiCo's stated reason: the juice business had margins "below the company's overall benchmark," and the proceeds would be redeployed into higher-growth areas. PepsiCo retained 39% and exclusive US distribution rights.</p>
+        <p>The acquisition chain is instructive:</p>
+      </div>
+
+      <div class="ownership-chain">
+        <div class="chain-item">
+          <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+          <div class="chain-content">
+            <div class="chain-year">1947</div>
+            <div class="chain-owner">Anthony Rossi (Founder)</div>
+            <div class="chain-note">Founded in Bradenton, Florida. Mission-driven fruit business.</div>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+          <div class="chain-content">
+            <div class="chain-year">1998</div>
+            <div class="chain-owner">PepsiCo</div>
+            <div class="chain-note">Acquired for $3.3B. Operated as a subsidiary for 23 years.</div>
+          </div>
+        </div>
+        <div class="chain-item">
+          <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+          <div class="chain-content">
+            <div class="chain-year">2021 – Present</div>
+            <div class="chain-owner">PAI Partners (61%) + PepsiCo (39%)</div>
+            <div class="chain-note">French PE firm. PepsiCo retained minority stake and US distribution. Revenue declining. Bankruptcy warning issued Feb 2025.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dim-body">
+        <p>PepsiCo sold Tropicana because it couldn't make adequate money from it. PAI Partners bought it because PE firms believe they can extract value that strategic owners cannot. In February 2025, Tropicana warned creditors it may file for Chapter 11 bankruptcy protection, citing declining sales, inflation, consumer diet shifts, and climate-related damage to Florida and Brazilian orange crops. PepsiCo has already written down its 39% stake by $135 million.</p>
+        <p>This is the PE extraction timeline playing out in real time: a 75-year American food institution, acquired because it was a drag on margins, now potentially heading toward restructuring under a European financial firm with no particular expertise in orange juice.</p>
+      </div>
+    </div>
+
+    <!-- DIM 2: MARKETING -->
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">02</span>
+        <span class="dim-title">Marketing Incentive Alignment</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>Tropicana does not have a meaningful investor-endorser conflict problem. There are no Huberman-style equity holders promoting the product on podcasts. The marketing is traditional CPG: television advertising, grocery placement, brand partnerships.</p>
+        <p>The yellow score reflects a different kind of misalignment: <strong>the "Grove to Glass" marketing narrative</strong>. Tropicana's brand has historically been built on the image of fresh oranges going directly from Florida groves into cartons. The tagline, the imagery, the word "pure" — all of it communicates a story of naturalness and minimal processing. That story is directly contradicted by the manufacturing reality described in Dimension 4. The misalignment is in the brand narrative itself, not in a paid endorser conflict.</p>
+        <p>Tropicana's 2024 bottle redesign is worth noting separately: the company replaced its iconic carafe-shaped bottle with a narrower 46oz container (shrinkflation from 52oz), sparking consumer backlash and a 19% sales drop by October 2024. The company doubled down on the new design rather than reverting. This is a classic PE-era signal — margin optimization overriding consumer relationship.</p>
+      </div>
+    </div>
+
+    <!-- DIM 3: REVENUE -->
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">03</span>
+        <span class="dim-title">Revenue Model</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>Tropicana is a single retail purchase with no subscription mechanism. You buy it, you drink it, you decide whether to buy it again. There is no lock-in, no auto-renew, no DTC premium model.</p>
+        <p>The yellow score reflects two things. First, the shrinkflation: reducing container size from 52oz to 46oz while maintaining price points is a form of quiet price extraction that most consumers don't notice at point of purchase. Second, the structural economics of the PE ownership: PAI Partners needs to generate returns for its investors on a defined timeline. That pressure produces the margin-optimization behaviors — shrinkflation, supply chain cost-cutting, potential bankruptcy — that are currently visible.</p>
+        <p>A single-purchase consumer product owned by a PE firm is not the same thing as a single-purchase consumer product owned by a founder or a strategic acquirer. The revenue model is the same; the incentive structure behind it is not.</p>
+      </div>
+    </div>
+
+    <!-- DIM 4: INGREDIENTS -->
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">04</span>
+        <span class="dim-title">Ingredient Integrity</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>This is the most important dimension for Tropicana, and the best-documented case of marketing-formula misalignment in the American grocery industry. The full story was researched and published by Yale doctoral student Alissa Hamilton in her 2009 book <em>Squeezed</em>, and has since been the subject of approximately 20 consolidated class action lawsuits.</p>
+        <p>What consumers believe they are buying: orange juice squeezed from oranges and put in a carton.</p>
+        <p>What actually happens:</p>
+      </div>
+
+      <div class="process-diagram">
+        <div class="process-step">
+          <span class="step-num">1</span>
+          <div class="step-content">
+            <div class="step-title">Oranges are squeezed</div>
+            <div class="step-desc">Florida and/or Brazilian oranges. This part is exactly what it sounds like.</div>
+          </div>
+        </div>
+        <div class="process-step highlight">
+          <span class="step-num">2</span>
+          <div class="step-content">
+            <div class="step-title">Oxygen is completely removed (deoxygenation)</div>
+            <div class="step-desc">The juice is stored in massive holding tanks. All oxygen is extracted to prevent spoilage — enabling storage for up to one year. This process also strips all natural flavor from the juice. The resulting liquid is essentially flavorless orange-colored water.</div>
+          </div>
+        </div>
+        <div class="process-step highlight">
+          <span class="step-num">3</span>
+          <div class="step-content">
+            <div class="step-title">Flavor packs are engineered and added back</div>
+            <div class="step-desc">Flavor and fragrance companies — the same firms that formulate perfumes for Dior and Calvin Klein — are hired to engineer "flavor packs" from orange essence and oil components. Different flavor profiles are created for different regional markets. Florida consumers receive a different taste than California consumers.</div>
+          </div>
+        </div>
+        <div class="process-step">
+          <span class="step-num">4</span>
+          <div class="step-content">
+            <div class="step-title">Packaged and labeled</div>
+            <div class="step-desc">The re-flavored juice is packaged and labeled "100% pure squeezed orange juice — not from concentrate." No flavor pack disclosure is required or made.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dim-body">
+        <p>The reason this is legal: flavor packs are derived from orange essence and orange oil — they come from the same fruit. Under FDA rules, they are therefore classified as "natural flavors" from the same source ingredient and do not require separate label disclosure. The FDA does not mandate disclosure of flavor packs in pasteurized juice.</p>
+
+        <div class="callout red">
+          <div class="callout-label">The Legal Technicality</div>
+          <div class="callout-body">
+            "Not from concentrate" means the juice was not reduced to a concentrate before shipping. It does not mean the juice was not de-oxygenated, stripped of flavor, stored for up to a year, and re-flavored by a perfume company before reaching your glass. Both statements are technically true simultaneously.
+          </div>
+        </div>
+
+        <p>Tropicana has never changed its labeling to disclose this process, despite the class action pressure. The label today still reads "100% Pure Squeezed Orange Juice" and "No Artificial Flavors." Both are technically accurate under current FDA rules. Neither accurately describes what most consumers would understand to be in the carton.</p>
+      </div>
+    </div>
+
+    <!-- DIM 5: SCIENCE -->
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">05</span>
+        <span class="dim-title">Scientific Backing</span>
+        <span class="score-pill green">Green</span>
+      </div>
+      <div class="dim-body">
+        <p>Tropicana does not make fabricated health claims, and it does not employ a scientific advisory board of equity-holding influencers. The Vitamin C content is real. The calorie count is accurate. There is no manufactured credibility problem here.</p>
+        <p>The green score is narrow: it applies only to the absence of false scientific claims, not to an affirmative endorsement of the product's healthfulness. Orange juice is high in sugar, low in fiber relative to whole fruit, and the "heart healthy" associations many consumers hold about OJ are not supported by specific research on the product as formulated.</p>
+      </div>
+    </div>
+
+    <!-- DIM 6: LABEL CLAIMS -->
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">06</span>
+        <span class="dim-title">Label Claim Accuracy</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>This is the second red dimension and the clearest one. The claim "100% Pure Squeezed Orange Juice — Not From Concentrate — No Artificial Flavors" creates a specific understanding in a reasonable consumer's mind: that the contents of this carton are the direct product of squeezing oranges, with no material alterations.</p>
+        <p>That understanding is false. The material alteration — de-oxygenation and flavor pack re-addition — is not disclosed. The flavor packs are engineered by specialty flavor houses. The same juice going into Florida cartons and California cartons has a different flavor profile by design.</p>
+        <p><strong>Regulatory record:</strong> Approximately 20 class action lawsuits were filed across multiple states beginning in 2012, alleging violations of state consumer fraud statutes over the "natural" marketing claims. The lawsuits were consolidated into a multi-district litigation proceeding. Tropicana did not change its label as a result of this litigation. The suits largely settled or were dismissed on the grounds that flavor packs are, under current FDA rules, technically permissible as undisclosed natural flavors — not because Tropicana's practices were found to be forthright.</p>
+
+        <div class="callout">
+          <div class="callout-label">Research Source</div>
+          <div class="callout-body">
+            The definitive account of the orange juice industry's manufacturing practices was published in <strong><em>Squeezed: What You Don't Know About Orange Juice</em></strong> by Alissa Hamilton (Yale University Press, 2009). Hamilton spent five years researching the industry, interviewing Tropicana employees, growers, and FDA officials. Her research directly informed the wave of class action litigation that followed.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIM 7: SAFETY -->
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">07</span>
+        <span class="dim-title">Safety Transparency</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>There are no active food safety concerns with Tropicana. The product is FDA-regulated as a food, not a supplement, and its safety record is generally clean. A 2012 incident involving trace amounts of the fungicide carbendazim in some orange juice imports from Brazil was investigated and resolved; Tropicana subsequently committed to Florida-only sourcing before reverting to a Florida-and-Brazil blend due to citrus greening disease.</p>
+        <p>The yellow score reflects the flavor pack non-disclosure rather than an active contamination or safety concern. Consumers cannot make an informed purchase decision about a product when a material aspect of its manufacturing — the fact that a flavor engineering company is responsible for its taste — is not disclosed anywhere on the label. This is a transparency failure, not a safety failure.</p>
+        <p>No independent third-party testing protocol exists for orange juice at the batch level. No Certificate of Analysis is publicly available. These are not unusual absences for a commodity food product, but they are worth noting in the context of Traced's framework.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="content-aside">
+
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat">
+        <div class="aside-stat-value">$3.3B</div>
+        <div class="aside-stat-label">PAI Partners acquisition price, 2021</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value red">19%</div>
+        <div class="aside-stat-label">Sales decline after 2024 bottle redesign (Oct 2024, Circana)</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value red">−10%</div>
+        <div class="aside-stat-label">Income decline, Q4 2024</div>
+      </div>
+      <div class="aside-stat">
+        <div class="aside-stat-value">~20</div>
+        <div class="aside-stat-label">Class action lawsuits filed over flavor pack non-disclosure (2012+)</div>
+      </div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Timeline Flags</div>
+      <ul class="aside-list">
+        <li>Feb 2025: Tropicana warned of potential Chapter 11 bankruptcy filing</li>
+        <li>Q4 2024: PepsiCo wrote down its 39% stake by $135M</li>
+        <li>Summer 2024: Bottle redesign launched, replacing iconic carafe with narrower 46oz bottle. Sales fell 19%.</li>
+        <li>2021: PepsiCo divested 61% stake to PAI Partners at $3.3B</li>
+        <li>2012: First class action lawsuits filed over flavor pack non-disclosure. ~20 suits consolidated nationally.</li>
+        <li>2009: <em>Squeezed</em> by Alissa Hamilton published. First comprehensive public account of industry manufacturing practices.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Category Context</div>
+      <ul class="aside-list">
+        <li>The flavor pack process applies broadly to all major pasteurized "not from concentrate" orange juice brands, not only Tropicana</li>
+        <li>Simply Orange (Coca-Cola) and Minute Maid use similar processes; Simply is taking Tropicana market share at the premium end</li>
+        <li>Florida's citrus greening disease has killed over 75% of Florida's orange trees — structural supply problem independent of PE ownership</li>
+        <li>US per-capita OJ consumption has declined for 15+ years as consumers moved away from high-sugar beverages</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">What to Look For Instead</div>
+      <ul class="aside-list">
+        <li>Fresh-squeezed juice from a local juicery or grocery that squeezes in-house — no deoxygenation, no flavor packs, no storage</li>
+        <li>Whole oranges — all the fiber, no processing, cheaper per serving</li>
+        <li>If buying packaged juice: "cold-pressed" juice sold refrigerated with a short shelf life (1–3 weeks) is meaningfully different — cold pressing does not require deoxygenation</li>
+      </ul>
+    </div>
+
+  </aside>
+</div>
+
+<!-- SOURCES -->
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item">
+      <strong>Hamilton, Alissa. Squeezed (2009)</strong>
+      Yale University Press. Primary source for deoxygenation and flavor pack research.
+    </div>
+    <div class="source-item">
+      <strong>ABC News, Jan 2012</strong>
+      "California Woman Sues Tropicana Over Flavor Packs." First major media coverage of class action filings.
+    </div>
+    <div class="source-item">
+      <strong>Top Class Actions, 2012</strong>
+      Consolidated MDL coverage: ~20 suits alleging deceptive "natural" claims.
+    </div>
+    <div class="source-item">
+      <strong>PepsiCo Press Release, Aug 2021</strong>
+      Official announcement of PAI Partners sale. Revenue and margin data confirmed.
+    </div>
+    <div class="source-item">
+      <strong>Wikipedia / Tropicana Brands Group</strong>
+      Ownership timeline, bankruptcy warning, shrinkflation packaging details.
+    </div>
+    <div class="source-item">
+      <strong>Money Digest, 2025</strong>
+      "The Popular Juice Brand That Could Face Bankruptcy." Revenue decline, PepsiCo write-down, Circana market share data.
+    </div>
+    <div class="source-item">
+      <strong>Food Dive, Jul 2024</strong>
+      "After $3B Sale by PepsiCo, Tropicana Goes About Juicing Up Its Business." Post-acquisition strategy analysis.
+    </div>
+    <div class="source-item">
+      <strong>Tropicana Brands Group Wikipedia, Feb 2025</strong>
+      Feb 2025 bankruptcy warning; Nov 2024 packaging redesign; citrus greening disease context.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#ef8a8b869b809d868e83af9b9d8e8c8a8bc18c8082cfc982868b8b809bd4cfd38ecf879d8a89d2" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2a4f4e435e4558434b466a5e584b494f4e04494547">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{col

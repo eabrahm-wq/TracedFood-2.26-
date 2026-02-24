@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halo Top — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .dose-diagram{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .dd-header{background:var(--surface-2);padding:10px 16px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border);}
+  .dd-row{display:flex;align-items:flex-start;gap:16px;padding:14px 18px;border-bottom:1px solid var(--border);transition:background 0.15s;}.dd-row:last-child{border-bottom:none;}.dd-row:hover{background:var(--surface-2);}
+  .dd-row.highlight{background:rgba(217,79,61,0.06);border-left:2px solid var(--red);}
+  .dd-num{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:18px;flex-shrink:0;padding-top:2px;}
+  .dd-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px;}.dd-row.highlight .dd-title{color:var(--red);}
+  .dd-desc{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .ownership-chain{margin:20px 0 0 36px;position:relative;}
+  .chain-item{display:flex;align-items:flex-start;gap:14px;position:relative;}
+  .chain-item:not(:last-child)::after{content:'';position:absolute;left:10px;top:28px;bottom:-24px;width:1px;background:var(--border-light);}
+  .chain-dot{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .chain-dot.current{background:var(--red-dim);border-color:rgba(217,79,61,0.3);}
+  .chain-dot-inner{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+  .chain-dot.current .chain-dot-inner{background:var(--red);}
+  .chain-content{padding-bottom:28px;flex:1;}
+  .chain-year{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:2px;}
+  .chain-owner{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .chain-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}}
+</style>
+</head>
+<body data-share-fact="A February 2023 study in Nature Medicine (Witkowski et al.) found an association between erythritol and cardiovascular risk. Erythritol is Halo Top's primary sweetener. The study's findings have not been reflected in Halo Top's marketing." data-share-owner="Wells Enterprises" data-share-year="Acquired 2019" data-share-url="https://traced.com/traced-halotop.html">
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Emerging Risk</span>
+  <span class="alert-text"><strong>2023:</strong> A peer-reviewed study in the <em>Nature Medicine</em> found erythritol — Halo Top's primary sweetener — associated with elevated cardiovascular risk markers. Halo Top has not updated its marketing or labeling in response.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Diet Brand / Dose Gap</span></div>
+    <h1 class="product-name">Halo Top</h1>
+    <p class="product-sub">Light Ice Cream,<br>"Go Ahead, Eat the Whole Pint"</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Halo Top built a category around a single permission slip: low-calorie ice cream you could eat in quantity without guilt. The tagline said it directly — <strong>"Go ahead, eat the whole pint."</strong> That instruction is the product's entire value proposition, and it is also the mechanism by which its most significant risk is delivered. Halo Top achieves its low-calorie, low-sugar profile primarily through <strong>erythritol</strong>, a sugar alcohol. A single serving contains approximately 7–9 grams of erythritol. A full pint — the consumption pattern the brand actively encouraged — contains roughly 28–36 grams. In February 2023, a study published in <em>Nature Medicine</em> found that elevated blood erythritol levels were associated with increased platelet aggregation and a higher risk of major cardiovascular events. The study's authors noted that eating a small amount of erythritol caused blood levels to remain elevated for days. The consumers most likely to eat an entire pint of diet ice cream in one sitting — those managing weight, those with diet-related health concerns, those for whom a "safe" indulgence is important — are also among those most likely to have elevated baseline cardiovascular risk. Halo Top was acquired by Wells Enterprises (maker of Blue Bunny ice cream) in 2019 and has not materially updated its marketing, labeling, or product formulation in response to the erythritol findings.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header"><span class="scorecard-title">Transparency Score</span><div class="score-summary"><span class="score-count red">4 ●</span><span class="score-count yellow">3 ●</span></div></div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green" style="color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);">Green</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      </div>
+      <div class="scorecard-footer"><div class="scorecard-footer-label">Last reviewed</div><div class="scorecard-footer-value">February 2026 · Sources below</div></div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Halo Top was founded in 2011 by Justin Woolverton, a Los Angeles attorney, initially as a home project and then as a commercial brand. It grew from near-zero to the best-selling ice cream pint in the United States in 2017 — one of the most rapid CPG category ascents in recent memory — driven almost entirely by social media, influencer marketing, and the "eat the whole pint" permission structure.</p>
+
+        <div class="ownership-chain">
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2011</div>
+              <div class="chain-owner">Justin Woolverton (Founder)</div>
+              <div class="chain-note">Founded in Los Angeles. Self-funded initially. Grew to #1 US ice cream pint by 2017 with minimal traditional advertising.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2019 – Present</div>
+              <div class="chain-owner">Wells Enterprises</div>
+              <div class="chain-note">Private, family-owned company. Maker of Blue Bunny, Bomb Pop, and other conventional ice cream brands. Acquired Halo Top for an undisclosed amount estimated at $1B+. Operates Halo Top as a standalone brand with original identity intact. No major product or marketing changes post-acquisition.</div>
+            </div>
+          </div>
+        </div>
+
+        <p>Wells Enterprises is one of the largest private ice cream manufacturers in the US. Its portfolio is conventional, mainstream, and sugar-forward — the precise opposite of Halo Top's positioning. The acquisition followed the same pattern as General Mills / Annie's and other values-brand acquisitions: buy the brand equity, maintain the narrative, extract the premium.</p>
+        <p>The red score reflects both the ownership gap and the post-acquisition inaction: Wells has not updated Halo Top's marketing or labeling in response to the 2023 erythritol cardiovascular risk findings. The incentive to do so — which would require acknowledging that the product's primary differentiating ingredient carries emerging safety questions — is structurally absent when the brand's entire value proposition depends on that ingredient.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Halo Top's marketing is built around a specific behavioral instruction: eat more. The tagline "Go ahead, eat the whole pint" is not passive positioning — it is an active call to a consumption pattern that maximizes erythritol dose per occasion. This is the dose gap pattern at its most direct: the product's marketing explicitly encourages consumers to consume at the level where its emerging risk profile becomes most relevant.</p>
+        <p>The incentive misalignment is not an influencer conflict or an equity scheme. It is the structural reality that Halo Top's brand and revenue depend on consumers eating large quantities of a product that is now associated with cardiovascular risk at large quantities. The marketing was designed around the permission to eat more. The science emerging around erythritol suggests that eating more is precisely the pattern most worth questioning.</p>
+
+        <div class="callout red">
+          <div class="callout-label">Pattern: The Dose Gap — Inverted</div>
+          <div class="callout-body">Cheerios uses real science applied at a dose consumers don't reach. Halo Top is the inverse: a risk that only materializes at the dose the brand's marketing explicitly instructs consumers to consume. In both cases, the marketing obscures the dose reality. The mechanism is opposite; the failure is the same.</div>
+        </div>
+
+        <p>Halo Top's original marketing targeted diet-conscious consumers, particularly women managing caloric intake. This audience — statistically more likely to be monitoring cardiovascular health markers and metabolic health — is also the audience most likely to consume the product in pint quantities on a regular basis. The marketing-to-audience alignment is the inverse of what the emerging safety data would recommend.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill green" style="color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);">Green</span></div>
+      <div class="dim-body">
+        <p>Single retail purchase, $5–6 per pint. No subscription, no DTC auto-renewal. The revenue model is as clean as grocery-aisle ice cream gets. The green score here is unambiguous — the concerns with this product are in other dimensions.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Halo Top Vanilla Bean ingredients: Skim Milk, Eggs, Erythritol, Prebiotic Fiber (Chicory Root), Cream, Milk Protein Concentrate, Organic Cane Sugar, Vegetable Glycerin, Sea Salt, Organic Carob Gum, Organic Guar Gum, Organic Stevia Leaf Extract, Vanilla Extract, Natural Flavors.</p>
+        <p>The ingredient list is not dramatically adulterated relative to conventional ice cream. There are no artificial dyes, no high-fructose corn syrup. The red score is driven by erythritol specifically — its role, its quantity, and what the 2023 research suggests about its safety profile at the doses the brand's marketing encourages.</p>
+
+        <div class="dose-diagram">
+          <div class="dd-header">Erythritol Dose Reality — Per Serving vs. Per Pint</div>
+          <div class="dd-row">
+            <span class="dd-num">1</span>
+            <div>
+              <div class="dd-title">Label serving size: ½ cup (106g)</div>
+              <div class="dd-desc">Approximately 7–9g erythritol. One of four servings in a pint. The serving nutrition facts are calculated on this amount.</div>
+            </div>
+          </div>
+          <div class="dd-row highlight">
+            <span class="dd-num">2</span>
+            <div>
+              <div class="dd-title">"Go ahead, eat the whole pint" = 28–36g erythritol</div>
+              <div class="dd-desc">The branded consumption instruction delivers 4x the per-serving erythritol dose. The 2023 Nature Medicine study found that erythritol consumption elevated blood levels for approximately 2–3 days post-consumption — meaning regular pint consumption may maintain chronically elevated erythritol blood levels.</div>
+            </div>
+          </div>
+          <div class="dd-row highlight">
+            <span class="dd-num">3</span>
+            <div>
+              <div class="dd-title">Study dose context</div>
+              <div class="dd-desc">The Witkowski et al. (2023) study found that a 30g erythritol drink produced sustained blood level elevation associated with platelet hyperreactivity. A full Halo Top pint delivers approximately this dose. The study population included individuals with existing cardiovascular risk factors — the demographic overlap with diet ice cream consumers is significant.</div>
+            </div>
+          </div>
+        </div>
+
+        <p>Erythritol is classified as GRAS (Generally Recognized as Safe) by the FDA. The 2023 research does not change its regulatory status. What it does is raise a question that Halo Top's labeling and marketing do not address: what is the dose, how does the brand encourage me to consume it, and what does the emerging science say about that dose?</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Halo Top's low-calorie claims are factually accurate and methodologically straightforward — calorie counting is well-established nutrition science. The yellow score reflects the erythritol safety literature and Halo Top's non-response to it.</p>
+        <p>The 2023 Witkowski et al. study in <em>Nature Medicine</em> is a peer-reviewed, large-cohort study from the Cleveland Clinic. It is not a fringe finding. It found an association between high erythritol blood levels and major adverse cardiovascular events (MACE), and demonstrated in follow-up experiments that erythritol enhanced platelet aggregation — the mechanism underlying thrombosis. The authors specifically called out the widespread use of erythritol in "keto" and diet products as a public health concern warranting further study.</p>
+        <p>The science is not settled — association studies require replication and do not prove causation. But the study is credible, the mechanism proposed is plausible, and Halo Top has made no visible response: no updated labeling, no marketing modification, no consumer communication about the findings.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Halo Top's label claims are accurate. Calorie counts are correct. Ingredient disclosures are complete. No FDA enforcement actions. The yellow score reflects two gaps. First, erythritol content is not disclosed by gram on the Nutrition Facts panel — it is listed as an ingredient but not quantified. A consumer who has read the 2023 erythritol study and wants to evaluate their dose cannot determine it from the label without independent research. Second, the "light ice cream" designation — while technically accurate under FDA definitions — is used to frame a product whose primary differentiation mechanism now has emerging safety questions, without any contextualizing communication to the consumer.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>The safety transparency red score is driven entirely by the post-2023 non-response. A credible, peer-reviewed study in one of the world's leading medical journals found that erythritol — Halo Top's primary sweetener, the ingredient that makes the product's entire value proposition possible — is associated with elevated cardiovascular risk at doses the brand's own marketing encourages consumers to consume regularly.</p>
+        <p>Wells Enterprises has not issued any consumer communication about this finding. Halo Top's marketing materials continue to use "Go ahead, eat the whole pint" framing on digital channels. The label has not been updated to disclose erythritol content by gram or to include any contextualizing safety information. The FDA has not required such updates — erythritol remains GRAS. But GRAS status reflects the pre-2023 evidence base. A company with genuine transparency commitments would communicate proactively about emerging findings related to its primary functional ingredient. Wells has not done so.</p>
+
+        <div class="callout red">
+          <div class="callout-label">The Population Mismatch</div>
+          <div class="callout-body">Diet ice cream consumers skew toward individuals managing weight, metabolic health, or cardiovascular risk — the precise population most likely to have elevated baseline cardiovascular risk factors. The Witkowski et al. study found that erythritol's cardiovascular associations were strongest in individuals with pre-existing risk factors. Halo Top markets most aggressively to the consumers most likely to be affected by the finding it has not disclosed.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value red">28–36g</div><div class="aside-stat-label">Erythritol per full pint — the consumption the brand's marketing encourages</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">30g</div><div class="aside-stat-label">Erythritol dose used in the 2023 Nature Medicine study that found cardiovascular risk association</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">2019</div><div class="aside-stat-label">Year Wells Enterprises (Blue Bunny) acquired Halo Top. Price undisclosed, estimated $1B+.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">0</div><div class="aside-stat-label">Consumer communications issued by Halo Top or Wells Enterprises about the 2023 erythritol findings</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">The Erythritol Study</div>
+      <ul class="aside-list">
+        <li><strong>Citation:</strong> Witkowski et al., "The artificial sweetener erythritol and cardiovascular event risk." Nature Medicine, Feb 2023.</li>
+        <li>Large prospective cohort: 1,157 patients undergoing cardiac evaluation. High erythritol plasma levels associated with 3-year MACE risk.</li>
+        <li>Follow-up: 30g erythritol drink produced sustained blood level elevation for 2+ days; enhanced ex vivo platelet aggregation.</li>
+        <li>Author recommendation: further safety studies warranted, especially given widespread use in diet and keto products.</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Alternatives</div>
+      <ul class="aside-list">
+        <li><strong>Enlightened Ice Cream:</strong> Uses chicory root fiber + small amounts of erythritol at lower doses. Lower erythritol per serving than Halo Top.</li>
+        <li><strong>Regular ice cream, smaller portions:</strong> A half-cup of Breyers Natural Vanilla contains 130 calories, 14g sugar, and zero erythritol.</li>
+        <li><strong>Frozen Greek yogurt:</strong> Siggi's skyr-based frozen bars deliver protein, lower sugar, no erythritol.</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Timeline</div>
+      <ul class="aside-list">
+        <li>2011: Justin Woolverton founds Halo Top in Los Angeles</li>
+        <li>2017: Becomes #1 selling ice cream pint in the US by unit volume</li>
+        <li>2019: Wells Enterprises acquires for estimated $1B+</li>
+        <li>Feb 2023: Witkowski et al. published in Nature Medicine — erythritol cardiovascular risk association</li>
+        <li>2023–2026: No label update, no marketing change, no consumer communication from Halo Top or Wells</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Witkowski et al., Nature Medicine, Feb 2023</strong>"The artificial sweetener erythritol and cardiovascular event risk." Cleveland Clinic. Large prospective cohort + mechanistic follow-up.</div>
+    <div class="source-item"><strong>FDA GRAS Database</strong>Erythritol GRAS status. Current regulatory classification unchanged by 2023 study findings.</div>
+    <div class="source-item"><strong>Halo Top product label / website</strong>Full ingredient list, nutrition facts panel. Erythritol listed but not quantified by gram.</div>
+    <div class="source-item"><strong>Wells Enterprises company overview</strong>Acquisition of Halo Top, 2019. Portfolio context: Blue Bunny, Bomb Pop, Halo Top.</div>
+    <div class="source-item"><strong>USDA FoodData Central</strong>Halo Top Vanilla Bean: full ingredient list, nutrition facts per serving and per pint.</div>
+    <div class="source-item"><strong>Nichol et al., Regulatory Toxicology and Pharmacology, 2021</strong>Erythritol safety review prior to 2023 findings. Provides pre-existing evidence base context.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#0663626f7269746f676a467274676563622865696b26206b6f626269723d263a67266e7463603b" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="50353439243f2239313c102422313335347e333f3d">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{color:#C9A84C;text-decoration:none}
+.traced-lega

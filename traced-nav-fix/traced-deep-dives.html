@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deep Dives — Traced</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #0a0908;
+      --bg-card:     #111009;
+      --bg-hover:    #161410;
+      --border:      #232018;
+      --border-lt:   #2d2a20;
+      --text:        #ede9e0;
+      --text-muted:  #9a9284;
+      --text-dim:    #625c50;
+      --amber:       #c8943a;
+      --amber-dim:   rgba(200,148,58,0.08);
+      --red:         #c94d3c;
+      --red-dim:     rgba(201,77,60,0.08);
+      --green:       #4e9b6f;
+      --green-dim:   rgba(78,155,111,0.08);
+      --yellow:      #d4a84b;
+      --yellow-dim:  rgba(212,168,75,0.08);
+      --fd: 'Playfair Display', Georgia, serif;
+      --fb: 'DM Sans', sans-serif;
+      --fm: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--fb);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(10,9,8,0.96); backdrop-filter: blur(16px);
+    }
+    .nav-logo {
+      font-family: var(--fd); font-size: 24px; font-weight: 700;
+      color: var(--amber); text-decoration: none; letter-spacing: -0.01em;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-size: 11.5px; font-weight: 400; color: var(--text-dim);
+      text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-muted); }
+    .nav-links a.active { color: var(--amber); }
+
+    /* ── MASTHEAD ── */
+    .masthead {
+      max-width: 1200px; margin: 0 auto;
+      padding: 88px 48px 72px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: end;
+    }
+    .masthead-left { padding-right: 64px; border-right: 1px solid var(--border); }
+    .masthead-eyebrow {
+      font-family: var(--fm); font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--amber);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+    }
+    .masthead-eyebrow::before {
+      content: ''; display: inline-block;
+      width: 24px; height: 1px; background: var(--amber);
+    }
+    .masthead-title {
+      font-family: var(--fd);
+      font-size: clamp(64px, 8vw, 108px);
+      font-weight: 900; line-height: 0.88;
+      letter-spacing: -0.03em; color: var(--text);
+      margin-bottom: 0;
+    }
+    .masthead-title em {
+      font-style: italic; color: var(--amber);
+      display: block;
+    }
+
+    .masthead-right { padding-left: 64px; }
+    .masthead-desc {
+      font-size: 15.5px; font-weight: 300; color: rgba(237,233,224,0.75);
+      line-height: 1.78; max-width: 440px; margin-bottom: 32px;
+    }
+    .masthead-desc strong { color: var(--text); font-weight: 500; }
+    .masthead-meta {
+      display: flex; gap: 32px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .masthead-stat-val {
+      font-family: var(--fd); font-size: 32px; font-weight: 900;
+      color: var(--text); line-height: 1; margin-bottom: 4px;
+    }
+    .masthead-stat-val.amber { color: var(--amber); }
+    .masthead-stat-label {
+      font-family: var(--fm); font-size: 9px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      max-width: 1200px; margin: 0 auto;
+      padding: 52px 48px 24px;
+      display: flex; align-items: baseline; gap: 16px;
+    }
+    .section-header-label {
+      font-family: var(--fm); font-size: 9px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--text-dim); flex-shrink: 0;
+    }
+    .section-header-line { flex: 1; height: 1px; background: var(--border); }
+    .section-header-count {
+      font-family: var(--fm); font-size: 9px; letter-spacing: 0.1em;
+      color: var(--text-dim); flex-shrink: 0;
+    }
+
+    /* ── LIVE CARD GRID ── */
+    .live-grid {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 48px 24px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    /* ── LIVE CARD ── */
+    .live-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+      transition: background 0.25s, border-color 0.25s;
+      cursor: pointer;
+    }
+    .live-card:hover { background: var(--bg-hover); border-color: var(--border-lt); }
+    .live-card:hover .card-arrow { transform: translateX(4px); color: var(--amber); }
+    .live-card:hover .card-title { color: var(--amber); }
+
+    /* animated left border on hover */
+    .live-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--amber);
+      transform: scaleY(0); transform-origin: bottom;
+      transition: transform 0.3s ease;
+    }
+    .live-card:hover::before { transform: scaleY(1); }
+
+    .card-inner { padding: 32px 36px 28px; flex: 1; display: flex; flex-direction: column; }
+
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+    .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .card-tag {
+      font-family: var(--fm); font-size: 8.5px; letter-spacing: 0.14em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 2px;
+    }
+    .card-tag.live { color: var(--amber); background: var(--amber-dim); border: 1px solid rgba(200,148,58,0.25); }
+    .card-tag.cat  { color: var(--text-dim); background: transparent; border: 1px solid var(--border); }
+    .card-tag.red  { color: var(--red); background: var(--red-dim); border: 1px solid rgba(201,77,60,0.2); }
+    .card-arrow {
+      font-size: 16px; color: var(--text-dim);
+      transition: transform 0.2s, color 0.2s;
+      flex-shrink: 0; margin-left: 12px; line-height: 1;
+    }
+
+    .card-number {
+      font-family: var(--fm); font-size: 9px; letter-spacing: 0.1em;
+      color: var(--text-dim); margin-bottom: 10px;
+    }
+    .card-title {
+      font-family: var(--fd); font-size: clamp(34px, 4vw, 52px);
+      font-weight: 900; line-height: 0.9; letter-spacing: -0.02em;
+      color: var(--text); margin-bottom: 6px;
+      transition: color 0.25s;
+    }
+    .card-title em { font-style: italic; color: var(--amber); }
+    .card-subtitle {
+      font-size: 12.5px; font-weight: 300; color: var(--text-dim);
+      margin-bottom: 20px; letter-spacing: 0.02em;
+    }
+    .card-thesis {
+      font-size: 13.5px; font-weight: 300; line-height: 1.65;
+      color: rgba(237,233,224,0.65);
+      flex: 1; margin-bottom: 24px;
+    }
+    .card-thesis strong { color: var(--text-muted); font-weight: 500; }
+
+    .card-stats { display: flex; gap: 0; border-top: 1px solid var(--border); margin-top: auto; padding-top: 20px; }
+    .card-stat { flex: 1; padding-right: 20px; }
+    .card-stat:not(:last-child) { border-right: 1px solid var(--border); margin-right: 20px; }
+    .card-stat-val {
+      font-family: var(--fd); font-size: 24px; font-weight: 900;
+      line-height: 1; margin-bottom: 3px; color: var(--text);
+    }
+    .card-stat-val.red { color: var(--red); }
+    .card-stat-val.amber { color: var(--amber); }
+    .card-stat-val.yellow { color: var(--yellow); }
+    .card-stat-label {
+      font-family: var(--fm); font-size: 8.5px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-dim); line-height: 1.4;
+    }
+
+    /* ── PLACEHOLDER GRID ── */
+    .placeholder-grid {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 48px 80px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .placeholder-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-style: dashed;
+      padding: 24px 26px 22px;
+      position: relative;
+      opacity: 0.7;
+    }
+    .ph-eyebrow {
+      font-family: var(--fm); font-size: 8px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    }
+    .ph-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--text-dim); flex-shrink: 0;
+      animation: blink 2.5s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+    .ph-name {
+      font-family: var(--fd); font-size: 26px; font-weight: 900;
+      line-height: 0.95; letter-spacing: -0.02em;
+      color: rgba(237,233,224,0.25); margin-bottom: 6px;
+    }
+    .ph-cat {
+      font-family: var(--fm); font-size: 9px; letter-spacing: 0.1em;
+      color: var(--text-dim); margin-bottom: 14px;
+    }
+    .ph-hint {
+      font-size: 11.5px; font-weight: 300; color: var(--text-dim);
+      line-height: 1.5;
+    }
+    .ph-tag {
+      display: inline-block; margin-top: 12px;
+      font-family: var(--fm); font-size: 8px; letter-spacing: 0.14em;
+      text-transform: uppercase; padding: 2px 7px; border-radius: 2px;
+      color: var(--text-dim); border: 1px dashed var(--border-lt);
+    }
+
+    /* ── METHODOLOGY STRIP ── */
+    .method-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+      padding: 36px 0;
+    }
+    .method-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 48px;
+      display: grid; grid-template-columns: 260px 1fr;
+      gap: 48px; align-items: start;
+    }
+    .method-label {
+      font-family: var(--fm); font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--amber); margin-bottom: 12px;
+    }
+    .method-heading {
+      font-family: var(--fd); font-size: 20px; font-weight: 700;
+      color: var(--text); line-height: 1.2;
+    }
+    .method-criteria {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .method-item { }
+    .method-item-label {
+      font-family: var(--fm); font-size: 9px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;
+    }
+    .method-item-text {
+      font-size: 12px; font-weight: 300; color: var(--text-muted); line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      max-width: 1200px; margin: 0 auto;
+      padding: 32px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: var(--fm); font-size: 12px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+    .footer-note {
+      font-size: 11px; font-weight: 300; color: var(--text-dim);
+      max-width: 420px; text-align: right; line-height: 1.5;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .masthead-eyebrow { animation: fadeUp 0.45s ease both; }
+    .masthead-title   { animation: fadeUp 0.5s 0.06s ease both; }
+    .masthead-right   { animation: fadeUp 0.5s 0.12s ease both; }
+    .live-card        { animation: fadeUp 0.5s ease both; }
+    .live-card:nth-child(1) { animation-delay: 0.08s; }
+    .live-card:nth-child(2) { animation-delay: 0.14s; }
+    .live-card:nth-child(3) { animation-delay: 0.20s; }
+    .live-card:nth-child(4) { animation-delay: 0.26s; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px) {
+      .masthead { grid-template-columns: 1fr; }
+      .masthead-left { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 32px; margin-bottom: 32px; }
+      .masthead-right { padding-left: 0; }
+      .live-grid { grid-template-columns: 1fr; }
+      .placeholder-grid { grid-template-columns: repeat(2, 1fr); }
+      .method-inner { grid-template-columns: 1fr; }
+      .method-criteria { grid-template-columns: 1fr 1fr; }
+    }
+    @media(max-width:640px) {
+      .nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .masthead, .section-header, .live-grid, .placeholder-grid, .method-inner, .footer { padding-left: 24px; padding-right: 24px; }
+      .masthead { padding-top: 52px; }
+      .placeholder-grid { grid-template-columns: 1fr; }
+      .method-criteria { grid-template-columns: 1fr; }
+      .card-inner { padding: 24px; }
+      .masthead-title { font-size: 56px; }
+      .footer { flex-direction: column; gap: 14px; }
+      .footer-note { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced <span>/ Deep Dives</span></a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+
+<!-- ── MASTHEAD ─────────────────────────────────────────────────────── -->
+<section class="masthead">
+  <div class="masthead-left">
+    <div class="masthead-eyebrow">Traced Investigations</div>
+    <h1 class="masthead-title">Deep<em>Dives.</em></h1>
+  </div>
+  <div class="masthead-right">
+    <p class="masthead-desc">
+      Brand profiles tell you the score. Deep dives show you the evidence.
+      Each investigation documents a specific structural problem — a hidden acquisition, a reformulated recipe, a regulatory record, a conflict of interest — with primary sources and a direct line from cause to consequence.
+      <strong>These are the stories behind the scores.</strong>
+    </p>
+    <div class="masthead-meta">
+      <div>
+        <div class="masthead-stat-val amber">6</div>
+        <div class="masthead-stat-label">Published</div>
+      </div>
+      <div>
+        <div class="masthead-stat-val">5</div>
+        <div class="masthead-stat-label">In progress</div>
+      </div>
+      <div>
+        <div class="masthead-stat-val">0</div>
+        <div class="masthead-stat-label">Sponsored</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LIVE INVESTIGATIONS ───────────────────────────────────────────── -->
+<div class="section-header">
+  <span class="section-header-label">Published investigations</span>
+  <div class="section-header-line"></div>
+  <span class="section-header-count">6 of 6</span>
+</div>
+
+<div class="live-grid" style="grid-template-columns:repeat(3,1fr);">
+
+  <!-- AG1 ── -->
+  <a class="live-card" href="traced-ag1-deep-trace.html">
+    <div class="card-inner">
+      <div class="card-top">
+        <div class="card-tags">
+          <span class="card-tag live">Live</span>
+          <span class="card-tag cat">Greens Powder</span>
+          <span class="card-tag red">Low Transparency</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card-number">Investigation 001</div>
+      <div class="card-title">AG1<em>.</em></div>
+      <div class="card-subtitle">Athletic Greens · $79/month</div>
+      <p class="card-thesis">75 ingredients. 49 hidden in a proprietary blend. <strong>Zero clinical trials</strong> on the complete formula. Podcast endorsers with undisclosed equity stakes. The most marketed greens powder is the least transparent about what you're buying.</p>
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val red">49</div><div class="card-stat-label">Doses hidden in<br>prop. blend</div></div>
+        <div class="card-stat"><div class="card-stat-val red">0</div><div class="card-stat-label">Clinical trials on<br>full formula</div></div>
+      </div>
+    </div>
+  </a>
+
+  <!-- ANNIE'S ── -->
+  <a class="live-card" href="traced-annies-deep-trace.html">
+    <div class="card-inner">
+      <div class="card-top">
+        <div class="card-tags">
+          <span class="card-tag live">Live</span>
+          <span class="card-tag cat">Packaged Food</span>
+          <span class="card-tag red">Low Transparency</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card-number">Investigation 002</div>
+      <div class="card-title">Annie's<em>.</em></div>
+      <div class="card-subtitle">Mac &amp; Cheese · General Mills</div>
+      <p class="card-thesis">Acquired for $820M in 2014. September 2024: <strong>butter and nonfat milk removed</strong>, replaced with corn starch. Marketed as "Now Cheesier." Protein dropped 22%. Not disclosed. Phthalates class action active since 2021.</p>
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val yellow">−22%</div><div class="card-stat-label">Protein after<br>Sept 2024</div></div>
+        <div class="card-stat"><div class="card-stat-val red">Active</div><div class="card-stat-label">Phthalates class<br>action (2021–)</div></div>
+      </div>
+    </div>
+  </a>
+
+  <!-- GHOST ── -->
+  <a class="live-card" href="traced-ghost-deep-trace.html">
+    <div class="card-inner">
+      <div class="card-top">
+        <div class="card-tags">
+          <span class="card-tag live">Live</span>
+          <span class="card-tag cat">Protein Supplement</span>
+          <span class="card-tag red">Low Transparency</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card-number">Investigation 003</div>
+      <div class="card-title">Ghost<em>.</em></div>
+      <div class="card-subtitle">Ghost Whey · Keurig Dr Pepper</div>
+      <p class="card-thesis">Built its identity on being "owned by no one." <strong>Acquired by Keurig Dr Pepper in October 2024.</strong> The independence narrative on all brand channels remains unchanged into 2025. No NSF cert. No batch COAs.</p>
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val red">Oct 2024</div><div class="card-stat-label">KDP acquisition</div></div>
+        <div class="card-stat"><div class="card-stat-val amber">Unchanged</div><div class="card-stat-label">Independence<br>narrative</div></div>
+      </div>
+    </div>
+  </a>
+
+  <!-- MUSCLEPHARM ── -->
+  <a class="live-card" href="traced-musclepharm-deep-trace.html">
+    <div class="card-inner">
+      <div class="card-top">
+        <div class="card-tags">
+          <span class="card-tag live">Live</span>
+          <span class="card-tag cat">Protein Supplement</span>
+          <span class="card-tag red">Low Transparency</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card-number">Investigation 004</div>
+      <div class="card-title">Muscle<em>Pharm.</em></div>
+      <div class="card-subtitle">Combat Protein · Nasdaq: MSLP</div>
+      <p class="card-thesis"><strong>$4M FTC settlement.</strong> SEC investigation of the former CEO. Revenue down ~70% from peak. Class action for protein spiking. Still on shelves at GNC with no label disclosure of any of this history.</p>
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val red">$4M</div><div class="card-stat-label">FTC settlement<br>(2014)</div></div>
+        <div class="card-stat"><div class="card-stat-val red">Active</div><div class="card-stat-label">SEC investigation<br>ex-CEO</div></div>
+      </div>
+    </div>
+  </a>
+
+  <!-- REESE'S ── -->
+  <a class="live-card" href="traced-reeses-deep-trace.html">
+    <div class="card-inner">
+      <div class="card-top">
+        <div class="card-tags">
+          <span class="card-tag live">Live</span>
+          <span class="card-tag cat">Chocolate</span>
+          <span class="card-tag red">Low Transparency</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card-number">Investigation 005</div>
+      <div class="card-title">Reese's<em>.</em></div>
+      <div class="card-subtitle">Hershey Company · Nasdaq: HSY</div>
+      <p class="card-thesis">PGPR added 2006 — castor oil emulsifier replacing cocoa butter, 18 years before the cocoa crisis. Hershey's CFO confirmed formula changes in the Q4 2024 investor call. <strong>They told Wall Street. They told consumers nothing.</strong></p>
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val red">2006</div><div class="card-stat-label">PGPR added —<br>not disclosed</div></div>
+        <div class="card-stat"><div class="card-stat-val amber">14</div><div class="card-stat-label">Ingredients now<br>vs. 9 originally</div></div>
+      </div>
+    </div>
+  </a>
+
+  <!-- DAVID ── -->
+  <a class="live-card" href="traced-david-deep-trace.html">
+    <div class="card-inner">
+      <div class="card-top">
+        <div class="card-tags">
+          <span class="card-tag live">Live</span>
+          <span class="card-tag cat">Protein Bar</span>
+          <span class="card-tag red">Low Transparency</span>
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+      <div class="card-number">Investigation 006</div>
+      <div class="card-title">David<em>.</em></div>
+      <div class="card-subtitle">Protein Bar · Peter Rahal</div>
+      <p class="card-thesis">Peter Attia: equity investor + Chief Science Officer + product promoter — until he <strong>resigned February 2026</strong> following Epstein document release. Andrew Huberman: equity investor + promoter. The AG1 model, newer brand, better macros.</p>
+      <div class="card-stats">
+        <div class="card-stat"><div class="card-stat-val red">Feb 2026</div><div class="card-stat-label">Attia resigned<br>as CSO</div></div>
+        <div class="card-stat"><div class="card-stat-val amber">2</div><div class="card-stat-label">Equity investor-<br>promoters</div></div>
+      </div>
+    </div>
+  </a>
+
+</div><!-- /live-grid -->
+
+
+<!-- ── IN PROGRESS ───────────────────────────────────────────────────── -->
+<div class="section-header">
+  <span class="section-header-label">In progress</span>
+  <div class="section-header-line"></div>
+  <span class="section-header-count">5 queued</span>
+</div>
+
+<div class="placeholder-grid">
+
+  <!-- Halo Top ── -->
+  <div class="placeholder-card">
+    <div class="ph-eyebrow"><div class="ph-dot"></div>In progress</div>
+    <div class="ph-name">Halo<br>Top</div>
+    <div class="ph-cat">Ice Cream · Wells Enterprises</div>
+    <div class="ph-hint">2023 Nature Medicine study found erythritol — Halo Top's primary sweetener — associated with cardiovascular risk at doses the brand's "eat the whole pint" marketing encourages. Zero response from Wells Enterprises.</div>
+    <span class="ph-tag">Sweetener risk · Non-disclosure</span>
+  </div>
+
+  <!-- Vital Proteins ── -->
+  <div class="placeholder-card">
+    <div class="ph-eyebrow"><div class="ph-dot"></div>In progress</div>
+    <div class="ph-name">Vital<br>Proteins</div>
+    <div class="ph-cat">Collagen · Nestlé Health Science</div>
+    <div class="ph-hint">Collagen has a PDCAAS of 0 — it is not a complete protein. Jennifer Aniston's role is a paid commercial arrangement, not equity. Acquired by Nestlé 2020–21. $20/serving for a supplement with no amino acid completeness.</div>
+    <span class="ph-tag">Protein claim inflation · Celebrity endorsement</span>
+  </div>
+
+  <!-- Herbalife ── -->
+  <div class="placeholder-card">
+    <div class="ph-eyebrow"><div class="ph-dot"></div>In progress</div>
+    <div class="ph-name">Herba<em style="font-style:normal">life</em></div>
+    <div class="ph-cat">MLM Supplements · NYSE: HLF</div>
+    <div class="ph-hint">$200M FTC settlement. Mandated business restructuring. Multiple FDA warning letters. Class actions tied to liver damage. Distributor revenue model: earn from recruiting, not selling.</div>
+    <span class="ph-tag">MLM structure · FTC settlement · FDA warnings</span>
+  </div>
+
+  <!-- Hu ── -->
+  <div class="placeholder-card">
+    <div class="ph-eyebrow"><div class="ph-dot"></div>In progress</div>
+    <div class="ph-name">Hu</div>
+    <div class="ph-cat">Chocolate · Mondelēz International</div>
+    <div class="ph-hint">"Get Back to Human" — acquired by Mondelēz (Cadbury, Oreo, Toblerone) in 2021. The cleanest ingredient story in premium chocolate now routes revenue to one of the largest conventional confectionery conglomerates.</div>
+    <span class="ph-tag">Acquisition concealment · Mission drift</span>
+  </div>
+
+  <!-- Beyond Meat ── -->
+  <div class="placeholder-card">
+    <div class="ph-eyebrow"><div class="ph-dot"></div>In progress</div>
+    <div class="ph-name">Beyond<br>Meat</div>
+    <div class="ph-cat">Plant-Based Protein · Nasdaq: BYND</div>
+    <div class="ph-hint">Going-concern notice 2024. Stock down ~98% from peak. Revenue declined 4 consecutive years. "Made from plants" marketing on a NOVA 4 ultra-processed product with 5× the sodium of ground beef.</div>
+    <span class="ph-tag">Hype cycle · Label claims · Financial distress</span>
+  </div>
+
+</div><!-- /placeholder-grid -->
+
+
+<!-- ── METHODOLOGY STRIP ─────────────────────────────────────────────── -->
+<div class="method-strip">
+  <div class="method-inner">
+    <div>
+      <div class="method-label">How deep dives work</div>
+      <div class="method-heading">Primary sources.<br>No affiliates.<br>No advertisers.</div>
+    </div>
+    <div class="method-criteria">
+      <div class="method-item">
+        <div class="method-item-label">Selection criteria</div>
+        <div class="method-item-text">A brand earns a deep dive when the story behind its score is complex enough to require documentation beyond a profile card — acquisition arcs, regulatory records, ingredient-level evidence, or conflicts of interest that take more than a verdict to explain.</div>
+      </div>
+      <div class="method-item">
+        <div class="method-item-label">Source standard</div>
+        <div class="method-item-text">Every factual claim is sourced to primary documents: SEC filings, FTC consent decrees, FDA warning letters, peer-reviewed studies, court filings, or direct product testing. Secondary sources are cited only where primary documents are paywalled or inaccessible.</div>
+      </div>
+      <div class="method-item">
+        <div class="method-item-label">Revenue policy</div>
+        <div class="method-item-text">Traced accepts no advertising, sponsorship, affiliate revenue, or brand partnerships. No brand has paid to be included, excluded, or scored favorably. Funding is reader-supported. Scores are not for sale.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer">
+    <span class="footer-logo">TRACED</span>
+    <p class="footer-note">Traced surfaces the financial and ingredient structures behind food and supplement products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+  </div>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#8eebeae7fae1fce7efe2cefafcefedebeaa0ede1" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="284d4c415c475a414944685c5a494b4d4c064b47">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="trace

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jif Peanut Butter — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .ingredient-compare{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .ic-header{background:var(--surface-2);display:grid;grid-template-columns:1.4fr 1fr 1fr;border-bottom:1px solid var(--border);}
+  .ic-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.ic-row:last-child{border-bottom:none;}.ic-row:hover{background:var(--surface-2);}
+  .ic-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.ic-cell:last-child{border-right:none;}
+  .ic-header .ic-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .ic-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}.ic-cell.flag{color:var(--red);}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Safety Record</span>
+  <span class="alert-text"><strong>2022:</strong> J.M. Smucker recalled Jif from its Lexington, KY plant due to Salmonella contamination. 21 people ill across 17 states. Estimated loss: $125 million. Class action filed.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Ingredient Substitution</span></div>
+    <h1 class="product-name">Jif</h1>
+    <p class="product-sub">J.M. Smucker,<br>"Choosy Moms Choose Jif"</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Real peanut butter has two ingredients: roasted peanuts and salt. The oil naturally separates. You stir it. That's the whole product. In the 1950s, Procter &amp; Gamble applied the same industrial hydrogenation technology used in soap manufacturing to stabilize peanut butter's oil — creating a product that never separates, has a longer shelf life, and contains <strong>fully hydrogenated vegetable oils, sugar, molasses, and emulsifiers</strong> that natural peanut butter doesn't need. The result became Jif, America's best-selling peanut butter since 1981. Fully hydrogenated vegetable oil is <strong>banned from the shelves of Whole Foods Market</strong> as an unacceptable ingredient. J.M. Smucker, which acquired Jif from P&G in 2002, also owns Adams and Laura Scudder's — the two leading natural peanut butter brands. One company extracts revenue from both the additive-laden mass market product and the natural alternative that health-conscious consumers buy to avoid it. The marketing campaign that drove Jif's 40-year #1 position — "Choosy moms choose Jif" — positioned the most additive-heavy option in the category as the premium, caring maternal choice.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header"><span class="scorecard-title">Transparency Score</span><div class="score-summary"><span class="score-count red">3 ●</span><span class="score-count yellow">3 ●</span><span class="score-count green">1 ●</span></div></div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill green">Green</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      </div>
+      <div class="scorecard-footer"><div class="scorecard-footer-label">Last reviewed</div><div class="scorecard-footer-value">February 2026 · Sources below</div></div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Jif is owned by J.M. Smucker Company (NYSE: SJM), a publicly traded food conglomerate with a ~$12 billion market cap headquartered in Orrville, Ohio. The Smucker portfolio includes Folgers coffee, Dunkin' packaged coffee, Meow Mix, Milk-Bone, Hostess — and, most relevant to this profile, both Jif <em>and</em> the two leading natural peanut butter brands: <strong>Adams Peanut Butter and Laura Scudder's</strong>.</p>
+        <p>Smucker has engineered a position where it captures consumer spending across both ends of the peanut butter market simultaneously. The health-conscious consumer who avoids Jif because of its additives and buys Adams or Laura Scudder's instead is still buying a Smucker product. The brand architecture is deliberately siloed — Adams and Laura Scudder's packaging does not cross-reference Smucker or Jif, and the Jif packaging does not reference the natural lines.</p>
+        <p>Jif's history before Smucker: created in 1946, reformulated and nationally launched by Procter &amp; Gamble in 1958 using P&G's industrial hydrogenation expertise from its soap and shortening businesses. P&G sold Jif to Smucker in 2002 as part of a portfolio consolidation, retaining its focus on personal care products.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>No influencer-equity conflicts. No paid celebrity investors. Jif's marketing is traditional CPG broadcast advertising, with the "Choosy moms choose Jif" campaign running in various forms since 1981 — one of the longest-running taglines in American food advertising.</p>
+        <p>The yellow score reflects the campaign's specific framing: positioning Jif as the premium, quality-conscious, <em>maternal</em> choice is a direct inversion of the ingredient reality. Jif is the most additive-laden product in the mainstream peanut butter category — it contains more non-peanut ingredients than any of its major competitors. The campaign successfully weaponized parental care and quality-consciousness as brand attributes for a product that, by ingredient standards, is the furthest from those values among its peers.</p>
+        <p>The campaign made no specific health claims. Its power is in what it implied without stating: that choosing Jif over other peanut butters was a deliberate quality decision, the choice of a discerning parent. That implication has driven category leadership for over four decades.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill green">Green</span></div>
+      <div class="dim-body">
+        <p>Single retail purchase, $4–7 per jar. No subscription, no DTC pressure, no auto-renewal. Straightforward grocery aisle transaction. The revenue model is clean.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>This is Jif's defining dimension. The ingredient gap between Jif Creamy and natural peanut butter is substantial:</p>
+
+        <div class="ingredient-compare">
+          <div class="ic-header">
+            <div class="ic-cell">Product</div>
+            <div class="ic-cell">Full Ingredient List</div>
+            <div class="ic-cell">Non-Peanut Additions</div>
+          </div>
+          <div class="ic-row">
+            <div class="ic-cell"><strong>Natural Peanut Butter</strong>e.g. Adams, Smucker's Natural</div>
+            <div class="ic-cell">Peanuts, Salt</div>
+            <div class="ic-cell" style="color:var(--green)">Salt only. Oil separation is natural and expected.</div>
+          </div>
+          <div class="ic-row">
+            <div class="ic-cell"><strong>Jif Creamy</strong>America's #1 PB since 1981</div>
+            <div class="ic-cell">Roasted Peanuts, Sugar, Contains 2% Or Less Of: Molasses, Fully Hydrogenated Vegetable Oils (Rapeseed And Soybean), Mono And Diglycerides, Salt</div>
+            <div class="ic-cell flag">Fully hydrogenated oils, sugar, molasses, emulsifiers. Banned at Whole Foods.</div>
+          </div>
+        </div>
+
+        <p>The key ingredient is <strong>fully hydrogenated vegetable oil</strong> (rapeseed and soybean). Hydrogenation is an industrial process that adds hydrogen atoms to unsaturated fats, converting them to a more saturated, solid form. The purpose in peanut butter is stabilization: it prevents the natural peanut oil from separating to the top of the jar. The consequence is that Jif's fat profile is meaningfully different from natural peanut butter — the heart-healthy monounsaturated fats characteristic of peanuts are partially displaced by hydrogenated fats.</p>
+        <p>Fully hydrogenated vegetable oil (as distinct from <em>partially</em> hydrogenated oil, which contains trans fats) is not classified as a trans fat by the FDA. It does not appear on the label as such. Whole Foods Market lists it on their "unacceptable ingredients" list regardless, on the basis that the hydrogenation process alters the fat profile in ways the company considers inconsistent with their product standards. Jif is not sold at Whole Foods.</p>
+        <p>Additionally: 3 grams of sugar per serving from added sugar and molasses. Natural peanut butter contains zero added sugar. Over a year of daily use, this adds up to approximately 2 pounds of sugar consumed from peanut butter alone.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Jif makes no meaningful scientific health claims, which is honest given the product's formulation. The brand has historically relied on taste and quality perception rather than health positioning. The yellow score reflects the absence of any affirmative scientific backing for the product's formulation choices — specifically, the hydrogenation — rather than any fabricated claims.</p>
+        <p>The FDA's 12-year regulatory standoff over peanut butter's composition standard is worth noting here. When P&G introduced Jif with non-peanut ingredients, Skippy and Peter Pan followed. The FDA initially proposed requiring 95% peanut content. All three brands lobbied for a lower standard. After over a decade, the FDA settled at a 90% peanut minimum — the threshold written into the current Standard of Identity for peanut butter. The current standard is, in part, a product of industry lobbying by the brands that benefited from it.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Jif's label is technically accurate. Every ingredient is disclosed. The nutrition facts are correct. No FDA enforcement actions have been taken against Jif's labeling specifically. The yellow score reflects what is absent rather than what is false.</p>
+        <p>The fully hydrogenated vegetable oils are disclosed by name on the ingredient list — but without context for what hydrogenation means, most consumers don't know this differentiates the product from natural peanut butter. The word "creamy" in Jif Creamy is the only signal that the texture comes from industrial processing rather than being a natural property of finely ground peanuts. That framing gap — between what the label technically states and what a reasonable consumer understands — is the yellow score.</p>
+        <div class="callout red">
+          <div class="callout-label">The FDA Standard of Identity</div>
+          <div class="callout-body">Under 21 CFR 164.150, any product labeled "peanut butter" in the US must contain at least 90% peanuts. Jif Creamy meets this standard. The 90% threshold — rather than the 95% the FDA originally proposed — exists because of industry lobbying by Jif, Skippy, and Peter Pan in the 1960s–70s. The standard was written to accommodate the products that existed, not to define what peanut butter should ideally be.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>In May 2022, J.M. Smucker recalled all Jif peanut butter produced at its Lexington, Kentucky facility — the largest peanut butter production plant in the world — due to potential Salmonella contamination. The recall covered products with lot codes 1274425 through 2140425. Twenty-one people were confirmed ill across 17 states; the CDC investigation linked the outbreak directly to the Lexington facility.</p>
+        <p>Smucker estimated the recall cost $125 million in direct losses. Multiple class action lawsuits were filed. The FDA and CDC investigation found that the contamination was present in the facility environment. Smucker halted production at Lexington, conducted remediation, and restarted operations later in 2022.</p>
+        <p>The red score reflects the severity and scale of the contamination event — the world's largest PB facility, a multi-state outbreak, and $125 million in losses — combined with the absence of any proactive, publicly available batch-level safety testing. Consumers using Jif have no mechanism to verify lot-specific safety independent of Smucker's own quality control, which failed in 2022.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value">$12B</div><div class="aside-stat-label">J.M. Smucker market cap (NYSE: SJM)</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">1981</div><div class="aside-stat-label">Year Jif became and has remained the #1 selling peanut butter in the US</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">3g</div><div class="aside-stat-label">Added sugar per serving. Natural peanut butter: 0g added sugar.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">$125M</div><div class="aside-stat-label">Estimated loss from 2022 Salmonella recall. 21 people ill across 17 states.</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Smucker Owns Both Sides</div>
+      <ul class="aside-list">
+        <li><strong>Jif:</strong> Most additive-laden mainstream PB. Hydrogenated oils, added sugar, emulsifiers.</li>
+        <li><strong>Adams Natural PB:</strong> Ingredients: Peanuts, Salt. Smucker-owned since 1984.</li>
+        <li><strong>Laura Scudder's Natural PB:</strong> Ingredients: Peanuts, Salt. Smucker-owned.</li>
+        <li>A consumer who avoids Jif for health reasons and buys Adams or Laura Scudder's instead is buying a Smucker product from the same parent company.</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">What to Buy Instead</div>
+      <ul class="aside-list">
+        <li><strong>Any natural PB (including Adams/Laura Scudder's):</strong> Same Smucker parent company, but genuinely cleaner ingredients. Just peanuts and salt.</li>
+        <li><strong>Kirkland Signature Natural PB (Costco):</strong> Peanuts, salt. Large format, well-priced.</li>
+        <li><strong>Grind-your-own:</strong> Available at Whole Foods, Sprouts, and most natural grocers. Single ingredient, maximum freshness.</li>
+        <li>Stir once when you open a new jar of natural PB, then refrigerate. The oil won't separate again.</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Ownership Timeline</div>
+      <ul class="aside-list">
+        <li>1946: William Young creates "Big Top" peanut butter in Lexington, KY</li>
+        <li>1955: Procter &amp; Gamble acquires, renames Jif, applies industrial hydrogenation</li>
+        <li>1958: National rollout with current formulation</li>
+        <li>1981: Jif becomes #1 US peanut butter, a position it has held since</li>
+        <li>2002: P&G sells Jif to J.M. Smucker for ~$786M</li>
+        <li>2022: Salmonella recall. Estimated $125M loss. 21 ill across 17 states.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>FDA 21 CFR 164.150</strong>Standard of Identity for peanut butter: 90% peanut minimum. History of 95% vs 90% standoff.</div>
+    <div class="source-item"><strong>FDA Recall Notice, May 2022</strong>Jif voluntary recall — Salmonella. Lexington, KY facility. Lot codes 1274425–2140425.</div>
+    <div class="source-item"><strong>CDC Investigation, 2022</strong>21 illnesses across 17 states linked to Jif Lexington facility. Outbreak declared over August 2022.</div>
+    <div class="source-item"><strong>J.M. Smucker Annual Report 2023</strong>Portfolio overview, Jif/Adams/Laura Scudder's ownership, recall financial impact ($125M).</div>
+    <div class="source-item"><strong>Whole Foods Market Unacceptable Ingredients List</strong>Fully hydrogenated vegetable oils listed as unacceptable. Jif not carried at Whole Foods.</div>
+    <div class="source-item"><strong>USDA FoodData Central</strong>Jif Creamy full ingredient list, nutrition facts, sugar content per serving.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#7d18191409120f141c113d090f1c1e1819531e12105d5b101419191209465d411c5d150f181b40" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0762636e7368756e666b477375666462632964686a">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{co

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oatly — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .owner-table{margin:20px 0 20px 36px;border:1px solid var(--border-light);border-radius:3px;overflow:hidden;}
+  .ot-header{background:var(--surface-2);display:grid;grid-template-columns:1.5fr 0.8fr 1.7fr;border-bottom:1px solid var(--border);}
+  .ot-row{display:grid;grid-template-columns:1.5fr 0.8fr 1.7fr;border-bottom:1px solid var(--border);transition:background 0.15s;}.ot-row:last-child{border-bottom:none;}.ot-row:hover{background:var(--surface-2);}
+  .ot-cell{padding:11px 16px;font-size:12.5px;font-weight:300;color:var(--text-muted);border-right:1px solid var(--border);line-height:1.4;}.ot-cell:last-child{border-right:none;}
+  .ot-header .ot-cell{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+  .ot-cell strong{display:block;color:var(--text);font-weight:500;margin-bottom:1px;}.ot-cell.flag{color:var(--red);}
+  .stock-chart{margin:20px 0 20px 36px;background:var(--surface-2);border:1px solid var(--border-light);border-radius:3px;padding:20px 20px 14px;}
+  .chart-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px;}
+  .chart-bars{display:flex;align-items:flex-end;gap:6px;height:80px;}
+  .chart-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;gap:6px;}
+  .chart-bar{width:100%;border-radius:2px 2px 0 0;background:var(--red);opacity:0.7;}
+  .chart-bar.peak{background:var(--green);opacity:0.8;}
+  .chart-year{font-family:var(--font-mono);font-size:8px;color:var(--text-dim);letter-spacing:0.06em;}
+  .chart-val{font-family:var(--font-mono);font-size:8px;color:var(--text-muted);}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="#">TRACED <span>/ Food Transparency</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Live Story</span>
+  <span class="alert-text"><strong>OTLY stock</strong> has declined ~97% from its May 2021 IPO peak of ~$15B market cap to ~$349M as of early 2026. The company has never reported annual net income.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-breadcrumb"><span>Traced Database</span><span class="sep">/</span><span class="hero-category">Hype Cycle / Mission Contradiction</span></div>
+    <h1 class="product-name">Oatly</h1>
+    <p class="product-sub">Oat Milk,<br>"It's Like Milk But Made For Humans"</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Oatly's entire consumer proposition was a values transaction: by choosing oat milk over dairy, you were making a meaningful environmental stand against industrial animal agriculture. That proposition drove a cult following, a Starbucks partnership, celebrity investors, and a $10 billion IPO in 2021. Then the ownership structure came into view. <strong>Blackstone Group</strong> — a private equity firm whose portfolio included investments linked to Amazon deforestation and whose CEO donated to pro-Trump PACs — owned roughly 7% of the company. <strong>China Resources</strong>, a Chinese state-owned conglomerate, owned approximately 46% — a larger stake, which received far less press coverage. Oatly's defense of the Blackstone relationship was remarkable for its candor: they argued that converting a major PE firm to sustainability investing was itself a climate victory. This defense is the precise inverse of Traced's thesis — instead of transparency, it offered a strategic rationale for a values compromise. Meanwhile the product itself contains <strong>rapeseed oil and dipotassium phosphate</strong> added to achieve creaminess that oat water alone cannot deliver, a fact largely absent from the brand's clean-and-natural positioning. The stock has since lost 97% of its peak value.
+    </p>
+  </div>
+  <aside>
+    <div class="scorecard">
+      <div class="scorecard-header"><span class="scorecard-title">Transparency Score</span><div class="score-summary"><span class="score-count red">2 ●</span><span class="score-count yellow">5 ●</span></div></div>
+      <div class="scorecard-rows">
+        <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+        <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+        <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+      </div>
+      <div class="scorecard-footer"><div class="scorecard-footer-label">Last reviewed</div><div class="scorecard-footer-value">February 2026 · Sources below</div></div>
+    </div>
+  </aside>
+</section>
+
+<div class="section-divider"></div>
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">01</span><span class="dim-title">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Oatly was founded in 1994 in Sweden by food scientist Rickard Öste at Lund University, based on his research into oat-based food processing. The company grew slowly for its first two decades before a global brand repositioning in the mid-2010s turned it into a lifestyle brand synonymous with sustainability-conscious dairy alternatives.</p>
+        <p>The investor table, as of the 2021 IPO and subsequent filings, tells a different story than the brand's public identity:</p>
+
+        <div class="owner-table">
+          <div class="ot-header">
+            <div class="ot-cell">Investor</div>
+            <div class="ot-cell">Stake</div>
+            <div class="ot-cell">Why It Matters</div>
+          </div>
+          <div class="ot-row">
+            <div class="ot-cell"><strong>China Resources</strong>Chinese state-owned conglomerate</div>
+            <div class="ot-cell">~45.9%</div>
+            <div class="ot-cell flag">Largest shareholder. Chinese state enterprise. Received far less media scrutiny than Blackstone despite ~6x larger stake.</div>
+          </div>
+          <div class="ot-row">
+            <div class="ot-cell"><strong>Blackstone Group</strong>US private equity</div>
+            <div class="ot-cell">~7%</div>
+            <div class="ot-cell flag">PE firm whose portfolio has included Amazon deforestation-linked investments. CEO donated to pro-Trump PAC. Directly contradicts Oatly's climate positioning.</div>
+          </div>
+          <div class="ot-row">
+            <div class="ot-cell"><strong>Verlinvest</strong>Belgian family investment group</div>
+            <div class="ot-cell">Significant minority</div>
+            <div class="ot-cell">Consumer growth investor. Less controversial.</div>
+          </div>
+          <div class="ot-row">
+            <div class="ot-cell"><strong>Celebrity investors</strong>Oprah, Jay-Z, Natalie Portman, Howard Schultz</div>
+            <div class="ot-cell">Small stakes</div>
+            <div class="ot-cell">High-profile but financially minor. Served primarily as brand validation during IPO marketing.</div>
+          </div>
+        </div>
+
+        <p>Oatly IPO'd on the Nasdaq in May 2021 at $17/share, initially trading above $22 and reaching a market cap exceeding $10 billion. The company's S-1 disclosed all investor relationships. The Blackstone stake generated significant controversy immediately upon IPO. The China Resources stake — nearly six times larger — generated far less mainstream press coverage, illustrating how media attention to ownership disclosure is itself selective and imperfect.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">02</span><span class="dim-title">Marketing Incentive Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="dim-body">
+        <p>Oatly's marketing is built on a values proposition: choosing Oatly is an act of climate consciousness. The brand's packaging, advertising campaigns, and founder communications have consistently framed the purchase decision as participation in environmental progress — a statement against industrial dairy and its carbon footprint.</p>
+        <p>The Blackstone investment directly and materially undermined this proposition. Blackstone's portfolio has included investments in companies linked to deforestation in the Brazilian Amazon — the single largest contributor to biodiversity loss and carbon release in the global agricultural system. Buying oat milk to reduce your environmental impact while the brand's investors hold stakes in Amazon-linked operations is not a coherent environmental position.</p>
+        <p>Oatly's public response to the Blackstone controversy is worth reading in full, because it is unusually honest about the compromise it represents. The company argued that by accepting Blackstone money and demonstrating profitability, it was showing the PE industry that sustainability-aligned businesses could generate returns — and that this demonstration effect would encourage future PE investment in climate-positive companies.</p>
+
+        <div class="callout red">
+          <div class="callout-label">The Values Arbitrage</div>
+          <div class="callout-body">Oatly's defense of Blackstone is the clearest example in the Traced database of a brand explicitly acknowledging a values compromise and offering a financial-strategy rationale in its place. The argument may be strategically coherent. It is not transparency. A consumer who buys Oatly because they believe their purchase is unambiguously climate-positive has not been given the information they need to evaluate that belief.</div>
+        </div>
+
+        <p>There are no influencer-equity conflicts in the AG1 mold. The marketing misalignment here is structural — between the ownership table and the brand promise — not between paid promoters and undisclosed financial relationships.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">03</span><span class="dim-title">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Oatly is primarily a single retail purchase — a carton of oat milk, $5–7, no subscription. The yellow score reflects two things. First, Oatly's DTC and subscription channels, while a small share of total revenue, have grown as the brand expanded beyond grocery into direct-to-consumer formats. Second, and more substantively, the IPO context: Oatly raised capital from public markets on a values and growth narrative that has not materialized financially. The company has never reported annual net income. Revenue of ~$843M TTM is growing but accompanied by persistent net losses. The financial structure creates pressure for margin improvement that may conflict with the premium ingredient and sustainability commitments the brand markets on.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">04</span><span class="dim-title">Ingredient Integrity</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Oatly Oat Milk (Barista Edition) ingredients: Oat Base (Water, Oats), Low Erucic Acid Rapeseed Oil, Dipotassium Phosphate, Calcium Carbonate, Tricalcium Phosphate, Sea Salt, Dicalcium Phosphate, Riboflavin, Vitamin A, Vitamin D2, Vitamin B12.</p>
+        <p>The core transparency gap: oat water alone is thin, watery, and lacks the creaminess that makes oat milk a satisfying dairy substitute. <strong>Rapeseed oil</strong> is added specifically to achieve the fat content and mouthfeel that makes Oatly work as a latte. The various calcium and phosphate compounds are added for fortification (to approximate the mineral profile of dairy milk) and as emulsifiers. None of this is inherently harmful. All of it is meaningfully absent from the brand's naturalistic, minimalist visual identity and "it's like milk but made for humans" positioning.</p>
+        <p>Oatly also contains added sugars — the enzymatic processing that converts oat starches to make oat milk produces naturally occurring sugars. This is not added cane sugar, but the resulting 7g of sugar per cup is higher than unsweetened almond milk (0g) or dairy milk (12g, lactose). Oatly's Original variety markets as an everyday milk alternative without prominently communicating this sugar profile.</p>
+        <p>The yellow (not red) score reflects that the ingredient list is genuinely disclosed, nothing is concealed, and the additives serve functional purposes rather than masking inferior core ingredients. The gap is between the clean-brand aesthetic and the ingredient reality — a perception gap, not a deception in the Tropicana sense.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">05</span><span class="dim-title">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Oatly's sustainability claims rest on a lifecycle analysis commissioned and updated by the company itself. The original study was conducted in 2013 and updated in 2016. Activist short seller Spruce Point Capital, in a July 2021 report, alleged that the 2016 update contained less favorable findings than the 2013 version and that Oatly continued to cite the more favorable original study selectively. Oatly disputed these allegations.</p>
+        <p>On the nutrition side, Oatly's fortification approach — adding calcium, vitamin D, and B12 to approximate dairy's micronutrient profile — is scientifically sound. Whether synthetic fortification provides equivalent bioavailability to naturally occurring dairy nutrients is a contested nutritional question. Oatly markets itself as a nutritional dairy equivalent without engaging with this nuance.</p>
+        <p>No clinical trials exist on Oatly specifically. The beta-glucan in oats has established cardiovascular benefits at appropriate doses; the beta-glucan content per cup of Oatly is not published prominently, and at 0.5g or less per serving is unlikely to reach the 3g/day therapeutic threshold studied in the literature.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">06</span><span class="dim-title">Label Claim Accuracy</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>Oatly has faced legal challenges over specific claims in multiple markets. In the UK, the Advertising Standards Authority ruled against Oatly's "carbon footprint" claims in 2021, finding they were misleading due to narrow scope (excluding full supply chain emissions). In Sweden, the dairy industry successfully challenged several Oatly health comparison claims. In the US, multiple class action suits have been filed alleging that Oatly's "sustainability" claims are materially misleading to consumers who purchase based on environmental values.</p>
+        <p>The yellow score reflects an active, contested regulatory environment around the brand's core marketing claims — not a single clear FDA enforcement action, but a pattern of challenges across jurisdictions that suggests the brand pushes the boundaries of its evidentiary basis.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header"><span class="dim-number">07</span><span class="dim-title">Safety Transparency</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="dim-body">
+        <p>No active food safety concerns. The yellow score reflects the Spruce Point Capital report's allegation — disputed by Oatly — that the company's New Jersey manufacturing plant used 55% more water per liter of oat milk produced than its Swedish plants, and that this fact was not disclosed in the IPO prospectus. Water intensity is a core sustainability metric for a brand whose environmental credentials are its primary value proposition. Whether this constitutes material non-disclosure is a legal question that has been raised in class action litigation without resolution as of this writing.</p>
+        <p>Oatly also went through three auditors in six years prior to its IPO — a pattern noted by Spruce Point that raises governance transparency questions, though auditor changes are not themselves unusual for a growing company.</p>
+      </div>
+    </div>
+
+  </main>
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Stock Collapse</div>
+      <div class="stock-chart">
+        <div class="chart-label">OTLY Share Price — Approximate Trajectory</div>
+        <div class="chart-bars">
+          <div class="chart-bar-wrap">
+            <div class="chart-val">$17</div>
+            <div class="chart-bar peak" style="height:65px;"></div>
+            <div class="chart-year">May '21</div>
+          </div>
+          <div class="chart-bar-wrap">
+            <div class="chart-val">$22</div>
+            <div class="chart-bar peak" style="height:80px;"></div>
+            <div class="chart-year">Peak</div>
+          </div>
+          <div class="chart-bar-wrap">
+            <div class="chart-val">$8</div>
+            <div class="chart-bar" style="height:28px;"></div>
+            <div class="chart-year">End '21</div>
+          </div>
+          <div class="chart-bar-wrap">
+            <div class="chart-val">$3</div>
+            <div class="chart-bar" style="height:10px;"></div>
+            <div class="chart-year">End '22</div>
+          </div>
+          <div class="chart-bar-wrap">
+            <div class="chart-val">$1.4</div>
+            <div class="chart-bar" style="height:5px;"></div>
+            <div class="chart-year">End '23</div>
+          </div>
+          <div class="chart-bar-wrap">
+            <div class="chart-val">~$0.6</div>
+            <div class="chart-bar" style="height:3px;"></div>
+            <div class="chart-year">'26</div>
+          </div>
+        </div>
+      </div>
+      <div class="aside-stat" style="margin-top:16px;"><div class="aside-stat-value red">−97%</div><div class="aside-stat-label">Decline from IPO peak market cap (~$15B) to current (~$349M)</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value">~46%</div><div class="aside-stat-label">China Resources stake — Chinese state-owned conglomerate, largest single shareholder</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">~7%</div><div class="aside-stat-label">Blackstone Group stake — the ownership that generated the most controversy</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">$0</div><div class="aside-stat-label">Annual net income ever reported. First positive EBITDA: Q3 2025.</div></div>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Timeline</div>
+      <ul class="aside-list">
+        <li>1994: Founded at Lund University, Sweden, by food scientist Rickard Öste</li>
+        <li>2020: $200M raise disclosed — Blackstone Group participating. Controversy begins.</li>
+        <li>May 2021: IPO on Nasdaq at $17/share, ~$10B valuation</li>
+        <li>Jul 2021: Spruce Point Capital short report alleges sustainability and financial disclosure issues</li>
+        <li>2021: UK ASA rules Oatly's carbon footprint claims misleading</li>
+        <li>2022–2025: Stock declines continuously. Multiple class actions filed.</li>
+        <li>Q3 2025: First positive quarterly EBITDA reported</li>
+      </ul>
+    </div>
+    <div class="aside-block">
+      <div class="aside-label">Alternatives</div>
+      <ul class="aside-list">
+        <li><strong>Califia Farms Oat Milk:</strong> Similar ingredient profile, privately held, comparable sustainability claims</li>
+        <li><strong>MALK Organics Oat Milk:</strong> Shorter ingredient list, organic, higher price point</li>
+        <li><strong>Homemade oat milk:</strong> Oats + water + blender + strainer. No rapeseed oil, no phosphates, no IPO baggage</li>
+        <li>If the environmental claim is the primary driver, evaluate any brand's full LCA independently — no major oat milk brand publishes fully audited third-party lifecycle analysis</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Oatly S-1 IPO Prospectus, 2021</strong>Full investor disclosure including China Resources (~45.9%) and Blackstone (~7%) stakes.</div>
+    <div class="source-item"><strong>Spruce Point Capital Report, July 2021</strong>"Cream of the Crop, or Getting Creamed?" — allegations re: sustainability claims, auditor changes, NJ plant water usage.</div>
+    <div class="source-item"><strong>UK Advertising Standards Authority, 2021</strong>Ruling against Oatly's carbon footprint claims as misleading due to incomplete scope.</div>
+    <div class="source-item"><strong>Nasdaq: OTLY historical pricing</strong>IPO price $17, peak ~$22.50, current ~$0.55–0.65 (early 2026). ~97% decline from peak market cap.</div>
+    <div class="source-item"><strong>Oatly Q3 2025 Earnings Release</strong>First positive EBITDA quarter. Revenue ~$843M TTM. EPS still negative annually.</div>
+    <div class="source-item"><strong>Multiple class action filings, 2021–2023</strong>Consolidated suits alleging material misrepresentation of sustainability claims and financial disclosure issues in IPO prospectus.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced surfaces the financial structures behind food products. We do not accept advertising, sponsorship, or affiliate revenue. All profiles are independently researched.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#f396979a879c819a929fb3878192909697dd909c9ed3d59e9a97979c87c8d3cf92d39b819695ce" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="294c4d405d465b404845695d5b484a4c4d074a4644">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{co

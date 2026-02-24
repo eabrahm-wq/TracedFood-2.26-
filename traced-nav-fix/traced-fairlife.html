@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fairlife — Traced</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--surface:#111111;--surface-2:#181818;--border:#222222;--border-light:#2a2a2a;--text:#e8e4dc;--text-muted:#7a7570;--text-dim:#4a4642;--accent:#C9A84C;--red:#D94F3D;--red-dim:rgba(217,79,61,0.12);--yellow:#D4A84B;--yellow-dim:rgba(212,168,75,0.12);--green:#4E9B6F;--green-dim:rgba(78,155,111,0.12);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  .site-logo{font-family:var(--font-mono);font-size:13px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);text-decoration:none;}
+  .site-logo span{color:var(--text-muted);font-weight:400;}
+  .site-nav{display:flex;gap:32px;}.site-nav a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}.site-nav a:hover{color:var(--text);}
+  .timeline-alert{margin-top:56px;background:rgba(217,79,61,0.08);border-bottom:1px solid rgba(217,79,61,0.25);padding:12px 40px;display:flex;align-items:center;gap:12px;}
+  .alert-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.3);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;}
+  .alert-text{font-size:12.5px;color:rgba(232,228,220,0.7);font-weight:300;}.alert-text strong{color:var(--text);font-weight:500;}
+  .hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:start;}
+  .hero-breadcrumb{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:28px;display:flex;align-items:center;gap:8px;}
+  .hero-breadcrumb .sep{color:var(--border-light);}.hero-category{color:var(--accent);}
+  .product-name{font-family:var(--font-display);font-size:clamp(52px,7vw,88px);font-weight:900;line-height:0.92;color:var(--text);letter-spacing:-0.02em;margin-bottom:8px;}
+  .product-sub{font-family:var(--font-display);font-style:italic;font-size:clamp(18px,2.5vw,28px);font-weight:700;color:var(--text-muted);margin-bottom:36px;line-height:1.2;}
+  .verdict-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .verdict-text{font-size:16.5px;font-weight:300;line-height:1.75;color:rgba(232,228,220,0.85);max-width:580px;}.verdict-text strong{color:var(--text);font-weight:500;}
+  .scorecard{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:sticky;top:76px;}
+  .scorecard-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;}
+  .scorecard-title{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);}
+  .score-summary{display:flex;gap:6px;}.score-count{font-family:var(--font-mono);font-size:11px;font-weight:500;}.score-count.red{color:var(--red);}.score-count.yellow{color:var(--yellow);}.score-count.green{color:var(--green);}
+  .scorecard-rows{padding:8px 0;}
+  .score-row{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);transition:background 0.15s;}.score-row:last-child{border-bottom:none;}.score-row:hover{background:var(--surface-2);}
+  .score-dim{font-size:12.5px;color:var(--text-muted);}
+  .score-pill{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+  .score-pill.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,0.2);}.score-pill.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,0.2);}.score-pill.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,0.2);}
+  .scorecard-footer{padding:14px 24px;border-top:1px solid var(--border);background:rgba(201,168,76,0.04);}
+  .scorecard-footer-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .scorecard-footer-value{font-size:12px;color:var(--text-muted);font-weight:300;}
+  .section-divider{max-width:1100px;margin:0 auto;padding:0 40px;border-top:1px solid var(--border);}
+  .content-grid{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 340px;gap:80px;}
+  .content-main{padding:60px 0;}.content-aside{padding:60px 0;}
+  .dimension-block{margin-bottom:52px;padding-bottom:52px;border-bottom:1px solid var(--border);}.dimension-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dim-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .dim-number{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);width:24px;flex-shrink:0;}
+  .dim-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);flex:1;}
+  .dim-body{font-size:15px;font-weight:300;line-height:1.78;color:rgba(232,228,220,0.75);padding-left:36px;}
+  .dim-body p{margin-bottom:14px;}.dim-body p:last-child{margin-bottom:0;}.dim-body strong{color:var(--text);font-weight:500;}
+  .callout{background:var(--surface-2);border:1px solid var(--border-light);border-left:3px solid var(--accent);border-radius:0 3px 3px 0;padding:18px 20px;margin:24px 0 24px 36px;}
+  .callout-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .callout-body{font-size:13.5px;font-weight:300;line-height:1.65;color:rgba(232,228,220,0.75);}.callout-body strong{color:var(--text);font-weight:500;}
+  .callout.red{border-left-color:var(--red);}.callout.red .callout-label{color:var(--red);}
+  .callout.yellow{border-left-color:var(--yellow);}.callout.yellow .callout-label{color:var(--yellow);}
+  .ownership-chain{margin:20px 0 0 36px;position:relative;}
+  .chain-item{display:flex;align-items:flex-start;gap:14px;position:relative;}
+  .chain-item:not(:last-child)::after{content:'';position:absolute;left:10px;top:28px;bottom:-24px;width:1px;background:var(--border-light);}
+  .chain-dot{width:20px;height:20px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+  .chain-dot.current{background:var(--red-dim);border-color:rgba(217,79,61,0.3);}
+  .chain-dot-inner{width:6px;height:6px;border-radius:50%;background:var(--text-dim);}
+  .chain-dot.current .chain-dot-inner{background:var(--red);}
+  .chain-content{padding-bottom:28px;flex:1;}
+  .chain-year{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:2px;}
+  .chain-owner{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .chain-note{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.5;}
+  .aside-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:20px;}
+  .aside-label{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .aside-stat{margin-bottom:14px;}.aside-stat:last-child{margin-bottom:0;}
+  .aside-stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px;}.aside-stat-value.red{color:var(--red);}
+  .aside-stat-label{font-size:12px;font-weight:300;color:var(--text-muted);line-height:1.4;}
+  .aside-list{list-style:none;}.aside-list li{font-size:12.5px;font-weight:300;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;line-height:1.4;}.aside-list li:last-child{border-bottom:none;}.aside-list li::before{content:'→';color:var(--text-dim);flex-shrink:0;margin-top:1px;}
+  .sources-section{max-width:1100px;margin:0 auto;padding:40px 40px 80px;border-top:1px solid var(--border);}
+  .sources-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px;}
+  .sources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .source-item{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.5;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;}
+  .source-item strong{display:block;color:var(--text-muted);font-weight:400;margin-bottom:2px;}
+  .page-footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .footer-logo{font-family:var(--font-mono);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);}
+  .footer-note{font-size:11.5px;font-weight:300;color:var(--text-dim);max-width:400px;text-align:right;line-height:1.5;}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero-breadcrumb{animation:fadeInUp 0.4s ease both;}.product-name{animation:fadeInUp 0.5s 0.05s ease both;}.product-sub{animation:fadeInUp 0.5s 0.1s ease both;}.verdict-label{animation:fadeInUp 0.5s 0.15s ease both;}.verdict-text{animation:fadeInUp 0.5s 0.2s ease both;}.scorecard{animation:fadeInUp 0.5s 0.25s ease both;}
+  @media(max-width:900px){.hero,.content-grid{grid-template-columns:1fr;gap:40px;}.scorecard{position:static;}.hero{padding:60px 24px 40px;}.content-grid,.section-divider,.sources-section{padding-left:24px;padding-right:24px;}.timeline-alert,.site-header{padding-left:24px;padding-right:24px;}.page-footer{padding:24px;flex-direction:column;gap:12px;}.footer-note{text-align:left;}.product-name{font-size:48px;}.site-nav{display:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="traced-index.html">TRACED <span>/ Food Transparency</span></a>
+  <nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced</a>
+  <div class="nav-links">
+    <a href="traced-archive.html">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+</header>
+
+<div class="timeline-alert">
+  <span class="alert-pill">⚠ Settlement</span>
+  <span class="alert-text"><strong>2022:</strong> Coca-Cola and Fairlife agreed to a $21 million settlement for falsely advertising milk came from humanely treated cows. Undercover investigations at supplier farms were also conducted in 2019 and 2023. No admission of wrongdoing in the settlement.</span>
+</div>
+
+<section class="hero">
+  <div>
+    <div class="hero-breadcrumb">
+      <span>Traced</span><span class="sep">/</span>
+      <span class="hero-category">Dairy · Ultra-Filtered Milk</span>
+    </div>
+    <h1 class="product-name">Fairlife</h1>
+    <p class="product-sub">Ultra-Filtered Milk & Core Power</p>
+    <div class="verdict-label">Traced Assessment</div>
+    <p class="verdict-text">
+      Fairlife built its brand — and its premium price — on a single promise: <strong>"Extraordinary care for our cows."</strong> That claim is printed on every bottle. In 2019, undercover footage from a supplier farm called Fair Oaks — co-founded by Fairlife's own founders — showed workers stabbing calves with steel bars, punching cows, and leaving animals to die in extreme heat. Subsequent investigations in 2023 found similar conditions at additional supplier farms. Coca-Cola acquired 100% of Fairlife in 2020 for what has become a total of approximately <strong>$7 billion</strong> — its largest brand acquisition in 133 years. The product is genuinely innovative: ultra-filtration removes lactose, concentrates protein to 13g per cup versus 8g in regular milk, and reduces sugar. The nutrition claims are real. <strong>The welfare claims were not.</strong> A $21 million settlement in 2022 resolved the consumer fraud lawsuit without admission of wrongdoing. Fairlife's retail sales have continued to grow — crossing $1 billion in 2022 and reaching nearly $4 billion in 2024. The reputational damage was entirely absorbed by market momentum. The premium price consumers paid for humane treatment funded a brand whose supply chain failed to deliver it.
+    </p>
+  </div>
+  <div class="scorecard">
+    <div class="scorecard-header">
+      <span class="scorecard-title">Transparency Score</span>
+      <div class="score-summary">
+        <span class="score-count red">4🔴</span>
+        <span class="score-count yellow">2🟡</span>
+        <span class="score-count green">1🟢</span>
+      </div>
+    </div>
+    <div class="scorecard-rows">
+      <div class="score-row"><span class="score-dim">Ownership Structure</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Marketing Alignment</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Revenue Model</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Ingredient Integrity</span><span class="score-pill green">Green</span></div>
+      <div class="score-row"><span class="score-dim">Scientific Backing</span><span class="score-pill yellow">Yellow</span></div>
+      <div class="score-row"><span class="score-dim">Label Claim Accuracy</span><span class="score-pill red">Red</span></div>
+      <div class="score-row"><span class="score-dim">Safety Transparency</span><span class="score-pill red">Red</span></div>
+    </div>
+    <div class="scorecard-footer">
+      <div class="scorecard-footer-label">Current Owner</div>
+      <div class="scorecard-footer-value">The Coca-Cola Company (100% since Jan 2020). Total acquisition value ~$7B — Coke's largest ever brand purchase.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<div class="content-grid">
+  <main class="content-main">
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">01</span>
+        <span class="dim-title">Ownership Structure</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>Fairlife was founded in 2012 as a joint venture between <strong>Select Milk Producers</strong> (a dairy cooperative run by founders Mike and Sue McCloskey) and The Coca-Cola Company. Coke held a 42.5% minority stake and provided national distribution through its Minute Maid and bottler networks. On January 3, 2020, Coca-Cola acquired the remaining stake, bringing its ownership to 100%.</p>
+        <p>The total cost of the acquisition has proven extraordinary. The initial closing payment was approximately $980 million. But the deal was structured as an earn-out — meaning the final price is tied to Fairlife's performance. As of Coca-Cola's 2024 earnings report, the total earn-out obligation stands at approximately <strong>$6.2 billion additional</strong>, bringing the total acquisition value to roughly <strong>$7.2 billion</strong> — the largest brand acquisition in Coca-Cola's 133-year history.</p>
+        <div class="ownership-chain">
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2012</div>
+              <div class="chain-owner">Select Milk Producers + Coca-Cola (JV)</div>
+              <div class="chain-note">McCloskey family founds Fairlife as JV with Coke holding 42.5%. Distribution via Coke's national bottler network.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">Jan 2020</div>
+              <div class="chain-owner">The Coca-Cola Company (100%)</div>
+              <div class="chain-note">Full acquisition. Initial payment ~$980M. Earn-out structure means total payment scales with brand performance.</div>
+            </div>
+          </div>
+          <div class="chain-item">
+            <div class="chain-dot current"><div class="chain-dot-inner"></div></div>
+            <div class="chain-content">
+              <div class="chain-year">2024</div>
+              <div class="chain-owner">Coca-Cola — ~$7.2B total acquisition value</div>
+              <div class="chain-note">Retail value grown from $10M (2014) to ~$4B (2024). Largest brand acquisition in Coca-Cola's history. New $650M production facility under construction in upstate New York.</div>
+            </div>
+          </div>
+        </div>
+        <p>The structural issue is incentive alignment: Coca-Cola's earn-out obligation means the company pays more as Fairlife grows. This creates maximum pressure to protect brand revenue even under reputational stress — which is precisely the pattern observed after the 2019 abuse videos. Sales continued growing 30%+ year-over-year through and after the scandal.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">02</span>
+        <span class="dim-title">Marketing Alignment</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>Fairlife's marketing rests on two simultaneous claims: superior nutrition and superior animal welfare. The nutrition claim is legitimate — ultrafiltration is real, protein concentration is real, lactose removal is real. The animal welfare claim is where the gap opens.</p>
+        <p>Every Fairlife bottle has carried language about animal care. The company's own website stated: <strong>"Extraordinary care for our cows."</strong> and <strong>"Always in Good Hands."</strong> These are not footnoted, hedged, or qualified. They are brand positioning claims on consumer-facing packaging, commanding a premium price — roughly twice the cost of conventional milk.</p>
+        <div class="callout red">
+          <div class="callout-label">The Humane-Washing Pattern</div>
+          <div class="callout-body">Fairlife's premium pricing is explicitly tied to its animal welfare narrative. Coca-Cola's own communications framed the brand's value proposition as "sustainable dairy with fully sustainable high-care processes with animals." When undercover footage showed calves being stabbed with steel bars, punched, and left to die in 110°F heat at Fair Oaks Farm — co-founded by Fairlife's own founders, Mike and Sue McCloskey — the gap between marketing and supply chain reality was not a marginal discrepancy. It was the central brand claim, falsified at the company's flagship supplier farm.</div>
+        </div>
+        <p>The 2022 class action settlement resolved lawsuits alleging consumer fraud and deceptive advertising. The settlement <strong>included no admission of wrongdoing</strong>. Fairlife's marketing language was adjusted after 2019. The brand has not, to date, run corrective advertising acknowledging the gap to consumers who paid premium prices based on the original claims.</p>
+        <p>In 2023, Animal Recovery Mission (ARM) conducted a follow-up investigation at Windy Ridge Dairy and Windy Too Dairy — farms in the same region with ownership ties to the original Fair Oaks network. The footage showed similar conditions. Fairlife denied active sourcing from these farms, though acknowledged a single milk shipment was received from Windy Ridge in September 2023 (which it said was not used in product).</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">03</span>
+        <span class="dim-title">Revenue Model</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>Fairlife retails at roughly twice the price of conventional milk — approximately $4.29 per 52oz versus ~$2 per 64oz for standard milk. This premium is structurally justified by real product differentiation: ultrafiltration is a genuine process that produces a nutritionally distinct product. The price premium is not purely marketing fiction.</p>
+        <p>The yellow score reflects one specific concern: the premium price has been sold to consumers partly on the basis of animal welfare claims that were not verified as accurate. Consumers paying a 2x premium for milk from "humanely treated cows" were not getting what they paid for — at least at the brand's flagship supplier during the documented periods. The revenue model benefited from a welfare narrative that the supply chain did not support.</p>
+        <p>Core Power protein shakes — Fairlife's fastest-growing product line — have a similar premium pricing structure justified by genuine protein density (26g per bottle), but the wellness positioning carries the same inherited brand association with the parent milk line's welfare claims.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">04</span>
+        <span class="dim-title">Ingredient Integrity</span>
+        <span class="score-pill green">Green</span>
+      </div>
+      <div class="dim-body">
+        <p>The green score here is earned and meaningful. Fairlife's ultrafiltration process is genuinely innovative and the nutritional claims are accurate and verified. The product does deliver 13g protein per cup (vs. 8g in regular milk), does remove lactose (making it genuinely accessible to lactose-intolerant consumers), and does reduce sugar by approximately 30% compared to conventional milk.</p>
+        <p>Core Power's 26g and 42g protein shake lines are made with ultra-filtered milk, not protein concentrate blends or caseinate systems. The protein quality is legitimate. No undisclosed ingredient substitution, no proprietary blends masking cheap sources, no inflated numbers. The ingredient integrity score reflects only what is in the product — not how it was sourced or how the sourcing was represented.</p>
+        <p>This separation is intentional in the Traced framework. Ingredient integrity and animal welfare claims are distinct dimensions. A product can have genuine nutritional quality and a falsified supply chain narrative simultaneously. Fairlife is the clearest example in the database of exactly this combination.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">05</span>
+        <span class="dim-title">Scientific Backing</span>
+        <span class="score-pill yellow">Yellow</span>
+      </div>
+      <div class="dim-body">
+        <p>The protein concentration and lactose removal claims are well-supported by the ultrafiltration process — this is established food science, not a proprietary or contested methodology. The nutritional advantages of higher protein, lower sugar, and lactose-free formulation are real and peer-reviewed in the context of dairy science generally.</p>
+        <p>The yellow score reflects the absence of published clinical trials on Fairlife products specifically, and the fact that Fairlife's broader health positioning — particularly Core Power's athletic recovery marketing — relies more on category-level protein science than product-specific evidence. This is standard in the dairy industry and not a significant concern. The product delivers what the label states; the science behind the claims is legitimate at the ingredient level.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">06</span>
+        <span class="dim-title">Label Claim Accuracy</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>The nutritional label claims are accurate. The protein, sugar, and lactose figures are verified and correct. The red score is for the welfare claims on packaging and in brand marketing — specifically "Extraordinary care for our cows" and equivalent statements — which a federal court found sufficient basis for a consumer fraud class action, resulting in a $21 million settlement.</p>
+        <p>The settlement did not require Fairlife to run corrective advertising or formally acknowledge the falsity of prior claims to consumers who made purchasing decisions based on them. The consent structure resolved the legal liability without consumer-facing acknowledgment. From a Traced label accuracy standpoint, claims that generated a nine-figure consumer fraud settlement warrant a red score regardless of settlement terms.</p>
+        <p>The FDA has not issued warning letters specifically about Fairlife's welfare marketing, as welfare claims generally fall under FTC jurisdiction rather than FDA. The FTC did not separately take enforcement action beyond the civil class action resolution.</p>
+      </div>
+    </div>
+
+    <div class="dimension-block">
+      <div class="dim-header">
+        <span class="dim-number">07</span>
+        <span class="dim-title">Safety Transparency</span>
+        <span class="score-pill red">Red</span>
+      </div>
+      <div class="dim-body">
+        <p>The safety concern in the Fairlife profile is supply chain transparency, not product safety in the conventional sense. No heavy metal contamination issues, no recall events for the core milk products, no food safety violations. The product reaches consumers safely.</p>
+        <p>The red score reflects the absence of meaningful supply chain transparency. Fairlife does not publish the names of its supplying farms. Consumers have no mechanism to verify which farms their milk comes from. The only way the Fair Oaks supply chain failure became public was through years of undercover investigation by an animal welfare organization — not through any disclosure mechanism Fairlife or Coca-Cola made available.</p>
+        <p>Post-2019, Fairlife committed to third-party audits and camera monitoring at supplier farms. The 2023 ARM investigation suggests these measures did not fully prevent repeat supply chain welfare failures at farms in the same network. Whether those farms were active Fairlife suppliers at the time of filming remains disputed by Fairlife. The dispute itself illustrates the transparency problem: without named sourcing, consumers have no ability to independently verify any welfare claim the brand makes.</p>
+        <div class="callout red">
+          <div class="callout-label">The Transparency Gap</div>
+          <div class="callout-body">Fairlife charges a 2x premium partly on the basis of animal welfare. It does not publish the names of its supplying farms. Third-party audits are conducted but results are not made publicly available at the farm level. A consumer cannot verify the welfare claim they are paying for. The only external verification mechanism that has existed is undercover investigation — which has, twice, found conditions inconsistent with what Fairlife's packaging promises.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="content-aside">
+    <div class="aside-block">
+      <div class="aside-label">Key Figures</div>
+      <div class="aside-stat"><div class="aside-stat-value red">$7.2B</div><div class="aside-stat-label">Total Coca-Cola acquisition cost — their largest brand purchase ever. Earn-out structure means price scales with brand growth.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value red">$21M</div><div class="aside-stat-label">Consumer fraud settlement, 2022. Alleged false advertising that milk came from humanely treated cows.</div></div>
+      <div class="aside-stat"><div class="aside-stat-value">~$4B</div><div class="aside-stat-label">Fairlife retail sales in 2024. Grown from $10M in 2014. The scandal did not slow growth.</div></div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Investigation Timeline</div>
+      <ul class="aside-list">
+        <li>2018–2019: ARM undercover investigation at Fair Oaks Farm (co-founded by Fairlife's founders). Footage released June 2019.</li>
+        <li>2019: Three farm workers arrested on animal cruelty charges. Fairlife cuts ties with Fair Oaks Farm.</li>
+        <li>2020: Coca-Cola completes 100% acquisition of Fairlife. Multiple class action lawsuits consolidated.</li>
+        <li>2022: $21M settlement reached. No admission of wrongdoing. Animal welfare oversight programs implemented.</li>
+        <li>2023: ARM conducts second investigation at Windy Ridge Dairy — farms with ownership ties to Fair Oaks network. Fairlife disputes active sourcing from these farms.</li>
+        <li>2024: Fairlife retail value reaches ~$4B. New $650M production facility breaking ground in New York.</li>
+      </ul>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">What Green Looks Like Here</div>
+      <ul class="aside-list">
+        <li>Organic Valley: farmer-owned cooperative, named farm sourcing available, welfare standards governed by member farms</li>
+        <li>Alexandre Family Farm: single-farm sourcing, certified regenerative organic, farm name on every carton</li>
+        <li>Straus Family Creamery: named farm, California certified organic, welfare standards publicly documented</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<section class="sources-section">
+  <div class="sources-label">Sources & Documentation</div>
+  <div class="sources-grid">
+    <div class="source-item"><strong>Animal Recovery Mission (ARM) — 2019 Investigation</strong>Undercover footage at Fair Oaks Farm documenting systemic animal abuse at a Fairlife supplier dairy co-founded by Fairlife's founders.</div>
+    <div class="source-item"><strong>Food Dive — $21M Settlement, May 2022</strong>"Coca-Cola and other parties agreed to pay $21 million to settle lawsuits for falsely advertising their Fairlife ultra-filtered milk came from humanely treated cows." Preliminary court approval April 27, 2022.</div>
+    <div class="source-item"><strong>Food Dive — 2023 ARM Follow-Up Investigation</strong>ARM investigation at Windy Ridge and Windy Too Dairy, September 2023. Fairlife denies active sourcing; acknowledges single milk shipment received Sept. 11, 2023.</div>
+    <div class="source-item"><strong>CNN Business — Coca-Cola/Fairlife, Feb 2025</strong>"In 2020, Coca-Cola fully acquired Fairlife for an initial $980 million." Earn-out total: "$6.2 billion, plus the $980 million Coke initially paid" per Coca-Cola earnings report.</div>
+    <div class="source-item"><strong>Coca-Cola 2024 Earnings — Fairlife Retail Value</strong>CEO James Quincey: "fairlife's retail value had grown from $10 million in 2014 to nearly $4 billion in 2024."</div>
+    <div class="source-item"><strong>Fairlife FAQ — "Who owns fairlife?"</strong>"On January 3, 2020, The Coca-Cola Company announced that it acquired the remaining stake in fairlife LLC from its joint venture partner Select Milk Producers." coca-cola.com</div>
+    <div class="source-item"><strong>Wikipedia — Fairlife</strong>Brand history, founding, acquisition structure, marketing controversy, settlement details. Verified against primary sources.</div>
+    <div class="source-item"><strong>Dairy Business MEA — $7B Investment, Feb 2025</strong>"This makes it the largest brand acquisition in Coca-Cola's 133-year history." Retail sales trajectory documented from 2014–2024.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span class="footer-logo">TRACED</span>
+  <p class="footer-note">Traced does not accept advertising or affiliate revenue. The green ingredient integrity score reflects product composition only — not supply chain practices, which are scored separately.</p>
+
+<div class="traced-legal-bar">
+  <div class="traced-legal-inner">
+    <span class="traced-legal-icon">&#9432;</span>
+    <p class="traced-legal-text">
+      <strong>Editorial Assessment.</strong>
+      Traced scores are independent editorial assessments based on publicly available information — including regulatory filings, acquisition records, ingredient labels, and published research. 
+      They reflect our analysis of transparency practices and are <strong>not statements of product safety, legality, or consumer harm.</strong>
+      Scores are not legal conclusions. We report on documented facts; our characterizations of those facts are opinion.
+      Traced is not affiliated with any brand featured on this site and accepts no advertising or sponsorship revenue.
+      Corrections and challenges: <a href="/cdn-cgi/l/email-protection#cda8a9a4b9a2bfa4aca18db9bfacaea8a9e3aea2a0edeba0a4a9a9a2b9f6edf1aceda5bfa8abf0" traced-editorial-standards.html" style="color:var(--accent)">Editorial Standards &rarr;</a>"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0762636e7368756e666b477375666462632964686a">[email&#160;protected]</a></a>
+    </p>
+  </div>
+</div>
+<style>
+.traced-legal-bar{background:#0d0d0d;border-top:1px solid #1e1e1e;padding:18px 0;margin-top:0}
+.traced-legal-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:14px;align-items:flex-start}
+.traced-legal-icon{font-size:14px;color:#4a4642;flex-shrink:0;margin-top:2px}
+.traced-legal-text{font-size:12px;color:#4a4642;line-height:1.65;font-family:'DM Sans',system-ui,sans-serif}
+.traced-legal-text strong{color:#7a7570;font-weight:500}
+.traced-legal-text a{col

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Everything We’ve Investigated — Traced</title>
+<meta name="description" content="The complete Traced investigation archive. Every brand story, category index, and owner web — all sourced to primary documents. 17 brand investigations, 5 category indexes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surface:#111;--surface-2:#181818;--surface-3:#1e1e1e;
+  --border:#222;--border-lt:#2a2a2a;
+  --text:#e8e4dc;--muted:#7a7570;--dim:#4a4642;
+  --accent:#C9A84C;--accent-dim:rgba(201,168,76,.08);
+  --red:#D94F3D;--red-dim:rgba(217,79,61,.10);
+  --yellow:#D4A84B;--yellow-dim:rgba(212,168,75,.10);
+  --green:#4E9B6F;--green-dim:rgba(78,155,111,.10);
+  --font-d:'Playfair Display',Georgia,serif;
+  --font-b:'DM Sans',sans-serif;
+  --font-m:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(8,8,8,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--font-m);font-size:13px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);}
+.nav-logo span{color:var(--muted);font-weight:400}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}.nav-links a.active{color:var(--accent)}
+
+/* HERO */
+.hero{max-width:1200px;margin:0 auto;padding:80px 40px 0}
+.hero-eyebrow{font-family:var(--font-m);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:var(--border)}
+.hero-h1{font-family:var(--font-d);font-size:clamp(48px,6.5vw,96px);font-weight:900;line-height:.88;letter-spacing:-.03em;margin-bottom:28px}
+.hero-h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:16px;font-weight:300;color:rgba(232,228,220,.6);max-width:58ch;line-height:1.65;margin-bottom:40px}
+.hero-sub strong{color:var(--text)}
+
+/* STAT BAR */
+.stat-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.stat-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;gap:0;}
+.stat{padding:22px 32px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:4px;}
+.stat:first-child{padding-left:0}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--font-d);font-size:32px;font-weight:900;line-height:1;letter-spacing:-.02em}
+.stat-n.red{color:var(--red)}.stat-n.yellow{color:var(--yellow)}.stat-n.green{color:var(--green)}.stat-n.accent{color:var(--accent)}
+.stat-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+
+/* W */
+.W{max-width:1200px;margin:0 auto;padding:0 40px}
+
+/* SECTION DIVIDER */
+.sdiv{display:flex;align-items:center;gap:16px;padding:60px 0 28px}
+.sdiv-label{font-family:var(--font-m);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);flex-shrink:0}
+.sdiv::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FILTER STRIP */
+.filter-strip{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:0 0 24px;border-bottom:1px solid var(--border);margin-bottom:0}
+.fchip{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:7px 14px;border-radius:2px;border:1px solid var(--border-lt);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
+.fchip:hover{border-color:var(--accent);color:var(--accent)}
+.fchip.active{background:var(--accent-dim);border-color:rgba(201,168,76,.4);color:var(--accent)}
+.fchip.r.active{background:var(--red-dim);border-color:rgba(217,79,61,.4);color:var(--red)}
+.fchip.y.active{background:var(--yellow-dim);border-color:rgba(212,168,75,.4);color:var(--yellow)}
+.fchip.g.active{background:var(--green-dim);border-color:rgba(78,155,111,.4);color:var(--green)}
+.filter-divider{width:1px;height:20px;background:var(--border);margin:0 4px;}
+.fcount{font-family:var(--font-m);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-left:auto}
+
+/* FEATURED STORIES */
+.featured-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px;}
+.feat-card{background:var(--bg);padding:30px 28px;cursor:pointer;transition:background .15s;display:block;position:relative;}
+.feat-card:hover{background:var(--surface)}
+.feat-card.primary{background:var(--surface-2)}
+.feat-card.primary:hover{background:var(--surface-3)}
+.feat-zone{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;}
+.feat-zone-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.feat-zone.red{color:var(--red)}.feat-zone.red .feat-zone-dot{background:var(--red)}
+.feat-zone.yellow{color:var(--yellow)}.feat-zone.yellow .feat-zone-dot{background:var(--yellow)}
+.feat-zone.green{color:var(--green)}.feat-zone.green .feat-zone-dot{background:var(--green)}
+.feat-cat{font-family:var(--font-m);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.feat-name{font-family:var(--font-d);font-size:clamp(20px,2.4vw,30px);font-weight:700;line-height:1.05;letter-spacing:-.01em;margin-bottom:10px}
+.feat-deck{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:18px;max-width:40ch}
+.feat-owner{font-family:var(--font-m);font-size:9px;letter-spacing:.10em;color:var(--dim);margin-bottom:14px}
+.feat-read{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(201,168,76,.3);padding:8px 14px;display:inline-block;transition:all .15s;}
+.feat-card:hover .feat-read{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.5)}
+
+/* ARCHIVE TABLE */
+.archive-table{width:100%;border-collapse:collapse;border:1px solid var(--border);}
+.ath{background:var(--surface);position:sticky;top:56px;z-index:10}
+.ath th{font-family:var(--font-m);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
+.ath th:last-child{border-right:none}
+.atr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;}
+.atr:hover{background:var(--surface)}
+.atr:last-child{border-bottom:none}
+.atr.hidden{display:none}
+/* col widths */
+.col-name{width:200px;padding:16px 16px;border-right:1px solid var(--border);vertical-align:middle}
+.col-zone{width:90px;padding:16px;border-right:1px solid var(--border);vertical-align:middle;text-align:center}
+.col-owner{width:160px;padding:16px;border-right:1px solid var(--border);vertical-align:middle}
+.col-cat{width:180px;padding:16px;border-right:1px solid var(--border);vertical-align:middle}
+.col-finding{padding:16px;border-right:1px solid var(--border);vertical-align:middle}
+.col-action{width:100px;padding:16px;vertical-align:middle;text-align:center}
+.t-brand{font-family:var(--font-d);font-size:16px;font-weight:700;line-height:1.1;color:var(--text)}
+.t-sub{font-family:var(--font-m);font-size:9px;color:var(--dim);letter-spacing:.06em;margin-top:4px}
+.t-zone{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:8.5px;letter-spacing:.10em;text-transform:uppercase;padding:4px 8px;border-radius:2px;}
+.t-zone.red{color:var(--red);background:var(--red-dim);border:1px solid rgba(217,79,61,.2)}
+.t-zone.yellow{color:var(--yellow);background:var(--yellow-dim);border:1px solid rgba(212,168,75,.2)}
+.t-zone.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(78,155,111,.2)}
+.t-zone-dot{width:5px;height:5px;border-radius:50%}
+.t-zone.red .t-zone-dot{background:var(--red)}.t-zone.yellow .t-zone-dot{background:var(--yellow)}.t-zone.green .t-zone-dot{background:var(--green)}
+.t-owner{font-size:12px;color:var(--muted);line-height:1.3}
+.t-owner-type{font-family:var(--font-m);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.t-cat-pill{font-family:var(--font-m);font-size:8.5px;letter-spacing:.10em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border-lt);color:var(--dim);display:inline-block}
+.t-finding{font-size:13px;color:var(--muted);line-height:1.5}
+.t-finding strong{color:var(--text);font-weight:500}
+.t-link{font-family:var(--font-m);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(201,168,76,.25);padding:7px 12px;display:inline-block;transition:all .15s;white-space:nowrap;}
+.atr:hover .t-link{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.5)}
+
+/* COMING SOON ROWS */
+.atr.coming{opacity:.42;cursor:default}
+.atr.coming:hover{background:transparent}
+.coming-badge{font-family:var(--font-m);font-size:8px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border-lt);color:var(--dim);display:inline-block}
+
+/* INDEXES SECTION */
+.idx-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:40px}
+.idx-card{background:var(--bg);padding:24px 22px;cursor:pointer;transition:background .15s;display:block;}
+.idx-card:hover{background:var(--surface)}
+.idx-n{font-family:var(--font-m);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.idx-name{font-family:var(--font-d);font-size:18px;font-weight:700;line-height:1.1;margin-bottom:8px}
+.idx-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.idx-count{font-family:var(--font-m);font-size:9px;letter-spacing:.10em;color:var(--accent)}
+
+/* OWNER CONCENTRATION */
+.owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:40px}
+.owner-row{background:var(--bg);padding:20px 22px;display:flex;align-items:center;gap:16px;}
+.owner-name{font-family:var(--font-d);font-size:16px;font-weight:700;min-width:160px;color:var(--text)}
+.owner-bar-wrap{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:0}
+.owner-bar{height:100%;background:var(--red)}
+.owner-bar.y{background:var(--yellow)}.owner-bar.g{background:var(--green)}.owner-bar.a{background:var(--accent)}
+.owner-count{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;color:var(--muted);min-width:40px;text-align:right}
+.owner-brands{font-size:11px;color:var(--dim);margin-top:4px;line-height:1.4}
+
+/* EMAIL CAPTURE */
+.capture-band{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 0;margin:60px 0 0;}
+.capture-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.cap-h{font-family:var(--font-d);font-size:clamp(24px,3vw,38px);font-weight:700;line-height:1.1;letter-spacing:-.01em;margin-bottom:10px}
+.cap-h em{font-style:italic;color:var(--accent)}
+.cap-sub{font-size:14px;color:var(--muted);line-height:1.6}
+.cap-form{display:flex;gap:8px;}
+.cap-input{flex:1;padding:13px 16px;border-radius:0;border:1px solid var(--border-lt);background:var(--surface-2);font-size:14px;color:var(--text);font-family:inherit;}
+.cap-input::placeholder{color:var(--dim)}
+.cap-input:focus{outline:none;border-color:rgba(201,168,76,.5)}
+.cap-btn{padding:13px 22px;background:var(--accent);color:#080808;border:none;font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:opacity .15s;white-space:nowrap;}
+.cap-btn:hover{opacity:.88}
+.cap-note{font-family:var(--font-m);font-size:9px;letter-spacing:.10em;color:var(--dim);margin-top:10px}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:36px 0}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-logo{font-family:var(--font-m);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.footer-note{font-size:12px;color:var(--dim)}
+
+/* RESPONSIVE */
+@media(max-width:1020px){.featured-grid{grid-template-columns:1fr}.idx-grid{grid-template-columns:1fr 1fr}.owner-grid{grid-template-columns:1fr}.capture-inner{grid-template-columns:1fr}.cap-form{flex-direction:column}.stat-inner{flex-wrap:wrap}.stat{padding:16px 20px;border-right:none;border-bottom:1px solid var(--border)}}
+@media(max-width:640px){.hero{padding:60px 20px 0}.W{padding:0 20px}.idx-grid{grid-template-columns:1fr}.nav{padding:0 20px}.archive-table{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="traced-homepage-v5.html" class="nav-logo">Traced <span>/ Archive</span></a>
+  <div class="nav-links">
+    <a href="traced-archive.html" class="active">Archive</a>
+    <a href="traced-protein-supplements.html">Proteins</a>
+    <a href="traced-electrolytes.html">Electrolytes</a>
+    <a href="traced-greens-powders.html">Greens</a>
+    <a href="traced-chocolate.html">Chocolate</a>
+    <a href="traced-methodology.html">Methodology</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Investigation Archive &mdash; Complete Coverage</div>
+  <h1 class="hero-h1">Everything<br><em>we’ve investigated</em></h1>
+  <p class="hero-sub">
+    17 brand investigations. 5 category indexes. Every score sourced to a primary document &mdash; 
+    SEC filings, FDA letters, acquisition announcements, lab reports. 
+    <strong>The brands that earned Red did something documentable. The brands in Green earned that too.</strong>
+  </p>
+</div>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="stat-inner">
+    <div class="stat"><div class="stat-n accent">22</div><div class="stat-lbl">Total investigations</div></div>
+    <div class="stat"><div class="stat-n red">11</div><div class="stat-lbl">Red zone brands</div></div>
+    <div class="stat"><div class="stat-n yellow">7</div><div class="stat-lbl">Yellow zone brands</div></div>
+    <div class="stat"><div class="stat-n green">3</div><div class="stat-lbl">Green zone brands</div></div>
+    <div class="stat"><div class="stat-n accent">5</div><div class="stat-lbl">Category indexes</div></div>
+    <div class="stat"><div class="stat-n accent">9</div><div class="stat-lbl">Conglomerates mapped</div></div>
+    <div class="stat"><div class="stat-n accent">Feb 2026</div><div class="stat-lbl">Archive last updated</div></div>
+  </div>
+</div>
+
+<!-- FEATURED 3 -->
+<div class="W">
+  <div class="sdiv"><span class="sdiv-label">Featured investigations</span></div>
+  <div class="featured-grid">
+
+    <a href="traced-annies.html" class="feat-card primary">
+      <div class="feat-zone yellow"><div class="feat-zone-dot"></div>Mixed Transparency</div>
+      <div class="feat-cat">Acquired Natural Food</div>
+      <h2 class="feat-name">Annie’s<br>Homegrown</h2>
+      <p class="feat-deck">The “homegrown” brand has been General Mills since 2014. $820M acquisition. The bunny stayed. The founder-controlled sourcing independence didn’t.</p>
+      <div class="feat-owner">General Mills &mdash; Acquired 2014</div>
+      <span class="feat-read">Read the investigation &rarr;</span>
+    </a>
+
+    <a href="traced-reeses-hershey.html" class="feat-card">
+      <div class="feat-zone red"><div class="feat-zone-dot"></div>Low Transparency</div>
+      <div class="feat-cat">Brand Investigation</div>
+      <h2 class="feat-name">Reese’s /<br>Hershey</h2>
+      <p class="feat-deck">PGPR replaced cocoa butter in 2006. Compound coatings replaced milk chocolate in line extensions. Hershey’s CFO confirmed recipe changes to investors while the marketing held.</p>
+      <div class="feat-owner">The Hershey Company</div>
+      <span class="feat-read">Read the investigation &rarr;</span>
+    </a>
+
+    <a href="traced-ag1.html" class="feat-card">
+      <div class="feat-zone red"><div class="feat-zone-dot"></div>Low Transparency &mdash; 7 of 7 red</div>
+      <div class="feat-cat">Greens Powder / Supplements</div>
+      <h2 class="feat-name">AG1<br>Athletic Greens</h2>
+      <p class="feat-deck">Every single dimension red. The definitive case study in health halo positioning: a product built almost entirely on influencer infrastructure and opacity.</p>
+      <div class="feat-owner">Private / VC-backed</div>
+      <span class="feat-read">Read the investigation &rarr;</span>
+    </a>
+
+  </div>
+
+  <!-- FILTER + ARCHIVE TABLE -->
+  <div class="sdiv"><span class="sdiv-label">Full archive &mdash; all brand investigations</span></div>
+
+  <div class="filter-strip" id="filterStrip">
+    <button class="fchip active" onclick="filter('zone','all',this)">All zones</button>
+    <button class="fchip r" onclick="filter('zone','red',this)">Red</button>
+    <button class="fchip y" onclick="filter('zone','yellow',this)">Yellow</button>
+    <button class="fchip g" onclick="filter('zone','green',this)">Green</button>
+    <div class="filter-divider"></div>
+    <button class="fchip" onclick="filter('cat','supplements',this)">Supplements</button>
+    <button class="fchip" onclick="filter('cat','food',this)">Food</button>
+    <button class="fchip" onclick="filter('cat','protein',this)">Protein</button>
+    <button class="fchip" onclick="filter('cat','dairy',this)">Dairy &amp; Ice Cream</button>
+    <button class="fchip" onclick="filter('cat','juice',this)">Juice &amp; Beverage</button>
+    <div class="filter-divider"></div>
+    <button class="fchip" onclick="filter('owner','pe',this)">PE-backed</button>
+    <button class="fchip" onclick="filter('owner','conglomerate',this)">Conglomerate</button>
+    <button class="fchip" onclick="filter('owner','independent',this)">Independent</button>
+    <span class="fcount" id="rowCount">17 investigations</span>
+  </div>
+
+  <table class="archive-table" id="archiveTable">
+    <thead class="ath">
+      <tr>
+        <th class="col-name">Brand</th>
+        <th class="col-zone">Zone</th>
+        <th class="col-owner">Owner</th>
+        <th class="col-cat">Category</th>
+        <th class="col-finding">Key finding</th>
+        <th class="col-action"></th>
+      </tr>
+    </thead>
+    <tbody id="archiveBody">
+
+      <tr class="atr" data-zone="red" data-cat="supplements" data-owner="pe conglomerate">
+        <td class="col-name"><div class="t-brand">AG1</div><div class="t-sub">Athletic Greens</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">Private / VC-backed</div><div class="t-owner-type">No public filings</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Greens Powder</span></td>
+        <td class="col-finding"><div class="t-finding"><strong>7 of 7 dimensions red.</strong> The most complete transparency failure in the Traced database. Influencer infrastructure, proprietary blend, dose opacity, and health halo claims unsupported by the disclosed formula.</div></td>
+        <td class="col-action"><a href="traced-ag1.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="yellow" data-cat="food" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Annie’s</div><div class="t-sub">Homegrown</div></td>
+        <td class="col-zone"><span class="t-zone yellow"><span class="t-zone-dot"></span>Yellow</span></td>
+        <td class="col-owner"><div class="t-owner">General Mills</div><div class="t-owner-type">Acquired 2014 &mdash; $820M</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Acquired Natural Food</span></td>
+        <td class="col-finding"><div class="t-finding">Formulas have largely held post-acquisition. The structural independence that justified the brand’s premium &mdash; founder control, mission alignment, independent sourcing &mdash; <strong>has not.</strong></div></td>
+        <td class="col-action"><a href="traced-annies.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="protein" data-owner="pe">
+        <td class="col-name"><div class="t-brand">Beyond Meat</div><div class="t-sub">BYND</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">Public (Nasdaq: BYND)</div><div class="t-owner-type">IPO 2019 &mdash; post-IPO decline</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Alternative Protein</span></td>
+        <td class="col-finding"><div class="t-finding">IPO in 2019 was the most successful food company debut in decades. The promise: sustainable, clean-label protein. The reality: <strong>ingredient complexity, proprietary processing, and a marketing-to-formula gap</strong> that widened as growth stalled.</div></td>
+        <td class="col-action"><a href="traced-beyondmeat.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="yellow" data-cat="food" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Cheerios</div><div class="t-sub">General Mills</div></td>
+        <td class="col-zone"><span class="t-zone yellow"><span class="t-zone-dot"></span>Yellow</span></td>
+        <td class="col-owner"><div class="t-owner">General Mills</div><div class="t-owner-type">Core portfolio brand</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Breakfast Cereal</span></td>
+        <td class="col-finding"><div class="t-finding">The red heart FDA-qualified health claim is legitimate. The “heritage grain” marketing is not substantiated at the supply chain level. <strong>Glyphosate residue in EWG testing</strong> has not been addressed in product communications.</div></td>
+        <td class="col-action"><a href="traced-cheerios.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="yellow" data-cat="dairy" data-owner="independent">
+        <td class="col-name"><div class="t-brand">Chobani</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="t-zone yellow"><span class="t-zone-dot"></span>Yellow</span></td>
+        <td class="col-owner"><div class="t-owner">Founder-led (Hamdi Ulukaya)</div><div class="t-owner-type">Public &mdash; Founder control maintained</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Yogurt</span></td>
+        <td class="col-finding"><div class="t-finding">One of the most compelling founder stories in American food. <strong>Founder control maintained post-IPO.</strong> Yellow because of sourcing claim verification gaps and an acquisition-heavy expansion strategy that introduces new ownership complexity.</div></td>
+        <td class="col-action"><a href="traced-chobani.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="protein" data-owner="independent">
+        <td class="col-name"><div class="t-brand">David</div><div class="t-sub">Protein Bar</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">Independent (2024 launch)</div><div class="t-owner-type">Founder-controlled</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Protein Bar</span></td>
+        <td class="col-finding"><div class="t-finding">Macros are real: 28g protein, 150 calories, 0g sugar. <strong>Red because the novel protein blend raises dose adequacy questions</strong> that the brand’s marketing does not address and that third-party testing has not yet resolved.</div></td>
+        <td class="col-action"><a href="traced-david.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="dairy" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Fairlife</div><div class="t-sub">Ultra-Filtered Milk</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">Coca-Cola (100%)</div><div class="t-owner-type">Full acquisition 2020</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Filtered Milk</span></td>
+        <td class="col-finding"><div class="t-finding">Built on a “farmer-owned” premium. <strong>Fully acquired by Coca-Cola in 2020.</strong> Animal welfare violations documented at co-founder’s farms. The sourcing story the premium price depends on is no longer structurally accurate.</div></td>
+        <td class="col-action"><a href="traced-fairlife.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="dairy" data-owner="pe">
+        <td class="col-name"><div class="t-brand">Halo Top</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">Wells Enterprises</div><div class="t-owner-type">Acquired 2019 &mdash; ~$1B est.</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Diet Ice Cream</span></td>
+        <td class="col-finding"><div class="t-finding">Wellness positioning maintained post-acquisition. Erythritol (primary sweetener) <strong>associated with elevated cardiovascular risk</strong> in 2023 Nature Medicine study. Brand has not updated marketing or labeling in response.</div></td>
+        <td class="col-action"><a href="traced-halotop.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="food" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Jif</div><div class="t-sub">Peanut Butter</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">J.M. Smucker</div><div class="t-owner-type">Core portfolio brand</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Pantry Staple</span></td>
+        <td class="col-finding"><div class="t-finding">2022 Salmonella recall: <strong>166 illnesses, 14 states.</strong> Post-recall communications managed the story rather than addressed the systemic failure. Added sugars and hydrogenated oils not disclosed in the “real peanut butter” framing.</div></td>
+        <td class="col-action"><a href="traced-jif.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="green" data-cat="supplements" data-owner="independent">
+        <td class="col-name"><div class="t-brand">Momentous</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="t-zone green"><span class="t-zone-dot"></span>Green</span></td>
+        <td class="col-owner"><div class="t-owner">Independent (VC-backed)</div><div class="t-owner-type">Founders in control</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Performance Supplements</span></td>
+        <td class="col-finding"><div class="t-finding">NSF Certified for Sport, batch COAs published, no proprietary blends. <strong>The green benchmark for the supplement category.</strong> Premium price reflects genuine premium sourcing and testing. No transparency gaps found.</div></td>
+        <td class="col-action"><a href="traced-momentous.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="protein" data-owner="pe conglomerate">
+        <td class="col-name"><div class="t-brand">MusclePharm</div><div class="t-sub">Deep Trace</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">Public (Nasdaq: MSLP)</div><div class="t-owner-type">Revenue down 70%</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Supplements &mdash; Deep Trace</span></td>
+        <td class="col-finding"><div class="t-finding"><strong>Most documented legal and regulatory history</strong> in the Traced supplement database. SEC investigations, FTC actions, product quality failures. A public company case study in what happens when brand > substance for a decade.</div></td>
+        <td class="col-action"><a href="traced-musclepharm-deep-trace.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="protein supplements" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Muscle Milk</div><div class="t-sub">RTD Protein</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">PepsiCo / Gatorade</div><div class="t-owner-type">Acquired via Hormel 2014 &rarr; PepsiCo 2019</div></td>
+        <td class="col-cat"><span class="t-cat-pill">RTD Protein</span></td>
+        <td class="col-finding"><div class="t-finding">FDA warning letter about the name. FTC advertising review. Consumer Reports heavy metals findings (2010). <strong>Most documented regulatory history in the category.</strong> 2025 reformulation improves but doesn’t close the record.</div></td>
+        <td class="col-action"><a href="traced-muscle-milk.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="yellow" data-cat="dairy" data-owner="pe">
+        <td class="col-name"><div class="t-brand">Oatly</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="t-zone yellow"><span class="t-zone-dot"></span>Yellow</span></td>
+        <td class="col-owner"><div class="t-owner">Blackstone-backed (major investor)</div><div class="t-owner-type">Public &mdash; OTLY</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Alternative Dairy</span></td>
+        <td class="col-finding"><div class="t-finding">Oat milk is genuinely what it claims. The values transaction Oatly sold &mdash; choosing oat milk is an environmental act &mdash; <strong>became complicated when Blackstone (deforestation ties) took a major position</strong> via the IPO.</div></td>
+        <td class="col-action"><a href="traced-oatly.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="yellow" data-cat="supplements protein" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Optimum Nutrition</div><div class="t-sub">Gold Standard</div></td>
+        <td class="col-zone"><span class="t-zone yellow"><span class="t-zone-dot"></span>Yellow</span></td>
+        <td class="col-owner"><div class="t-owner">Glanbia plc</div><div class="t-owner-type">Irish conglomerate, acquired 2008</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Protein Supplements</span></td>
+        <td class="col-finding"><div class="t-finding">Category-defining product with genuine quality. <strong>Yellow because Glanbia ownership creates supply chain opacity</strong> and proprietary blend use has increased since acquisition. No NSF certification despite category-leader positioning.</div></td>
+        <td class="col-action"><a href="traced-optimum-nutrition.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="food" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Reese’s</div><div class="t-sub">The Hershey Company</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">The Hershey Company</div><div class="t-owner-type">Core portfolio brand</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Confectionery</span></td>
+        <td class="col-finding"><div class="t-finding">PGPR replaced cocoa butter in 2006. Compound coatings replaced milk chocolate in line extensions. <strong>CFO confirmed changes to investors in 2024</strong> while public communications said “no consumer impact.”</div></td>
+        <td class="col-action"><a href="traced-reeses-hershey.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="yellow" data-cat="protein" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">RXBar</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="t-zone yellow"><span class="t-zone-dot"></span>Yellow</span></td>
+        <td class="col-owner"><div class="t-owner">Mars Inc.</div><div class="t-owner-type">Via Kellogg’s 2017, Mars 2023</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Protein Bar</span></td>
+        <td class="col-finding"><div class="t-finding">The “No B.S.” label lists ingredients but not ownership. <strong>Kellogg’s $600M acquisition in 2017, then sold to Mars in 2023.</strong> Ingredients hold. The transparency the label implies does not extend to ownership disclosure.</div></td>
+        <td class="col-action"><a href="traced-rxbar.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="green" data-cat="dairy" data-owner="independent">
+        <td class="col-name"><div class="t-brand">Salt &amp; Straw</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="t-zone green"><span class="t-zone-dot"></span>Green</span></td>
+        <td class="col-owner"><div class="t-owner">Founder-owned</div><div class="t-owner-type">Kim &amp; Tyler Malek, Portland OR</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Independent Ice Cream</span></td>
+        <td class="col-finding"><div class="t-finding">The answer to what transparency looks like in practice. <strong>Farm-direct dairy partnerships published by name.</strong> Founder-controlled, no PE, no acquisition. Every Halo Top story ends with a Salt &amp; Straw.</div></td>
+        <td class="col-action"><a href="traced-saltstraw.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="green" data-cat="supplements" data-owner="independent">
+        <td class="col-name"><div class="t-brand">Transparent Labs</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="t-zone green"><span class="t-zone-dot"></span>Green</span></td>
+        <td class="col-owner"><div class="t-owner">Independent</div><div class="t-owner-type">Founder-controlled</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Performance Supplements</span></td>
+        <td class="col-finding"><div class="t-finding">Full ingredient disclosure, no proprietary blends, published COAs, clinical dosing. <strong>Green because the product does what the label says.</strong> No NSF certification (Yellow flag) but COA transparency partially compensates.</div></td>
+        <td class="col-action"><a href="traced-transparent-labs.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <tr class="atr" data-zone="red" data-cat="juice" data-owner="pe">
+        <td class="col-name"><div class="t-brand">Tropicana</div><div class="t-sub">Pure Premium OJ</div></td>
+        <td class="col-zone"><span class="t-zone red"><span class="t-zone-dot"></span>Red</span></td>
+        <td class="col-owner"><div class="t-owner">PAI Partners (PE)</div><div class="t-owner-type">Divested by PepsiCo 2021 &mdash; $3.3B</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Orange Juice</span></td>
+        <td class="col-finding"><div class="t-finding">“Pure Premium” orange juice that is reconstituted, flavor-packed, and stored for up to a year before packaging. <strong>Divested to PE in 2021</strong> with no consumer communication about the ownership change or its supply chain implications.</div></td>
+        <td class="col-action"><a href="traced-tropicana.html" class="t-link">Read &rarr;</a></td>
+      </tr>
+
+      <!-- COMING SOON ROWS -->
+      <tr class="atr coming" data-zone="tbd" data-cat="food" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Oatmeal Crisp</div><div class="t-sub">General Mills</div></td>
+        <td class="col-zone"><span class="coming-badge">In progress</span></td>
+        <td class="col-owner"><div class="t-owner">General Mills</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Breakfast Cereal</span></td>
+        <td class="col-finding"><div class="t-finding" style="color:var(--dim)">Glyphosate residue data. Health claims vs. ingredient reality. General Mills’ third appearance in the archive.</div></td>
+        <td class="col-action"><span style="font-family:var(--font-m);font-size:9px;color:var(--dim);letter-spacing:.10em;text-transform:uppercase">Soon</span></td>
+      </tr>
+
+      <tr class="atr coming" data-zone="tbd" data-cat="dairy" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Chobani Complete</div><div class="t-sub"></div></td>
+        <td class="col-zone"><span class="coming-badge">In progress</span></td>
+        <td class="col-owner"><div class="t-owner">Chobani Inc.</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Functional Dairy</span></td>
+        <td class="col-finding"><div class="t-finding" style="color:var(--dim)">The “Complete” sub-brand adds novel sweeteners and functional claims to Chobani’s otherwise clean positioning. Dose adequacy and label accuracy questions pending.</div></td>
+        <td class="col-action"><span style="font-family:var(--font-m);font-size:9px;color:var(--dim);letter-spacing:.10em;text-transform:uppercase">Soon</span></td>
+      </tr>
+
+      <tr class="atr coming" data-zone="tbd" data-cat="supplements" data-owner="conglomerate">
+        <td class="col-name"><div class="t-brand">Vital Proteins</div><div class="t-sub">Nestlé Health Science</div></td>
+        <td class="col-zone"><span class="coming-badge">In progress</span></td>
+        <td class="col-owner"><div class="t-owner">Nestlé Health Science</div></td>
+        <td class="col-cat"><span class="t-cat-pill">Collagen / Supplements</span></td>
+        <td class="col-finding"><div class="t-finding" style="color:var(--dim)">“Clean sourcing” brand, Nestlé majority stake since 2021. Jennifer Aniston partnership. The wellness positioning vs. conglomerate ownership tension in full.</div></td>
+        <td class="col-action"><span style="font-family:var(--font-m);font-size:9px;color:var(--dim);letter-spacing:.10em;text-transform:uppercase">Soon</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- CATEGORY INDEXES -->
+  <div class="sdiv"><span class="sdiv-label">Category indexes &mdash; full spectrum comparisons</span></div>
+  <div class="idx-grid">
+    <a href="traced-protein-supplements.html" class="idx-card">
+      <div class="idx-n">Index 01</div>
+      <div class="idx-name">Protein<br>Supplements</div>
+      <div class="idx-desc">7-dimension transparency scores across 20 brands. The definitive dossier on a $10B category with almost no mandatory disclosure requirements.</div>
+      <div class="idx-count">20 brands &mdash; Feb 2026</div>
+    </a>
+    <a href="traced-chocolate.html" class="idx-card">
+      <div class="idx-n">Index 02</div>
+      <div class="idx-name">Chocolate<br>Index</div>
+      <div class="idx-desc">Bean-to-bar vs. compound chocolate vs. Hershey and Mondelez. The sourcing transparency spectrum from Dandelion to PGPR.</div>
+      <div class="idx-count">11 brands &mdash; Jan 2026</div>
+    </a>
+    <a href="traced-protein-bars.html" class="idx-card">
+      <div class="idx-n">Index 03</div>
+      <div class="idx-name">Protein<br>Bars</div>
+      <div class="idx-desc">David, RXBar, Lara, Kind &mdash; the ownership map of a category where “clean label” and conglomerate-owned coexist on the same shelf.</div>
+      <div class="idx-count">12 brands &mdash; Jan 2026</div>
+    </a>
+    <a href="traced-electrolytes.html" class="idx-card">
+      <div class="idx-n">Index 04</div>
+      <div class="idx-name">Electrolytes</div>
+      <div class="idx-desc">LMNT, Liquid IV (Unilever), DripDrop, Nuun. The dose adequacy and ownership map for the fastest-growing supplement category.</div>
+      <div class="idx-count">8 brands &mdash; Dec 2025</div>
+    </a>
+    <a href="traced-greens-powders.html" class="idx-card">
+      <div class="idx-n">Index 05</div>
+      <div class="idx-name">Greens<br>Powders</div>
+      <div class="idx-desc">AG1 sits at one end. The index shows what the rest of the category looks like when dose adequacy and sourcing claims are verified.</div>
+      <div class="idx-count">9 brands &mdash; Dec 2025</div>
+    </a>
+  </div>
+
+  <!-- OWNER CONCENTRATION -->
+  <div class="sdiv"><span class="sdiv-label">Conglomerate exposure &mdash; who owns what in this archive</span></div>
+  <div class="owner-grid">
+    <div class="owner-row">
+      <div><div class="owner-name">General Mills</div><div class="owner-brands">Annie’s &middot; Cheerios &middot; Lärabar (contextual)</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar" style="width:100%"></div></div>
+      <div class="owner-count">3 brands</div>
+    </div>
+    <div class="owner-row">
+      <div><div class="owner-name">PepsiCo</div><div class="owner-brands">Muscle Milk (via Gatorade) &middot; Tropicana (divested 2021)</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar" style="width:66%"></div></div>
+      <div class="owner-count">2 brands</div>
+    </div>
+    <div class="owner-row">
+      <div><div class="owner-name">Coca-Cola</div><div class="owner-brands">Fairlife (100% since 2020)</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar y" style="width:33%"></div></div>
+      <div class="owner-count">1 brand</div>
+    </div>
+    <div class="owner-row">
+      <div><div class="owner-name">Hershey</div><div class="owner-brands">Reese’s (core portfolio)</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar" style="width:33%"></div></div>
+      <div class="owner-count">1 brand</div>
+    </div>
+    <div class="owner-row">
+      <div><div class="owner-name">Mars Inc.</div><div class="owner-brands">RXBar (via Kellogg’s 2017 → Mars 2023)</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar y" style="width:33%"></div></div>
+      <div class="owner-count">1 brand</div>
+    </div>
+    <div class="owner-row">
+      <div><div class="owner-name">Wells Enterprises</div><div class="owner-brands">Halo Top (~$1B acquisition, 2019)</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar" style="width:33%"></div></div>
+      <div class="owner-count">1 brand</div>
+    </div>
+    <div class="owner-row">
+      <div><div class="owner-name">PE-backed / divested</div><div class="owner-brands">Tropicana (PAI Partners) &middot; Oatly (Blackstone investor)</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar" style="width:66%"></div></div>
+      <div class="owner-count">2 brands</div>
+    </div>
+    <div class="owner-row">
+      <div><div class="owner-name">Founder / independent</div><div class="owner-brands">Salt &amp; Straw &middot; Momentous &middot; Transparent Labs &middot; Chobani</div></div>
+      <div class="owner-bar-wrap"><div class="owner-bar g" style="width:100%"></div></div>
+      <div class="owner-count">4 brands</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EMAIL CAPTURE -->
+<div class="capture-band">
+  <div class="capture-inner">
+    <div>
+      <h2 class="cap-h">Get notified when the<br><em>next investigation</em> goes live</h2>
+      <p class="cap-sub">Vital Proteins (Nestlé). Oatmeal Crisp (General Mills). Chobani Complete. The next three investigations are in progress. The people who read this archive are exactly who we’re writing for.</p>
+    </div>
+    <div>
+      <div class="cap-form">
+        <input class="cap-input" type="email" placeholder="your@email.com" id="capEmail">
+        <button class="cap-btn" onclick="capSubmit()">Notify me</button>
+      </div>
+      <div class="cap-note" id="capConfirm">No marketing. One email per new investigation. Unsubscribe any time.</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-logo">Traced</span>
+    <span class="footer-note">Investigation archive &mdash; last updated February 2026 &mdash; <a href="traced-methodology.html" style="color:var(--accent)">Scoring methodology &rarr;</a></span>
+    <a href="index.html" style="font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)">&larr; Back to Traced</a>
+  </div>
+
+<div class="traced-legal-bar" style="background:rgba(201,168,76,0.04);border-top:1px solid rgba(201,168,76,0.12);padding:20px 24px;margin-top:48px;">
+  <p style="font-family:var(--font-mono, 'DM Mono', monospace);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted, #7a7570);line-height:1.7;max-width:820px;margin:0 auto;text-align:center;">
+    <strong style="color:var(--text, #e8e4dc);">Editorial Assessment.</strong>
+    Traced scores are independent editorial assessments based on publicly available information.
+    They are not statements of product safety, legality, or consumer harm. Scores are editorial opinion.
+    Corrections: <a href="/cdn-cgi/l/email-protection#1471707d607b667d7578546066757771703a777b" style="color:var(--accent, #C9A84C);"><span class="__cf_email__" data-cfemail="1772737e6378657e767b57636576747273397478">[email&#160;protected]</span></a>
+    &nbsp;·&nbsp;
+    <a href="traced-editorial-standards.html" style="color:var(--accent, #C9A84C);">Editorial Standards →</a>
+  </p>
+</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+var activeZone = 'all';
+var activeCat = 'all';
+var activeOwner = 'all';
+
+function filter(type, val, btn) {
+  if (type === 'zone') activeZone = val;
+  else if (type === 'cat') activeCat = val;
+  else if (type === 'owner') activeOwner = val;
+
+  // update chip states
+  var strip = document.getElementById('filterStrip');
+  var chips = strip.querySelectorAll('.fchip');
+  chips.forEach(function(c) { c.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+
+  var rows = document.querySelectorAll('#archiveBody .atr:not(.coming)');
+  var visible = 0;
+  rows.forEach(function(r) {
+    var zone = r.getAttribute('data-zone');
+    var cat = r.getAttribute('data-cat') || '';
+    var owner = r.getAttribute('data-owner') || '';
+
+    var zoneOk = activeZone === 'all' || zone === activeZone;
+    var catOk = activeCat === 'all' || cat.indexOf(activeCat) !== -1;
+    var ownerOk = activeOwner === 'all' || owner.indexOf(activeOwner) !== -1;
+
+    if (zoneOk && catOk && ownerOk) {
+      r.classList.remove('hidden');
+      visible++;
+    } else {
+      r.classList.add('hidden');
+    }
+  });
+  document.getElementById('rowCount').textContent = visible + ' investigation' + (visible !== 1 ? 's' : '');
+}
+
+function capSubmit() {
+  var email = document.getElementById('capEmail').value;
+  if (!email || email.indexOf('@') === -1) return;
+  document.getElementById('capConfirm').textContent = '✓ You’re on the list. We’ll email when the next investigation goes live.';
+  document.getEle

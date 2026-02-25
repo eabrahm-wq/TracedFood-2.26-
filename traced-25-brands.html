@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traced — 25 Brand Investigations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0e0c09;
+  --surface:  #161410;
+  --surface2: #1e1b16;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --ink:      #f0ead8;
+  --muted:    rgba(240,234,216,0.42);
+  --amber:    #d4952a;
+  --amber-d:  #a06d18;
+  --amber-glow: rgba(212,149,42,0.12);
+  --red:      #c44;
+  --red-glow: rgba(204,68,68,0.12);
+  --green:    #3a8a5a;
+  --green-glow: rgba(58,138,90,0.1);
+  --tag-masking:   #d4952a;
+  --tag-ownership: #c44;
+  --tag-drift:     #3a8a5a;
+  --tag-both:      #7a5cd4;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  border-bottom: 1px solid var(--border2);
+  padding: 28px 40px 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.1em;
+  color: var(--amber);
+}
+.header-meta {
+  text-align: right;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.header-sub {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.stat-box {
+  flex: 1;
+  padding: 16px 24px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.stat-box:last-child { border-right: none; }
+.stat-n {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 0.05em;
+  color: var(--amber);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-l {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* ── MEAL TABS ── */
+.tabs-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border2);
+  padding: 0 40px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs-wrap::-webkit-scrollbar { display: none; }
+
+.tab {
+  padding: 14px 20px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  user-select: none;
+}
+.tab:hover { color: var(--ink); }
+.tab.active {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
+}
+.tab-count {
+  display: inline-block;
+  background: var(--surface2);
+  border-radius: 20px;
+  padding: 1px 6px;
+  font-size: 9px;
+  margin-left: 6px;
+  color: var(--muted);
+}
+.tab.active .tab-count {
+  background: var(--amber-glow);
+  color: var(--amber);
+}
+
+/* ── CONTENT AREA ── */
+.content {
+  padding: 32px 40px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.meal-section { display: none; }
+.meal-section.active { display: block; }
+
+.section-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  line-height: 1;
+}
+.section-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 500px;
+}
+
+/* ── BRAND GRID ── */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+
+/* ── BRAND CARD ── */
+.brand-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.brand-card:hover {
+  border-color: var(--border2);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+.brand-card.open {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 1px var(--amber), 0 8px 32px var(--amber-glow);
+  grid-column: 1 / -1;
+}
+
+/* card header */
+.card-head {
+  padding: 16px 18px 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.card-left { flex: 1; }
+.brand-name {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+.brand-claim {
+  font-size: 9px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.arrow-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+}
+.arrow-brand { color: var(--muted); }
+.arrow-sep { color: var(--amber); }
+.arrow-parent {
+  color: var(--amber);
+  font-weight: 500;
+}
+.card-tag {
+  font-size: 7.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.tag-masking   { background: rgba(212,149,42,0.15); color: var(--amber); }
+.tag-ownership { background: rgba(204,68,68,0.15);  color: var(--red); }
+.tag-drift     { background: rgba(58,138,90,0.15);  color: var(--green); }
+.tag-both      { background: rgba(122,92,212,0.15); color: #a08ae8; }
+
+/* acquisition bar */
+.acq-bar {
+  padding: 8px 18px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+  font-size: 9px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.acq-year {
+  font-weight: 500;
+  color: var(--amber);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+.acq-price {
+  margin-left: auto;
+  font-size: 9px;
+  color: var(--muted);
+}
+
+/* expand icon */
+.expand-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform 0.3s, color 0.2s;
+}
+.brand-card.open .expand-btn {
+  transform: rotate(180deg);
+  color: var(--amber);
+}
+
+/* expanded body */
+.card-body {
+  display: none;
+  padding: 20px 18px 20px;
+  border-top: 1px solid var(--border);
+  animation: slideDown 0.25s ease;
+}
+.brand-card.open .card-body { display: block; }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 700px) {
+  .card-body-grid { grid-template-columns: 1fr; }
+}
+
+.body-col { }
+.col-label {
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.body-text {
+  font-size: 11px;
+  line-height: 1.65;
+  color: rgba(240,234,216,0.78);
+}
+.verdict-box {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--red-glow);
+  border-left: 2px solid var(--red);
+  border-radius: 0 6px 6px 0;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: rgba(240,234,216,0.85);
+}
+
+/* ── OWNER BADGE on expanded ── */
+.parent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+}
+.parent-badge-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--red);
+}
+.parent-badge-also {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+/* ── ALL VIEW ── */
+#all-view .brand-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 40px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--muted);
+}
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--amber); }
+
+/* ── INDEPENDENT BADGE ── */
+.ind-badge {
+  display: inline-block;
+  font-size: 7.5px;
+  background: rgba(58,138,90,0.15);
+  color: var(--green);
+  border: 1px solid rgba(58,138,90,0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 600px) {
+  .site-header { padding: 20px 16px; flex-direction: column; align-items: flex-start; }
+  .tabs-wrap { padding: 0 16px; }
+  .content { padding: 20px 16px 48px; }
+  .legend { padding: 10px 16px; }
+  .stats-strip { flex-wrap: wrap; }
+  .stat-box { min-width: 50%; }
+  .brand-grid { grid-template-columns: 1fr; }
+  .section-header { flex-direction: column; gap: 8px; }
+  .section-title { font-size: 32px; }
+  .site-footer { flex-direction: column; gap: 8px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">TRACED</div>
+  <div class="header-meta">
+    <div class="header-title">25 Brands. The Ownership Story Behind Each One.</div>
+    <div class="header-sub">Every brand below markets itself as independent, healthy, or clean. Most are owned by one of six conglomerates. Click any card to see what changed — and what didn't.</div>
+  </div>
+</header>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-box"><div class="stat-n">25</div><div class="stat-l">brands investigated</div></div>
+  <div class="stat-box"><div class="stat-n">7</div><div class="stat-l">parent companies</div></div>
+  <div class="stat-box"><div class="stat-n">6</div><div class="stat-l">meal occasions covered</div></div>
+  <div class="stat-box"><div class="stat-n">$30B+</div><div class="stat-l">total acquisition value</div></div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Ingredient masking</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Ownership shock</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Mission drift</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7a5cd4"></div>Both angles</div>
+</div>
+
+<!-- TABS -->
+<nav class="tabs-wrap">
+  <div class="tab active" data-target="breakfast">Breakfast <span class="tab-count">6</span></div>
+  <div class="tab" data-target="snacks">Snacks <span class="tab-count">5</span></div>
+  <div class="tab" data-target="lunch">Lunch <span class="tab-count">5</span></div>
+  <div class="tab" data-target="dinner">Dinner <span class="tab-count">4</span></div>
+  <div class="tab" data-target="beverages">Beverages <span class="tab-count">3</span></div>
+  <div class="tab" data-target="dessert">Dessert <span class="tab-count">2</span></div>
+  <div class="tab" data-target="all">All 25</div>
+</nav>
+
+<!-- CONTENT -->
+<main class="content">
+
+<!-- BREAKFAST -->
+<section class="meal-section active" id="breakfast">
+  <div class="section-header">
+    <div class="section-title">Breakfast</div>
+    <div class="section-desc">The most trusted meal occasion. The most acquired brands. General Mills alone owns three of the six.</div>
+  </div>
+  <div class="brand-grid" id="grid-breakfast"></div>
+</section>
+
+<!-- SNACKS -->
+<section class="meal-section" id="snacks">
+  <div class="section-header">
+    <div class="section-title">Snacks</div>
+    <div class="section-desc">The "better-for-you" snack category is where acquisition strategy is most visible. Every major clean snack brand has been bought.</div>
+  </div>
+  <div class="brand-grid" id="grid-snacks"></div>
+</section>
+
+<!-- LUNCH -->
+<section class="meal-section" id="lunch">
+  <div class="section-header">
+    <div class="section-title">Lunch</div>
+    <div class="section-desc">Deli meats, condiments, fresh juices, organic salads — all owned by companies whose primary products are Spam, Velveeta, or Doritos.</div>
+  </div>
+  <div class="brand-grid" id="grid-lunch"></div>
+</section>
+
+<!-- DINNER -->
+<section class="meal-section" id="dinner">
+  <div class="section-header">
+    <div class="section-title">Dinner</div>
+    <div class="section-desc">Plant-based, "natural" chicken, frozen vegetables. The "healthy dinner" aisle is largely owned by Nestlé, Conagra, and Perdue.</div>
+  </div>
+  <div class="brand-grid" id="grid-dinner"></div>
+</section>
+
+<!-- BEVERAGES -->
+<section class="meal-section" id="beverages">
+  <div class="section-header">
+    <div class="section-title">Beverages</div>
+    <div class="section-desc">Coca-Cola's strategy: acquire every "healthy" beverage brand, then either scale it or discontinue it. Three examples here, all Coca-Cola.</div>
+  </div>
+  <div class="brand-grid" id="grid-beverages"></div>
+</section>
+
+<!-- DESSERT -->
+<section class="meal-section" id="dessert">
+  <div class="section-header">
+    <div class="section-title">Dessert</div>
+    <div class="section-desc">Two different acquisition models — conglomerate and private equity — both leading to the same outcome: diluted original promise.</div>
+  </div>
+  <div class="brand-grid" id="grid-dessert"></div>
+</section>
+
+<!-- ALL -->
+<section class="meal-section" id="all">
+  <div class="section-header">
+    <div class="section-title">All 25 Brands</div>
+    <div class="section-desc">Every investigation across all meal occasions. Filter by scrolling or use the tabs above.</div>
+  </div>
+  <div class="brand-grid" id="grid-all"></div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">TRACED</div>
+  <div>Food transparency research · tracedfood.com</div>
+  <div>All data from public filings, acquisition records, and documented consumer reports.</div>
+</footer>
+
+<script>
+const BRANDS = [
+  // ── BREAKFAST ──────────────────────────────────────────────────────────────
+  {
+    meal: 'breakfast',
+    name: "Cascadian Farm Purely O's",
+    claim: 'Organic · No added sugar',
+    parent: 'General Mills',
+    year: '1999',
+    price: 'Undisclosed',
+    tag: 'masking',
+    tagLabel: 'Ingredient Masking',
+    parentAlso: 'Also owns: Annie\'s, Lärabar, Cheerios, Lucky Charms, Häagen-Dazs',
+    what: 'Organic cereal brand founded as a family farm. Marketed on "no added sugar" and organic credentials.',
+    what_changed: 'Sugar content tripled from 1g to 3g per serving post-acquisition. The "no added sugar" label quietly disappeared from packaging. Consumers noticed the taste change and complained publicly.',
+    verdict: 'General Mills quietly reverted after complaints — but never acknowledged the change. The label was already gone. The brand promise existed because it wasn\'t owned by General Mills yet.'
+  },
+  {
+    meal: 'breakfast',
+    name: 'Kashi',
+    claim: 'Natural · Whole grain',
+    parent: "Kellogg's",
+    year: '2000',
+    price: '$32M',
+    tag: 'both',
+    tagLabel: 'Masking + Contradiction',
+    parentAlso: "Also owns: Special K, Frosted Flakes, Pop-Tarts, Pringles, RXBar, Bear Naked",
+    what: 'Independent natural cereal brand built on whole grain and "natural" ingredient positioning.',
+    what_changed: 'Exposed in 2012 for using non-organic, GMO soy in products marketed as "natural." The contradiction extended to the parent company: Kellogg\'s simultaneously donated money to defeat California\'s mandatory GMO labeling law.',
+    verdict: 'The law Kellogg\'s helped kill was the exact law that would have disclosed what was in Kashi. The brand promise and the parent company\'s lobbying were direct opposites.'
+  },
+  {
+    meal: 'breakfast',
+    name: 'Quaker Oats',
+    claim: 'Heart healthy · Whole grain',
+    parent: 'PepsiCo',
+    year: '2001',
+    price: '$13.4B',
+    tag: 'masking',
+    tagLabel: 'Halo Exploitation',
+    parentAlso: 'Also owns: Lay\'s, Gatorade, Tropicana, Doritos, Cheetos, Naked Juice',
+    what: 'One of America\'s oldest food brands. The plain oats are genuinely healthy and the "heart healthy" FDA claim is real.',
+    what_changed: 'The brand halo has been leveraged to sell sugary instant oat product lines — flavored packets, maple brown sugar, "dinosaur egg" oatmeal — that share the Quaker credibility but are nutritionally closer to cereal.',
+    verdict: 'The plain oats are fine. The problem is what the brand name gets applied to. The Quaker credential is now a distribution platform, not a quality standard.'
+  },
+  {
+    meal: 'breakfast',
+    name: "Annie's Mac & Cheese",
+    claim: 'Organic · Homegrown',
+    parent: 'General Mills',
+    year: '2014',
+    price: '$820M',
+    tag: 'ownership',
+    tagLabel: 'Ownership Shock',
+    parentAlso: 'Also owns: Cascadian Farm, Lärabar, Cheerios, Lucky Charms, Pillsbury, Betty Crocker',
+    what: 'Beloved organic brand built on the "homegrown" identity, the bunny mascot, and a direct relationship with consumers who distrust Big Food.',
+    what_changed: 'The bunny, the "homegrown" name, the packaging — all intact. Formula changes documented by consumers; cheese powder sourcing shifted post-acquisition. The brand identity is a marketing artifact now.',
+    verdict: 'General Mills paid $820M specifically for the brand trust. The trust was built on being independent of companies like General Mills. The contradiction is the business model.'
+  },
+  {
+    meal: 'breakfast',
+    name: 'Chobani',
+    claim: 'No artificial ingredients',
+    parent: 'Independent',
+    year: '—',
+    price: '—',
+    tag: 'drift',
+    tagLabel: 'Mission Drift (no acquisition)',
+    parentAlso: 'Still independently owned — but a useful contrast case',
+    what: 'Greek yogurt brand that disrupted the dairy category. Built on genuine "no artificial ingredients" positioning and founder-led authenticity.',
+    what_changed: 'As Chobani scaled into flavored lines, fruit-on-bottom preps began using concentrated juice and added sugars. The "no artificial ingredients" claim remained — but the nutritional profile of the extended product line quietly drifted.',
+    verdict: 'No acquisition needed. Scale itself creates reformulation pressure. The growth imperative affects even brands with aligned founders. Chobani is the warning, not the safe harbor.',
+    independent: true
+  },
+  {
+    meal: 'breakfast',
+    name: 'Horizon Organic Milk',
+    claim: 'Certified organic',
+    parent: 'Danone (via WhiteWave)',
+    year: '2017',
+    price: '$10.4B (WhiteWave total)',
+    tag: 'ownership',
+    tagLabel: 'Scale vs. Standards',
+    parentAlso: 'Also owns: Dannon, Oikos, Activia, Silk, Earthbound Farm, Stonyfield',
+    what: 'The most recognizable organic dairy brand in the US. "Certified organic" is a real, third-party verified claim.',
+    what_changed: 'The Organic Consumers Association organized a public boycott in 2006, accusing Horizon of not following organic practices at the scale it was operating. "Organic" at mass-production volume has different supply chain realities than the label implies.',
+    verdict: 'The certification is real. The question is what organic means when you\'re supplying Costco, Whole Foods, and Walmart simultaneously. Volume and values have structural tension.'
+  },
+
+  // ── SNACKS ──────────────────────────────────────────────────────────────────
+  {
+    meal: 'snacks',
+    name: 'Lärabar',
+    claim: 'Clean label · Whole ingredients',
+    parent: 'General Mills',
+    year: '2008',
+    price: 'Undisclosed',
+    tag: 'masking',
+    tagLabel: 'Line Extension Drift',
+    parentAlso: 'Also owns: Annie\'s, Cascadian Farm, Cheerios, Lucky Charms, Pillsbury',
+    what: 'Founded on a radical premise: bars made only from whole ingredients. Original Lärabar: dates, cashews, almonds. Nothing else.',
+    what_changed: 'Post-acquisition, the extended line includes "Lärabar ALT" products with added protein isolates, sugar alcohols, and multiple additives. The original SKUs were preserved — but new ones dilute the brand promise for anyone who doesn\'t read closely.',
+    verdict: 'The original bar still exists and is still clean. But the brand name now covers products that violate the founding premise. New buyers have no way to know which is which without reading every label.'
+  },
+  {
+    meal: 'snacks',
+    name: 'KIND Bar',
+    claim: 'Healthy snack · Real ingredients',
+    parent: 'Mars',
+    year: '2020',
+    price: 'Undisclosed',
+    tag: 'ownership',
+    tagLabel: 'Ownership Shock',
+    parentAlso: 'Also owns: M&M\'s, Snickers, Twix, Skittles, Starburst, Pedigree, Uncle Ben\'s',
+    what: 'The "healthy snack" bar that disrupted the category with visible whole nuts and a transparency-first positioning.',
+    what_changed: 'No documented reformulation. The bars appear unchanged. But KIND\'s "healthy snack" identity is now owned by the world\'s largest confectionery company — the maker of M&M\'s, Snickers, and Twix.',
+    verdict: 'The product may be the same. The incentive structure is not. When the parent company\'s core business is engineered sugar delivery, the definition of "healthy" gets negotiated differently in R&D meetings.'
+  },
+  {
+    meal: 'snacks',
+    name: 'Clif Bar',
+    claim: 'Organic · Family-owned',
+    parent: 'Mondelēz',
+    year: '2022',
+    price: '$2.9B',
+    tag: 'ownership',
+    tagLabel: 'Ownership Shock',
+    parentAlso: 'Also owns: Oreo, Chips Ahoy, Cadbury, Toblerone, Ritz, belVita, Triscuit',
+    what: 'Family-owned for 30 years. Founder Gary Erickson famously turned down a $120M acquisition offer in 2000 to preserve the brand\'s independence and values.',
+    what_changed: 'The founding family sold in 2022 for $2.9B. Mondelēz — which also owns Oreo, Chips Ahoy, and Cadbury — is now the owner. Ingredient changes are being monitored closely by long-time buyers.',
+    verdict: 'The "family-owned" positioning was central to the brand identity. That\'s gone. Mondelēz\'s primary business is engineered snack food. Whether Clif\'s values survive that ownership is an open question.'
+  },
+  {
+    meal: 'snacks',
+    name: 'SkinnyPop',
+    claim: 'Better for you · Simple ingredients',
+    parent: 'Hershey',
+    year: '2018',
+    price: '$1.6B',
+    tag: 'ownership',
+    tagLabel: 'Ownership Irony',
+    parentAlso: 'Also owns: Reese\'s, Kit Kat (US), York Peppermint Patties, Jolly Rancher, Twizzlers',
+    what: '"Better for you" popcorn brand built on a simple ingredient list and positioned as the guilt-free snack.',
+    what_changed: 'Ingredient list largely unchanged. But SkinnyPop — a diet snack brand — is now owned by Hershey, the company that makes Reese\'s, Kit Kat, and Twizzlers.',
+    verdict: 'The ownership story is the story. A candy company now owns a "skinny" brand. The marketing incentive to keep the product credible is real — but so is the incentive to expand the line in directions that blur the original positioning.'
+  },
+  {
+    meal: 'snacks',
+    name: "Stacy's Pita Chips",
+    claim: 'Wholesome · Artisan',
+    parent: 'PepsiCo (Frito-Lay)',
+    year: '2006',
+    price: 'Undisclosed',
+    tag: 'ownership',
+    tagLabel: 'Distribution Capture',
+    parentAlso: 'Also owns: Lay\'s, Doritos, Cheetos, Fritos, Tostitos, Ruffles, Smartfood',
+    what: 'Started as a sandwich shop in Boston. Founders Stacy Madison and Mark Anderman built a snack brand from leftover pita bread.',
+    what_changed: 'Now distributed as part of the Frito-Lay infrastructure — same company as Doritos and Lay\'s. The "artisan" and "wholesome" positioning lives on the packaging; the supply chain is fully industrial.',
+    verdict: 'The founding story stays on the bag forever. The founders left the company years ago. The brand is now a shelf-space asset in the Frito-Lay system.'
+  },
+
+  // ── LUNCH ────────────────────────────────────────────────────────────────────
+  {
+    meal: 'lunch',
+    name: 'Bolthouse Farms',
+    claim: 'Cold-pressed · Fresh vegetables',
+    parent: "Campbell's",
+    year: '2012',
+    price: '$1.55B',
+    tag: 'masking',
+    tagLabel: 'Quality Degradation',
+    parentAlso: "Also owns: Pepperidge Farm, V8, Swanson, Pace, Prego, Pacific Foods",
+    what: 'Premium cold-pressed vegetable juice and baby carrot brand. Made its name on nutrition-dense beverages and fresh produce.',
+    what_changed: 'Post-acquisition, juices became noticeably more sugar-dense according to documented consumer reviews. Campbell\'s struggled to grow the brand and eventually sold it in 2019 after the brand had lost significant value under corporate management.',
+    verdict: "Campbell's paid $1.55B for the brand equity and couldn't keep it. Seven years later it was worth less. The brand that can't justify its premium without the quality that earned the premium collapses under corporate management."
+  },
+  {
+    meal: 'lunch',
+    name: 'Naked Juice',
+    claim: 'No added sugar · All natural',
+    parent: 'PepsiCo',
+    year: '2006',
+    price: 'Undisclosed',
+    tag: 'both',
+    tagLabel: 'Masking + Legal',
+    parentAlso: "Also owns: Lay's, Gatorade, Quaker, Tropicana, Doritos, Cheetos, Stacy's",
+    what: 'Premium juice and smoothie brand built on "all natural" and "no added sugar" positioning.',
+    what_changed: 'Sued in 2016 for labeling products "all natural" while containing synthetic ingredients. Settled. The "no added sugar" claim was also misleading — naturally occurring sugars from fruit concentrates drove counts equivalent to a can of Coke per serving.',
+    verdict: "PepsiCo's legal team became the brand's most active department. The brand promise required a lawsuit to clarify. That's not a labeling technicality — it's a fundamental misrepresentation the parent company allowed to persist."
+  },
+  {
+    meal: 'lunch',
+    name: 'Applegate Farms',
+    claim: 'No antibiotics · Humanely raised',
+    parent: 'Hormel',
+    year: '2015',
+    price: '$775M',
+    tag: 'drift',
+    tagLabel: 'Mission Drift',
+    parentAlso: 'Also owns: Spam, Skippy, Jennie-O, Dinty Moore, Justin\'s, Natural Choice',
+    what: 'One of the largest and most trusted organic and natural meat brands. Applegate was actively working toward eliminating all GMO animal feed.',
+    what_changed: 'Acquired by Hormel — maker of Spam — for $775M. The trajectory toward eliminating GMO feed slowed post-acquisition. The "humanely raised" and "no antibiotics" claims remain on packaging, but the parent company\'s practices across its other brands are a direct contradiction.',
+    verdict: "The label claims are real and legally maintained. The question is whether those standards survive when the owner's incentive is to extract margin from a $775M acquisition while running Spam and Jennie-O on the same balance sheet."
+  },
+  {
+    meal: 'lunch',
+    name: 'Primal Kitchen',
+    claim: 'Paleo · Clean label',
+    parent: 'Kraft Heinz',
+    year: '2019',
+    price: '$200M',
+    tag: 'ownership',
+    tagLabel: 'Ownership Shock',
+    parentAlso: 'Also owns: Velveeta, Oscar Mayer, Jell-O, Lunchables, Maxwell House, Heinz',
+    what: 'Founded by Mark Sisson on the paleo/clean label premise. Avocado oil mayo, ketchup with no added sugar — products built specifically as alternatives to what Kraft Heinz makes.',
+    what_changed: 'No documented reformulation yet. But Primal Kitchen is now owned by the company that makes Velveeta and Oscar Mayer. Kraft Heinz under 3G Capital had an explicit business model of cost-cutting through ingredient substitution.',
+    verdict: "Primal Kitchen was literally founded as an alternative to Kraft Heinz products. Its acquisition by Kraft Heinz is either an irony or a warning — depending on what happens to the ingredient list over the next five years."
+  },
+  {
+    meal: 'lunch',
+    name: 'Earthbound Farm',
+    claim: 'Organic · Sustainably grown',
+    parent: 'Danone (via WhiteWave)',
+    year: '2013',
+    price: '$600M',
+    tag: 'drift',
+    tagLabel: 'Scale vs. Standards',
+    parentAlso: 'Also owns: Dannon, Oikos, Silk, Horizon Organic, Stonyfield, Activia',
+    what: 'Started in 1984 as a two-acre raspberry farm in Carmel Valley. Pioneered the organic salad category.',
+    what_changed: '"Organic" at Earthbound\'s volume involves supply chains that critics argue are structurally similar to conventional farming. The label is certified — but the sourcing practices at volume are a different conversation from a small farm.',
+    verdict: 'The certification is real. The farm story on the packaging is not the farm that grows what you buy. Earthbound at Danone scale is a supply chain operation — the word "farm" is a brand element, not a description.'
+  },
+
+  // ── DINNER ────────────────────────────────────────────────────────────────────
+  {
+    meal: 'dinner',
+    name: 'Ragú Pasta Sauce',
+    claim: 'Old World style · Fresh tomatoes',
+    parent: 'Mizkan',
+    year: '2015',
+    price: '$2.15B',
+    tag: 'masking',
+    tagLabel: 'Ingredient Degradation',
+    parentAlso: 'Sold by Unilever to Japanese conglomerate Mizkan. Mizkan also owns: Holland House, Barenaked Pasta',
+    what: 'One of America\'s most iconic pasta sauce brands, originally built on fresh tomato content.',
+    what_changed: 'Under Unilever, Ragú quietly reduced tomato content and increased water and thickeners over multiple years. Consumer taste complaints spiked around 2012. The brand continued declining after the Mizkan sale and was eventually restructured.',
+    verdict: 'The product that made Ragú famous — tomato-forward sauce — was slowly replaced with a cheaper formulation while the branding stayed the same. By the time consumers noticed, the original was already gone.'
+  },
+  {
+    meal: 'dinner',
+    name: 'Sweet Earth Foods',
+    claim: 'Plant-based · Clean ingredients',
+    parent: 'Nestlé',
+    year: '2017',
+    price: 'Undisclosed',
+    tag: 'masking',
+    tagLabel: 'Line Expansion Drift',
+    parentAlso: 'Also owns: Lean Cuisine, Stouffer\'s, Hot Pockets, DiGiorno, Toll House, KitKat, Gerber',
+    what: 'California-founded plant-based food company built on clean ingredient principles and genuine sourcing transparency.',
+    what_changed: 'Post-acquisition, Nestlé launched the "Awesome Burger" under Sweet Earth — competing with Beyond Meat. The new product uses a significantly longer ingredient list than the original Sweet Earth line. Nestlé\'s incentive is to scale, not to maintain the founding philosophy.',
+    verdict: 'Sweet Earth was acquired to give Nestlé a plant-based platform. The brand name is now applied to products that would not have met the original brand\'s standards. Same name, different ethos.'
+  },
+  {
+    meal: 'dinner',
+    name: 'Coleman Natural Chicken',
+    claim: 'Natural · Humanely raised',
+    parent: 'Perdue',
+    year: 'Undisclosed',
+    price: 'Undisclosed',
+    tag: 'ownership',
+    tagLabel: 'Ownership Shock',
+    parentAlso: 'Perdue is one of the largest industrial chicken producers in the US',
+    what: '"Coleman Natural" is positioned as the natural, humanely-raised alternative to conventional chicken. The label and natural claims are real.',
+    what_changed: 'The brand is owned by Perdue — one of the largest industrial chicken processors in the country. Perdue\'s conventional operations are routinely criticized by animal welfare organizations.',
+    verdict: 'The Coleman Natural claims are maintained. The question is context: what does "natural" mean when it\'s a sub-brand of one of the country\'s largest industrial chicken producers? The label is not lying. The packaging is not telling the whole story.'
+  },
+  {
+    meal: 'dinner',
+    name: "Birds Eye Vegetables",
+    claim: 'Fresh · Simple ingredients',
+    parent: 'Conagra',
+    year: '1996',
+    price: 'Part of portfolio',
+    tag: 'ownership',
+    tagLabel: 'Portfolio Contrast',
+    parentAlso: "Also owns: Slim Jim, Chef Boyardee, Vlasic, Orville Redenbacher, Marie Callender's, Hunt's",
+    what: 'Frozen vegetable brand marketed on freshness, simplicity, and nutritional integrity.',
+    what_changed: 'No documented reformulation. The vegetables are still vegetables. The issue is the portfolio context: Conagra also owns Slim Jim, Chef Boyardee, and Vlasic.',
+    verdict: 'The cross-portfolio cost-cutting incentives apply equally to the "healthy" and "indulgent" brands. The same procurement, manufacturing, and margin-optimization processes that run Slim Jim run Birds Eye. The bag looks different. The parent company is the same.'
+  },
+
+  // ── BEVERAGES ──────────────────────────────────────────────────────────────
+  {
+    meal: 'beverages',
+    name: 'Vitaminwater',
+    claim: 'Healthy · Vitamin-enriched',
+    parent: 'Coca-Cola',
+    year: '2007',
+    price: '$4.1B',
+    tag: 'masking',
+    tagLabel: 'Label Deception',
+    parentAlso: 'Also owns: Sprite, Fanta, Dasani, SmartWater, Simply, Minute Maid, Honest Tea, Costa',
+    what: '"Enhanced water" with vitamins, marketed as a healthy alternative to soda. The "vitamin" branding was the entire positioning.',
+    what_changed: 'Coca-Cola was banned in 2011 from advertising Vitaminwater as "healthy." A 500ml bottle contains 23g of sugar — more than a quarter of the recommended daily intake. The vitamin content is real but marginal. The sugar content was the product.',
+    verdict: 'Coca-Cola paid $4.1B for a product whose marketing premise couldn\'t survive legal scrutiny. The brand exists to convert health-conscious soda avoiders back to a sugar delivery vehicle.'
+  },
+  {
+    meal: 'beverages',
+    name: 'Honest Tea',
+    claim: 'Organic · Honest ingredients',
+    parent: 'Coca-Cola',
+    year: '2011',
+    price: 'Full acquisition ~$43M originally, undisclosed full buy',
+    tag: 'drift',
+    tagLabel: 'Mission Killed',
+    parentAlso: 'Also owns: Sprite, Fanta, Dasani, SmartWater, Vitaminwater, Minute Maid, Costa',
+    what: 'Founded on the insight that most bottled teas used the lowest quality "dust and fannings" left over after quality tea production. The most literally truth-in-advertising brand in the beverage category.',
+    what_changed: 'Acquired by Coca-Cola in 2011. Discontinued entirely in 2022 — Coca-Cola cited low demand. The brand that built its identity on exposing beverage industry deception was owned by the industry\'s largest player, then shut down.',
+    verdict: 'The acquisition\'s purpose was to remove a credible critical voice from the market and gain shelf space. The mission was incompatible with the parent company\'s interests. Discontinued is the logical outcome.'
+  },
+  {
+    meal: 'beverages',
+    name: 'Odwalla',
+    claim: 'Fresh-squeezed · All natural',
+    parent: 'Coca-Cola (discontinued 2020)',
+    year: '2001',
+    price: '$181M',
+    tag: 'masking',
+    tagLabel: 'Core Product Replaced',
+    parentAlso: 'Discontinued by Coca-Cola in 2020',
+    what: 'Founded on fresh-squeezed juice — the actual thing, not concentrate. The freshness was the product. Built a cult following in the SF Bay Area on genuine quality.',
+    what_changed: 'Post-acquisition, switched to flash-pasteurized "all natural" concentrate to handle shelf life at industrial scale. The fresh-squeezed juice that made Odwalla famous was the first casualty of going big.',
+    verdict: 'The thing that made Odwalla Odwalla was gone within years of acquisition. A "fresh juice" brand that uses concentrate is a label, not a product. Coca-Cola discontinued it entirely in 2020 — 19 years after killing what made it worth buying.'
+  },
+
+  // ── DESSERT ────────────────────────────────────────────────────────────────
+  {
+    meal: 'dessert',
+    name: 'Häagen-Dazs',
+    claim: 'Premium · Simple 5 ingredients',
+    parent: 'General Mills (US) + Nestlé (intl)',
+    year: '1983 (GM), 2002 (Nestlé intl)',
+    price: 'Part of Pillsbury acquisition ($10.5B)',
+    tag: 'masking',
+    tagLabel: 'Line Extension Dilution',
+    parentAlso: 'General Mills (US): Also owns Annie\'s, Cascadian Farm, Cheerios, Pillsbury. Nestlé (intl): Also owns KitKat, Gerber, Lean Cuisine, Stouffer\'s',
+    what: 'Built on a radical simplicity premise: five ingredients. Cream, skim milk, sugar, egg yolks, flavor. The "five ingredient" promise was the entire identity.',
+    what_changed: 'Recent SKUs in the "Trio," "Light," and novelty lines have significantly expanded ingredient lists. The original promise and the extended product line are two different products under the same name.',
+    verdict: 'The classic flavors still have five ingredients. The question is what the brand name now legitimizes. When "Häagen-Dazs" appears on a product with 15 ingredients, the five-ingredient promise becomes a heritage claim, not a standard.'
+  },
+  {
+    meal: 'dessert',
+    name: 'Halo Top',
+    claim: 'Low calorie · Guilt-free',
+    parent: 'Strand Equity (Private Equity)',
+    year: '2019',
+    price: 'Undisclosed',
+    tag: 'masking',
+    tagLabel: 'PE Quality Degradation',
+    parentAlso: 'Strand Equity portfolio. No food background — pure financial acquisition',
+    what: 'Disrupted the ice cream category with genuinely low-calorie ice cream that didn\'t taste like punishment. Built a massive following on the actual product quality.',
+    what_changed: 'Multiple documented consumer reviews — on Reddit, product review sites, and food blogs — cite measurable texture and flavor degradation post-acquisition. The "low calorie" positioning was retained. The product quality, per long-time buyers, was not.',
+    verdict: 'Private equity acquisitions follow the same playbook: buy at peak brand value, reduce COGS, maintain marketing spend. The calorie count stayed the same. The experience did not. This is the PE model in a pint of ice cream.'
+  }
+];
+
+// ── RENDER CARDS ──────────────────────────────────────────────────────────────
+function tagClass(tag) {
+  return { masking:'tag-masking', ownership:'tag-ownership', drift:'tag-drift', both:'tag-both' }[tag] || 'tag-ownership';
+}
+
+function renderCard(b, idx) {
+  const card = document.createElement('div');
+  card.className = 'brand-card';
+  card.dataset.idx = idx;
+
+  card.innerHTML = `
+    <div class="card-head">
+      <div class="card-left">
+        ${b.independent ? '<div class="ind-badge">Still independent</div>' : ''}
+        <div class="brand-name">${b.name}</div>
+        <div class="brand-claim">${b.claim}</div>
+        <div class="arrow-line">
+          <span class="arrow-brand">${b.name.split(' ')[0]}</span>
+          <span class="arrow-sep">→</span>
+          <span class="arrow-parent">${b.parent}</span>
+        </div>
+      </div>
+      <div class="card-tag ${tagClass(b.tag)}">${b.tagLabel}</div>
+    </div>
+    <div class="acq-bar">
+      <span class="acq-year">${b.year}</span>
+      <span>acquisition</span>
+      <span class="acq-price">${b.price}</span>
+    </div>
+    <div class="expand-btn">▾</div>
+    <div class="card-body">
+      <div class="parent-badge">
+        <span class="parent-badge-name">${b.parent}</span>
+        <span class="parent-badge-also">· ${b.parentAlso}</span>
+      </div>
+      <div class="card-body-grid">
+        <div class="body-col">
+          <div class="col-label">Original Brand</div>
+          <div class="body-text">${b.what}</div>
+        </div>
+        <div class="body-col">
+          <div class="col-label">What Changed</div>
+          <div class="body-text">${b.what_changed}</div>
+        </div>
+        <div class="body-col">
+          <div class="col-label">The Point</div>
+          <div class="body-text">${b.verdict}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  card.addEventListener('click', () => {
+    const isOpen = card.classList.contains('open');
+    // Close all in same grid
+    card.closest('.brand-grid').querySelectorAll('.brand-card.open').forEach(c => c.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
+  });
+
+  return card;
+}
+
+// Populate all grids
+const meals = ['breakfast','snacks','lunch','dinner','beverages','dessert'];
+meals.forEach(meal => {
+  const grid = document.getElementById(`grid-${meal}`);
+  BRANDS.filter(b => b.meal === meal).forEach((b, i) => grid.appendChild(renderCard(b, i)));
+});
+
+// All grid
+const allGrid = document.getElementById('grid-all');
+BRANDS.forEach((b, i) => allGrid.appendChild(renderCard(b, i)));
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.meal-section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.dataset.target;
+    document.getElementById(target).classList.add('active');
+    // Close any open cards when switching tabs
+    document.querySelectorAll('.brand-card.open').forEach(c => c.classList.remove('open'));
+  });
+});
+</script>
+</body>
+</html>
